@@ -3,6 +3,9 @@ import { hash } from 'bcryptjs'
 import { Seller } from '../../enterprise/entities/seller'
 import { SellersRepository } from '../repositories/sellers-repository'
 import { Attachment } from '../../enterprise/entities/attachment'
+import { Either, right } from '@/core/either'
+import { EmailAlreadyExistsError } from './errors/email-already-exists-error'
+import { PhoneAlreadyExistsError } from './errors/phone-already-exists-error'
 
 interface RegisterSellerUseCaseProps {
   name: string
@@ -11,6 +14,13 @@ interface RegisterSellerUseCaseProps {
   password: string
   avatarId?: string
 }
+
+type RegisterSellerUseCaseResponse = Either<
+  EmailAlreadyExistsError | PhoneAlreadyExistsError,
+  {
+    seller: Seller
+  }
+>
 
 export class RegisterSellerUseCase {
   constructor(private sellerRepository: SellersRepository) {}
@@ -21,12 +31,17 @@ export class RegisterSellerUseCase {
     email,
     password,
     avatarId,
-  }: RegisterSellerUseCaseProps) {
+  }: RegisterSellerUseCaseProps): Promise<RegisterSellerUseCaseResponse> {
     const sellerWithSameEmail = await this.sellerRepository.findByEmail(email)
+
+    if (sellerWithSameEmail) {
+      throw new EmailAlreadyExistsError(email)
+    }
+
     const sellerWithSamePhone = await this.sellerRepository.findByPhone(phone)
 
-    if (sellerWithSameEmail || sellerWithSamePhone) {
-      throw new Error()
+    if (sellerWithSamePhone) {
+      throw new PhoneAlreadyExistsError(phone)
     }
 
     const hashedPassword = await hash(password, 8)
@@ -43,5 +58,9 @@ export class RegisterSellerUseCase {
     }
 
     await this.sellerRepository.create(seller)
+
+    return right({
+      seller,
+    })
   }
 }

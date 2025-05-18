@@ -3,13 +3,19 @@ import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-r
 import { Seller } from '../../enterprise/entities/seller'
 import { UpdateSellerUseCase } from './update-seller'
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
+import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
 
+let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
 let inMemorySellersRepository: InMemorySellersRepository
 let sut: UpdateSellerUseCase
 
 describe('Update Seller Use Case', () => {
   beforeEach(() => {
-    inMemorySellersRepository = new InMemorySellersRepository()
+    inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository()
+    inMemorySellersRepository = new InMemorySellersRepository(
+      inMemoryAttachmentsRepository,
+    )
+
     sut = new UpdateSellerUseCase(inMemorySellersRepository)
   })
 
