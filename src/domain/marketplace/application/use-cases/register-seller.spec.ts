@@ -7,6 +7,7 @@ import { Seller } from '../../enterprise/entities/seller'
 import { RegisterSellerUseCase } from './register-seller'
 import { PhoneAlreadyExistsError } from './errors/phone-already-exists-error'
 import { EmailAlreadyExistsError } from './errors/email-already-exists-error'
+import { makeSeller } from 'test/factories/make-seller'
 
 let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
 let inMemorySellersRepository: InMemorySellersRepository
@@ -62,14 +63,11 @@ describe('Register Seller Use Case', () => {
   })
 
   it('should not be possible to register seller with duplicate email', async () => {
-    const seller = Seller.create({
-      name: 'John Doe',
+    const newSeller = makeSeller({
       email: 'johndoe@example.com',
-      phone: '32989903213',
-      password: '123456',
     })
 
-    inMemorySellersRepository.items.push(seller)
+    inMemorySellersRepository.items.push(newSeller)
 
     const result = await sut.execute({
       name: 'Jane Doe',
@@ -83,17 +81,11 @@ describe('Register Seller Use Case', () => {
   })
 
   it('should not be possible to register user seller duplicate phone', async () => {
-    const seller = Seller.create(
-      {
-        name: 'John Doe',
-        email: 'johndoe@example.com',
-        phone: '32989903212',
-        password: '123456',
-      },
-      new UniqueEntityId('seller-1'),
-    )
+    const newSeller = makeSeller({
+      phone: '32989903212',
+    })
 
-    inMemorySellersRepository.items.push(seller)
+    inMemorySellersRepository.items.push(newSeller)
 
     const result = await sut.execute({
       name: 'Jane Doe',

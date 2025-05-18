@@ -9,6 +9,7 @@ import { EmailAlreadyExistsError } from './errors/email-already-exists-error'
 import { PhoneAlreadyExistsError } from './errors/phone-already-exists-error'
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found'
 import { hash } from 'bcryptjs'
+import { makeSeller } from 'test/factories/make-seller'
 
 let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
 let inMemorySellersRepository: InMemorySellersRepository
@@ -25,17 +26,9 @@ describe('Update Seller Use Case', () => {
   })
 
   it('should allow updating user data', async () => {
-    const seller = Seller.create(
-      {
-        name: 'John Doe',
-        email: 'johndoe@example.com',
-        phone: '32900000000',
-        password: '123456',
-      },
-      new UniqueEntityId('seller-1'),
-    )
+    const newSeller = makeSeller({}, new UniqueEntityId('seller-1'))
 
-    inMemorySellersRepository.items.push(seller)
+    inMemorySellersRepository.items.push(newSeller)
 
     await sut.execute({
       id: 'seller-1',
@@ -55,17 +48,9 @@ describe('Update Seller Use Case', () => {
   })
 
   it('should hash the password when updating it', async () => {
-    const seller = Seller.create(
-      {
-        name: 'John Doe',
-        email: 'johndoe@example.com',
-        phone: '32900000000',
-        password: '123456',
-      },
-      new UniqueEntityId('seller-1'),
-    )
+    const newSeller = makeSeller({}, new UniqueEntityId('seller-1'))
 
-    inMemorySellersRepository.items.push(seller)
+    inMemorySellersRepository.items.push(newSeller)
 
     await sut.execute({
       id: 'seller-1',
@@ -85,17 +70,14 @@ describe('Update Seller Use Case', () => {
   it('should not generate a new hash if the password is the same', async () => {
     const currentPassword = await hash('123456', 8)
 
-    const seller = Seller.create(
+    const newSeller = makeSeller(
       {
-        name: 'John Doe',
-        email: 'johndoe@example.com',
-        phone: '32900000000',
         password: currentPassword,
       },
       new UniqueEntityId('seller-1'),
     )
 
-    inMemorySellersRepository.items.push(seller)
+    inMemorySellersRepository.items.push(newSeller)
 
     await sut.execute({
       id: 'seller-1',
@@ -108,17 +90,9 @@ describe('Update Seller Use Case', () => {
   })
 
   it("should allow updating the seller's avatar", async () => {
-    const seller = Seller.create(
-      {
-        name: 'John Doe',
-        email: 'johndoe@example.com',
-        phone: '32900000000',
-        password: '123456',
-      },
-      new UniqueEntityId('seller-1'),
-    )
+    const newSeller = makeSeller({}, new UniqueEntityId('seller-1'))
 
-    inMemorySellersRepository.items.push(seller)
+    inMemorySellersRepository.items.push(newSeller)
 
     await sut.execute({
       id: 'seller-1',
@@ -133,27 +107,21 @@ describe('Update Seller Use Case', () => {
   })
 
   it('should not allow updating to a duplicated email', async () => {
-    const seller1 = Seller.create(
+    const newSeller1 = makeSeller(
       {
-        name: 'John Doe',
         email: 'johndoe@example.com',
-        phone: '32900000000',
-        password: '123456',
       },
       new UniqueEntityId('seller-1'),
     )
 
-    const seller2 = Seller.create(
+    const newSeller2 = makeSeller(
       {
-        name: 'Jane Doe',
         email: 'jane@example.com',
-        phone: '32900000001',
-        password: '123456',
       },
       new UniqueEntityId('seller-2'),
     )
 
-    inMemorySellersRepository.items.push(seller1, seller2)
+    inMemorySellersRepository.items.push(newSeller1, newSeller2)
 
     const result = await sut.execute({
       id: 'seller-1',
@@ -168,27 +136,21 @@ describe('Update Seller Use Case', () => {
   })
 
   it('should not allow updating to a duplicated phone number', async () => {
-    const seller1 = Seller.create(
+    const newSeller1 = makeSeller(
       {
-        name: 'John Doe',
-        email: 'johndoe@example.com',
         phone: '32900000000',
-        password: '123456',
       },
       new UniqueEntityId('seller-1'),
     )
 
-    const seller2 = Seller.create(
+    const newSeller2 = makeSeller(
       {
-        name: 'Jane Doe',
-        email: 'jane@example.com',
         phone: '32900000001',
-        password: '123456',
       },
       new UniqueEntityId('seller-2'),
     )
 
-    inMemorySellersRepository.items.push(seller1, seller2)
+    inMemorySellersRepository.items.push(newSeller1, newSeller2)
 
     const result = await sut.execute({
       id: 'seller-1',
