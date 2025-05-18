@@ -1,9 +1,13 @@
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
+
 import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
+import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
 
 import { Seller } from '../../enterprise/entities/seller'
 import { UpdateSellerUseCase } from './update-seller'
-import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
-import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
+import { EmailAlreadyExistsError } from './errors/email-already-exists-error'
+import { PhoneAlreadyExistsError } from './errors/phone-already-exists-error'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found'
 
 let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
 let inMemorySellersRepository: InMemorySellersRepository
@@ -90,15 +94,16 @@ describe('Update Seller Use Case', () => {
 
     inMemorySellersRepository.items.push(seller)
 
-    await expect(() =>
-      sut.execute({
-        id: 'seller-1',
-        name: 'Jane Doe',
-        email: 'johndoe@example.com',
-        phone: '32900000001',
-        password: '12345678',
-      }),
-    ).rejects.toBeInstanceOf(Error)
+    const result = await sut.execute({
+      id: 'seller-1',
+      name: 'Jane Doe',
+      email: 'johndoe@example.com',
+      phone: '32900000001',
+      password: '12345678',
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(EmailAlreadyExistsError)
   })
 
   it('should not allow updating to a duplicated phone number', async () => {
@@ -114,26 +119,28 @@ describe('Update Seller Use Case', () => {
 
     inMemorySellersRepository.items.push(seller)
 
-    await expect(() =>
-      sut.execute({
-        id: 'seller-1',
-        name: 'Jane Doe',
-        email: 'janedoe@example.com',
-        phone: '32900000000',
-        password: '12345678',
-      }),
-    ).rejects.toBeInstanceOf(Error)
+    const result = await sut.execute({
+      id: 'seller-1',
+      name: 'Jane Doe',
+      email: 'janedoe@example.com',
+      phone: '32900000000',
+      password: '12345678',
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(PhoneAlreadyExistsError)
   })
 
   it('should not allow updating to a seller nonexistent', async () => {
-    await expect(() =>
-      sut.execute({
-        id: 'seller-1',
-        name: 'Jane Doe',
-        email: 'janedoe@example.com',
-        phone: '32900000000',
-        password: '12345678',
-      }),
-    ).rejects.toBeInstanceOf(Error)
+    const result = await sut.execute({
+      id: 'seller-1',
+      name: 'Jane Doe',
+      email: 'janedoe@example.com',
+      phone: '32900000000',
+      password: '12345678',
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(ResourceNotFoundError)
   })
 })

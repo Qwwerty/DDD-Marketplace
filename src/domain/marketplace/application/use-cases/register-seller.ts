@@ -3,7 +3,7 @@ import { hash } from 'bcryptjs'
 import { Seller } from '../../enterprise/entities/seller'
 import { SellersRepository } from '../repositories/sellers-repository'
 import { Attachment } from '../../enterprise/entities/attachment'
-import { Either, right } from '@/core/either'
+import { Either, left, right } from '@/core/either'
 import { EmailAlreadyExistsError } from './errors/email-already-exists-error'
 import { PhoneAlreadyExistsError } from './errors/phone-already-exists-error'
 
@@ -23,7 +23,7 @@ type RegisterSellerUseCaseResponse = Either<
 >
 
 export class RegisterSellerUseCase {
-  constructor(private sellerRepository: SellersRepository) {}
+  constructor(private sellersRepository: SellersRepository) {}
 
   async execute({
     name,
@@ -32,18 +32,17 @@ export class RegisterSellerUseCase {
     password,
     avatarId,
   }: RegisterSellerUseCaseProps): Promise<RegisterSellerUseCaseResponse> {
-    const sellerWithSameEmail = await this.sellerRepository.findByEmail(email)
+    const sellerWithSameEmail = await this.sellersRepository.findByEmail(email)
 
     if (sellerWithSameEmail) {
-      throw new EmailAlreadyExistsError(email)
+      return left(new EmailAlreadyExistsError(email))
     }
 
-    const sellerWithSamePhone = await this.sellerRepository.findByPhone(phone)
+    const sellerWithSamePhone = await this.sellersRepository.findByPhone(phone)
 
     if (sellerWithSamePhone) {
-      throw new PhoneAlreadyExistsError(phone)
+      return left(new PhoneAlreadyExistsError(phone))
     }
-
     const hashedPassword = await hash(password, 8)
 
     const seller = Seller.create({
@@ -57,7 +56,7 @@ export class RegisterSellerUseCase {
       seller.avatar = Attachment.create({ path: avatarId })
     }
 
-    await this.sellerRepository.create(seller)
+    await this.sellersRepository.create(seller)
 
     return right({
       seller,

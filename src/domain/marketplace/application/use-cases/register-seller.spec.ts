@@ -5,6 +5,8 @@ import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attac
 
 import { Seller } from '../../enterprise/entities/seller'
 import { RegisterSellerUseCase } from './register-seller'
+import { PhoneAlreadyExistsError } from './errors/phone-already-exists-error'
+import { EmailAlreadyExistsError } from './errors/email-already-exists-error'
 
 let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
 let inMemorySellersRepository: InMemorySellersRepository
@@ -69,14 +71,15 @@ describe('Register Seller Use Case', () => {
 
     inMemorySellersRepository.items.push(seller)
 
-    await expect(
-      sut.execute({
-        name: 'Jane Doe',
-        email: 'johndoe@example.com',
-        phone: '32989903212',
-        password: '123456',
-      }),
-    ).rejects.toBeInstanceOf(Error)
+    const result = await sut.execute({
+      name: 'Jane Doe',
+      email: 'johndoe@example.com',
+      phone: '32989903212',
+      password: '123456',
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(EmailAlreadyExistsError)
   })
 
   it('should not be possible to register user seller duplicate phone', async () => {
@@ -92,13 +95,14 @@ describe('Register Seller Use Case', () => {
 
     inMemorySellersRepository.items.push(seller)
 
-    await expect(
-      sut.execute({
-        name: 'Jane Doe',
-        email: 'janedoe@example.com',
-        phone: '32989903212',
-        password: '123456',
-      }),
-    ).rejects.toBeInstanceOf(Error)
+    const result = await sut.execute({
+      name: 'Jane Doe',
+      email: 'janedoe@example.com',
+      phone: '32989903212',
+      password: '123456',
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(PhoneAlreadyExistsError)
   })
 })
