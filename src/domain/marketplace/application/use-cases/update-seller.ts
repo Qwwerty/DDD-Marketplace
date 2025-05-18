@@ -42,20 +42,23 @@ export class UpdateSellerUseCase {
 
     const sellerWithSameEmail = await this.sellersRepository.findByEmail(email)
 
-    if (sellerWithSameEmail) {
+    if (sellerWithSameEmail && sellerWithSameEmail.id.toString() !== id) {
       return left(new EmailAlreadyExistsError(email))
     }
 
     const sellerWithSamePhone = await this.sellersRepository.findByPhone(phone)
 
-    if (sellerWithSamePhone) {
+    if (sellerWithSamePhone && sellerWithSamePhone.id.toString() !== id) {
       return left(new PhoneAlreadyExistsError(phone))
     }
 
     seller.name = name
     seller.email = email
     seller.phone = phone
-    seller.password = password ? await hash(password, 8) : seller?.password
+
+    if (password) {
+      seller.password = await hash(password, 8)
+    }
 
     if (avatarId) {
       seller.avatar = Attachment.create({ path: avatarId })
