@@ -6,13 +6,15 @@ import { Seller } from '../../enterprise/entities/seller'
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found'
 import { EmailAlreadyExistsError } from './errors/email-already-exists-error'
 import { PhoneAlreadyExistsError } from './errors/phone-already-exists-error'
+import { Attachment } from '../../enterprise/entities/attachment'
 
 interface UpdateSellerUseCaseRequest {
   id: string
   name: string
   phone: string
   email: string
-  password: string
+  password?: string
+  avatarId?: string
 }
 
 type UpdateSellerUseCaseResponse = Either<
@@ -30,6 +32,7 @@ export class UpdateSellerUseCase {
     phone,
     email,
     password,
+    avatarId,
   }: UpdateSellerUseCaseRequest): Promise<UpdateSellerUseCaseResponse> {
     const seller = await this.sellersRepository.findById(id)
 
@@ -53,6 +56,10 @@ export class UpdateSellerUseCase {
     seller.email = email
     seller.phone = phone
     seller.password = password ? await hash(password, 8) : seller?.password
+
+    if (avatarId) {
+      seller.avatar = Attachment.create({ path: avatarId })
+    }
 
     await this.sellersRepository.save(seller)
 

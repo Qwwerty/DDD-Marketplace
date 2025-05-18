@@ -8,6 +8,7 @@ import { UpdateSellerUseCase } from './update-seller'
 import { EmailAlreadyExistsError } from './errors/email-already-exists-error'
 import { PhoneAlreadyExistsError } from './errors/phone-already-exists-error'
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found'
+import { Attachment } from '../../enterprise/entities/attachment'
 
 let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
 let inMemorySellersRepository: InMemorySellersRepository
@@ -79,6 +80,31 @@ describe('Update Seller Use Case', () => {
         password: '12345678',
       }),
     )
+  })
+
+  it("should allow updating the seller's avatar", async () => {
+    const seller = Seller.create(
+      {
+        name: 'John Doe',
+        email: 'johndoe@example.com',
+        phone: '32900000000',
+        password: '123456',
+      },
+      new UniqueEntityId('seller-1'),
+    )
+
+    inMemorySellersRepository.items.push(seller)
+
+    await sut.execute({
+      id: 'seller-1',
+      name: 'Jane Doe',
+      email: 'janedoe@example.com',
+      phone: '32900000001',
+      password: '12345678',
+      avatarId: 'avatar-id',
+    })
+
+    expect(inMemoryAttachmentsRepository.items).toHaveLength(1)
   })
 
   it('should not allow updating to a duplicated email', async () => {
