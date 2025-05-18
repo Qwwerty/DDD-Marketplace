@@ -3,7 +3,6 @@ import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
 import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
 
-import { Seller } from '../../enterprise/entities/seller'
 import { UpdateSellerUseCase } from './update-seller'
 import { EmailAlreadyExistsError } from './errors/email-already-exists-error'
 import { PhoneAlreadyExistsError } from './errors/phone-already-exists-error'

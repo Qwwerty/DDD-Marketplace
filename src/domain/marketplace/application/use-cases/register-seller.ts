@@ -6,6 +6,7 @@ import { Attachment } from '../../enterprise/entities/attachment'
 import { Either, left, right } from '@/core/either'
 import { EmailAlreadyExistsError } from './errors/email-already-exists-error'
 import { PhoneAlreadyExistsError } from './errors/phone-already-exists-error'
+import { HashGenerator } from '../cryptography/hash-generator'
 
 interface RegisterSellerUseCaseProps {
   name: string
@@ -23,7 +24,10 @@ type RegisterSellerUseCaseResponse = Either<
 >
 
 export class RegisterSellerUseCase {
-  constructor(private sellersRepository: SellersRepository) {}
+  constructor(
+    private sellersRepository: SellersRepository,
+    private hashGenerator: HashGenerator,
+  ) {}
 
   async execute({
     name,
@@ -43,7 +47,8 @@ export class RegisterSellerUseCase {
     if (sellerWithSamePhone) {
       return left(new PhoneAlreadyExistsError(phone))
     }
-    const hashedPassword = await hash(password, 8)
+
+    const hashedPassword = await this.hashGenerator.hash(password)
 
     const seller = Seller.create({
       name,

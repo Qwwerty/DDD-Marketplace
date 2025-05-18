@@ -1,14 +1,13 @@
-import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
-
 import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
 import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
+import { makeSeller } from 'test/factories/make-seller'
+import { FakeHasher } from 'test/cryptography/fake-hasher'
 
-import { Seller } from '../../enterprise/entities/seller'
 import { RegisterSellerUseCase } from './register-seller'
 import { PhoneAlreadyExistsError } from './errors/phone-already-exists-error'
 import { EmailAlreadyExistsError } from './errors/email-already-exists-error'
-import { makeSeller } from 'test/factories/make-seller'
 
+let fakeHasher: FakeHasher
 let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
 let inMemorySellersRepository: InMemorySellersRepository
 let sut: RegisterSellerUseCase
@@ -20,7 +19,9 @@ describe('Register Seller Use Case', () => {
       inMemoryAttachmentsRepository,
     )
 
-    sut = new RegisterSellerUseCase(inMemorySellersRepository)
+    fakeHasher = new FakeHasher()
+
+    sut = new RegisterSellerUseCase(inMemorySellersRepository, fakeHasher)
   })
 
   it('should be possible to register new sellers', async () => {
