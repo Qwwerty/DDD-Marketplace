@@ -1,5 +1,3 @@
-import { hash } from 'bcryptjs'
-
 import { Seller } from '../../enterprise/entities/seller'
 import { SellersRepository } from '../repositories/sellers-repository'
 import { Attachment } from '../../enterprise/entities/attachment'

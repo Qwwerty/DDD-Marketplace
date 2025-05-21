@@ -7,4 +7,8 @@ export class InMemoryAttachmentsRepository implements AttachmentsRepository {
   async create(attachment: Attachment): Promise<void> {
     this.items.push(attachment)
   }
+
+  async createMany(attachments: Attachment[]): Promise<void> {
+    this.items.push(...attachments)
+  }
 }

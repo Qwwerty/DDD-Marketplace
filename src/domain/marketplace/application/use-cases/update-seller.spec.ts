@@ -6,7 +6,7 @@ import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attac
 import { UpdateSellerUseCase } from './update-seller'
 import { EmailAlreadyExistsError } from './errors/email-already-exists-error'
 import { PhoneAlreadyExistsError } from './errors/phone-already-exists-error'
-import { ResourceNotFoundError } from '@/core/errors/resource-not-found'
+import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found'
 import { hash } from 'bcryptjs'
 import { makeSeller } from 'test/factories/make-seller'
 
