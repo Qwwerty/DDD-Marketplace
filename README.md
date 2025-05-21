@@ -21,7 +21,7 @@
     - [ ]  Não deve ser possível editar um Produto já vendido
 - [ ]  Deve ser possível obter dados de um Produto
     - [ ]  Qualquer usuário deve poder obter dados do Produto
-- [ ]  Deve ser possível listar todas as categorias
+- [x]  Deve ser possível listar todas as categorias
     - [ ]  Qualquer usuário deve poder obter a lista de categorias
 - [ ]  Deve ser possível listar todos os produtos por ordem de criação (mais recente)
     - [ ]  Qualquer usuário deve poder obter a lista de produtos
