@@ -41,7 +41,7 @@ export class InMemorySellersRepository implements SellersRepository {
     this.items.push(seller)
 
     if (seller.avatar) {
-      await this.attachmentsRepository.create(seller.avatar)
+      await this.attachmentsRepository.createMany([seller.avatar])
     }
   }
 
@@ -49,7 +49,7 @@ export class InMemorySellersRepository implements SellersRepository {
     const itemIndex = this.items.findIndex((item) => item.id === seller.id)
 
     if (seller.avatar) {
-      await this.attachmentsRepository.create(seller.avatar)
+      await this.attachmentsRepository.createMany([seller.avatar])
     }
 
     this.items[itemIndex] = seller

@@ -1,7 +1,7 @@
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 import { Entity } from '@/core/entities/entity'
 
-interface CategoryProps {
+export interface CategoryProps {
   title: string
   slug: string
 }
