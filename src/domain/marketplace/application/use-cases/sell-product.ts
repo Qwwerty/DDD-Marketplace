@@ -38,7 +38,7 @@ export class SellProductUseCase {
     description,
     priceInCents,
     attachmentsIds,
-  }: SellProductUseCaseProps) {
+  }: SellProductUseCaseProps): Promise<SellProductUseCaseResponse> {
     const seller = await this.sellersRepository.findById(ownerId)
 
     if (!seller) {
