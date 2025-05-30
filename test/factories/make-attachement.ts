@@ -1,0 +1,21 @@
+import { faker } from '@faker-js/faker'
+
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
+import {
+  Attachment,
+  AttachmentProps,
+} from '@/domain/marketplace/enterprise/entities/attachment'
+
+export function makeAttachment(
+  override: Partial<AttachmentProps> = {},
+  id?: UniqueEntityId,
+) {
+  return Attachment.create(
+    {
+      title: faker.lorem.words(2),
+      path: faker.internet.url(),
+      ...override,
+    },
+    id,
+  )
+}
