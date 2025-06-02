@@ -12,7 +12,6 @@ export function makeAttachment(
 ) {
   return Attachment.create(
     {
-      title: faker.lorem.words(2),
       path: faker.internet.url(),
       ...override,
     },

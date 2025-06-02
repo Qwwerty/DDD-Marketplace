@@ -1,11 +1,11 @@
 import { Either, left, right } from '@/core/either'
+
 import { Product } from '../../enterprise/entities/product'
-import { AttachmentsRepository } from '../repositories/attachmenets-repository'
+import { AttachmentsRepository } from '../repositories/attachments-repository'
 import { CategoriesRepository } from '../repositories/categories-repository'
 import { SellersRepository } from '../repositories/sellers-repository'
 import { ProductsRepository } from '../repositories/products-repository'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
-import { ProductAttachments } from '../../enterprise/entities/product-attachments'
 
 interface SellProductUseCaseProps {
   ownerId: string

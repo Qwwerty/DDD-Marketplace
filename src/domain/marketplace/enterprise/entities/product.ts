@@ -4,7 +4,7 @@ import { Optional } from '@/core/types/optional'
 
 import { Seller } from './seller'
 import { Category } from './category'
-import { ProductAttachments } from './product-attachments'
+import { ProductAttachmentList } from './product-attachments-list'
 
 export enum ProductStatus {
   AVAILABLE = 'available',
@@ -19,7 +19,7 @@ export interface ProductProps {
   status: ProductStatus
   onwer: Seller
   category: Category
-  attachments: ProductAttachments
+  attachments: ProductAttachmentList
   createdAt: Date
 }
 
@@ -72,6 +72,10 @@ export class Product extends Entity<ProductProps> {
     return this.props.category
   }
 
+  set attachments(attachments: ProductAttachmentList) {
+    this.props.attachments = attachments
+  }
+
   get attachments() {
     return this.props.attachments
   }
@@ -82,7 +86,7 @@ export class Product extends Entity<ProductProps> {
   ): Product {
     const product: ProductProps = {
       ...props,
-      attachments: props.attachments ?? new ProductAttachments(),
+      attachments: props.attachments ?? new ProductAttachmentList(),
       status: props.status ?? ProductStatus.AVAILABLE,
       createdAt: props.createdAt ?? new Date(),
     }

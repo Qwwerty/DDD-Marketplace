@@ -1,14 +1,14 @@
 import {
   AsyncFindMany,
   AttachmentsRepository,
-} from '@/domain/marketplace/application/repositories/attachmenets-repository'
+} from '@/domain/marketplace/application/repositories/attachments-repository'
 import { Attachment } from '@/domain/marketplace/enterprise/entities/attachment'
 
 export class InMemoryAttachmentsRepository implements AttachmentsRepository {
   public items: Attachment[] = []
 
-  async createMany(attachments: Attachment[]): Promise<void> {
-    this.items.push(...attachments)
+  async create(attachement: Attachment): Promise<void> {
+    throw new Error('Method not implemented.')
   }
 
   async findManyByIds(ids: string[]): AsyncFindMany<Attachment> {

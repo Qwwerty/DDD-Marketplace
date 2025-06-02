@@ -32,7 +32,6 @@ describe('Upload Attachments Use Case', () => {
     })
 
     expect(inMemoryAttachmentsRepository.items).toHaveLength(1)
-    expect(inMemoryAttachmentsRepository.items[0].title).toBe('profile.png')
   })
 
   it('should not be able to upload an attachment with invalid file type', async () => {

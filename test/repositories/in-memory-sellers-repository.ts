@@ -1,5 +1,6 @@
 import { SellersRepository } from '@/domain/marketplace/application/repositories/sellers-repository'
 import { Seller } from '@/domain/marketplace/enterprise/entities/seller'
+
 import { InMemoryAttachmentsRepository } from './in-memory-attachments-repository'
 
 export class InMemorySellersRepository implements SellersRepository {

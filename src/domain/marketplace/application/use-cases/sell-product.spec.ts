@@ -1,13 +1,15 @@
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
+
 import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
-import { SellProductUseCase } from './sell-product'
 import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
 import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
 import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
 import { makeSeller } from 'test/factories/make-seller'
 import { makeCategory } from 'test/factories/make-category'
-import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { makeAttachment } from 'test/factories/make-attachement'
-import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
+
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { SellProductUseCase } from './sell-product'
 
 let inMemorySellersRepository: InMemorySellersRepository
 let inMemoryCategoriesRepository: InMemoryCategoriesRepository
@@ -55,6 +57,7 @@ describe('Sell Product Use Case', () => {
     })
 
     expect(inMemoryProductsRepository.items).toHaveLength(1)
+    expect(inMemoryAttachmentsRepository.items).toHaveLength(1)
   })
 
   it('should not able to create a product with a non-existent user', async () => {

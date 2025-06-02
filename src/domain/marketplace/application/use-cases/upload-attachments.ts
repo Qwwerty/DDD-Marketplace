@@ -1,6 +1,6 @@
 import { Either, left, right } from '@/core/either'
 
-import { AttachmentsRepository } from '../repositories/attachmenets-repository'
+import { AttachmentsRepository } from '../repositories/attachments-repository'
 import { Attachment } from '../../enterprise/entities/attachment'
 import { Uploader } from '../storage/uploader'
 import { InvalidAttachemntTypeError } from './errors/invalid-attachment-error'
@@ -51,7 +51,6 @@ export class UploadAttachmentsUseCase {
 
     const attachments = result.map((file) =>
       Attachment.create({
-        title: file.fileName,
         path: file.path,
       }),
     )

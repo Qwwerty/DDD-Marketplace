@@ -9,6 +9,6 @@ export interface FindMany<T> {
 export type AsyncFindMany<T> = Promise<FindMany<T>>
 
 export abstract class AttachmentsRepository {
+  abstract create(attachement: Attachment): Promise<void>
   abstract findManyByIds(ids: string[]): AsyncFindMany<Attachment>
-  abstract createMany(attachments: Attachment[]): Promise<void>
 }

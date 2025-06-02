@@ -1,0 +1,108 @@
+import { Either, left, right } from '@/core/either'
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
+
+import { Product, ProductStatus } from '../../enterprise/entities/product'
+import { CategoriesRepository } from '../repositories/categories-repository'
+import { SellersRepository } from '../repositories/sellers-repository'
+import { ProductsRepository } from '../repositories/products-repository'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { ProductAttachment } from '../../enterprise/entities/product-attachment'
+import { ProductAttachmentsRepository } from '../repositories/product-attachments-repository'
+import { ProductAttachmentList } from '../../enterprise/entities/product-attachments-list'
+
+interface EditProductUseCaseProps {
+  productId: string
+  ownerId: string
+  categoryId: string
+  title: string
+  description: string
+  priceInCents: number
+  attachmentsIds: string[]
+}
+
+type EditProductUseCaseResponse = Either<
+  ResourceNotFoundError | NotAllowedError,
+  {
+    product: Product
+  }
+>
+
+export class EditProductUseCase {
+  constructor(
+    private sellersRepository: SellersRepository,
+    private categoryRepository: CategoriesRepository,
+    private productsRepository: ProductsRepository,
+    private productAttachmentsRepository: ProductAttachmentsRepository,
+  ) {}
+
+  async execute({
+    productId,
+    ownerId,
+    categoryId,
+    title,
+    description,
+    priceInCents,
+    attachmentsIds,
+  }: EditProductUseCaseProps): Promise<EditProductUseCaseResponse> {
+    const product = await this.productsRepository.findById(productId)
+
+    if (!product) {
+      return left(new ResourceNotFoundError('Product', productId))
+    }
+
+    if (
+      product.status === ProductStatus.SOLD ||
+      product.onwer.id.toString() !== ownerId
+    ) {
+      return left(new NotAllowedError())
+    }
+
+    const seller = await this.sellersRepository.findById(ownerId)
+
+    if (!seller) {
+      return left(new ResourceNotFoundError('Seller', ownerId))
+    }
+
+    const category = await this.categoryRepository.findById(categoryId)
+
+    if (!category) {
+      return left(new ResourceNotFoundError('Category', categoryId))
+    }
+
+    // const { hasAll, inexistentIds } =
+    //   await this.attachmentsRepository.findManyByIds(attachmentsIds)
+
+    // if (!hasAll) {
+    //   return left(new ResourceNotFoundError('Images', inexistentIds.join(', ')))
+    // }
+
+    const currentProductAttachments =
+      await this.productAttachmentsRepository.findByProductId(productId)
+
+    const productAttachmentList = new ProductAttachmentList(
+      currentProductAttachments,
+    )
+
+    const productAttachments = attachmentsIds.map((attachmentId) =>
+      ProductAttachment.create({
+        attachmentId: new UniqueEntityId(attachmentId),
+        productId: product.id,
+      }),
+    )
+
+    productAttachmentList.update(productAttachments)
+
+    product.title = title
+    product.description = description
+    product.category = category
+    product.priceInCents = priceInCents
+    product.attachments = productAttachmentList
+
+    await this.productsRepository.save(product)
+
+    return right({
+      product,
+    })
+  }
+}
