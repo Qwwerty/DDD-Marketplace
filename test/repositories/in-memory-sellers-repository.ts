@@ -1,12 +1,14 @@
 import { SellersRepository } from '@/domain/marketplace/application/repositories/sellers-repository'
 import { Seller } from '@/domain/marketplace/enterprise/entities/seller'
 
-import { InMemoryAttachmentsRepository } from './in-memory-attachments-repository'
+import { InMemoryUserAttachmentsRepository } from './in-memory-user-attachments-repository'
 
 export class InMemorySellersRepository implements SellersRepository {
   public items: Seller[] = []
 
-  constructor(private attachmentsRepository: InMemoryAttachmentsRepository) {}
+  constructor(
+    private userAttachmentsRepository: InMemoryUserAttachmentsRepository,
+  ) {}
 
   async findById(id: string): Promise<Seller | null> {
     const seller = this.items.find((item) => item.id.toString() === id)
@@ -42,16 +44,16 @@ export class InMemorySellersRepository implements SellersRepository {
     this.items.push(seller)
 
     if (seller.avatar) {
-      await this.attachmentsRepository.createMany([seller.avatar])
+      await this.userAttachmentsRepository.create(seller.avatar)
     }
   }
 
   async save(seller: Seller): Promise<void> {
     const itemIndex = this.items.findIndex((item) => item.id === seller.id)
 
-    if (seller.avatar) {
-      await this.attachmentsRepository.createMany([seller.avatar])
-    }
+    // if (seller.avatar) {
+    //   await this.attachmentsRepository.createMany([seller.avatar])
+    // }
 
     this.items[itemIndex] = seller
   }

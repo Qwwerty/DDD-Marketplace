@@ -1,17 +1,18 @@
 import { Seller } from '../../enterprise/entities/seller'
 import { SellersRepository } from '../repositories/sellers-repository'
-import { Attachment } from '../../enterprise/entities/attachment'
 import { Either, left, right } from '@/core/either'
 import { EmailAlreadyExistsError } from './errors/email-already-exists-error'
 import { PhoneAlreadyExistsError } from './errors/phone-already-exists-error'
 import { HashGenerator } from '../cryptography/hash-generator'
+import { UserAttachment } from '../../enterprise/entities/user-attachment'
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 
 interface RegisterSellerUseCaseProps {
   name: string
   phone: string
   email: string
   password: string
-  avatarId?: string
+  attachmentId?: string
 }
 
 type RegisterSellerUseCaseResponse = Either<
@@ -32,7 +33,7 @@ export class RegisterSellerUseCase {
     phone,
     email,
     password,
-    avatarId,
+    attachmentId,
   }: RegisterSellerUseCaseProps): Promise<RegisterSellerUseCaseResponse> {
     const sellerWithSameEmail = await this.sellersRepository.findByEmail(email)
 
@@ -55,8 +56,11 @@ export class RegisterSellerUseCase {
       password: hashedPassword,
     })
 
-    if (avatarId) {
-      seller.avatar = Attachment.create({ path: avatarId })
+    if (attachmentId) {
+      seller.avatar = UserAttachment.create({
+        onwerId: seller.id,
+        attachmentId: new UniqueEntityId(attachmentId),
+      })
     }
 
     await this.sellersRepository.create(seller)

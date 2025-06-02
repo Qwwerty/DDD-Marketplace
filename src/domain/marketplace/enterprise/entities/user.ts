@@ -1,13 +1,13 @@
 import { Entity } from '@/core/entities/entity'
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
-import { Attachment } from './attachment'
+import { UserAttachment } from './user-attachment'
 
 export interface UserProps {
   name: string
   email: string
   phone?: string | null
   password: string
-  avatar?: Attachment | null
+  avatar?: UserAttachment | null
 }
 
 export class User extends Entity<UserProps> {
@@ -43,7 +43,7 @@ export class User extends Entity<UserProps> {
     return this.props.password
   }
 
-  set avatar(avatar: Attachment | null | undefined) {
+  set avatar(avatar: UserAttachment | null | undefined) {
     this.props.avatar = avatar
   }
 
