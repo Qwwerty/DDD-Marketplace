@@ -7,7 +7,7 @@ export interface UserProps {
   email: string
   phone?: string | null
   password: string
-  avatar?: UserAttachment | null
+  avatar?: UserAttachment
 }
 
 export class User extends Entity<UserProps> {
@@ -43,7 +43,7 @@ export class User extends Entity<UserProps> {
     return this.props.password
   }
 
-  set avatar(avatar: UserAttachment | null | undefined) {
+  set avatar(avatar: UserAttachment | undefined) {
     this.props.avatar = avatar
   }
 
