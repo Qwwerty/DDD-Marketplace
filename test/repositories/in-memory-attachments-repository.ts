@@ -7,10 +7,6 @@ import { Attachment } from '@/domain/marketplace/enterprise/entities/attachment'
 export class InMemoryAttachmentsRepository implements AttachmentsRepository {
   public items: Attachment[] = []
 
-  async create(attachement: Attachment): Promise<void> {
-    throw new Error('Method not implemented.')
-  }
-
   async findManyByIds(ids: string[]): AsyncFindMany<Attachment> {
     const itemsById = new Map(
       this.items.map((item) => [item.id.toString(), item]),
@@ -34,5 +30,9 @@ export class InMemoryAttachmentsRepository implements AttachmentsRepository {
       inexistentIds,
       hasAll: inexistentIds.length === 0,
     }
+  }
+
+  async createMany(attachments: Attachment[]): Promise<void> {
+    this.items.push(...attachments)
   }
 }

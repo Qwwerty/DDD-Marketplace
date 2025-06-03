@@ -51,10 +51,6 @@ export class InMemorySellersRepository implements SellersRepository {
   async save(seller: Seller): Promise<void> {
     const itemIndex = this.items.findIndex((item) => item.id === seller.id)
 
-    // if (seller.avatar) {
-    //   await this.attachmentsRepository.createMany([seller.avatar])
-    // }
-
     this.items[itemIndex] = seller
   }
 }

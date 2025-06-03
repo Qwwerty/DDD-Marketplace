@@ -4,7 +4,7 @@
     - [x]  Deve ser feito o hash da senha do usuário
     - [x]  Não deve ser possível cadastrar usuário com e-mail duplicado
     - [x]  Não deve ser possível cadastrar usuário com telefone duplicado
-- [x]  Deve ser possível atualizar os dados do usuário
+- [ ]  Deve ser possível atualizar os dados do usuário
     - [x]  Deve ser feito o hash da senha do usuário
     - [x]  Não deve ser possível atualizar para um e-mail duplicado
     - [x]  Não deve ser possível atualizar para um telefone duplicado

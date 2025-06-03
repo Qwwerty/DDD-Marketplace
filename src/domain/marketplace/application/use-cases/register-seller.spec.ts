@@ -43,7 +43,7 @@ describe('Register Seller Use Case', () => {
       email: 'johndoe@example.com',
       phone: '32989903212',
       password: '123456',
-      attachmentId: 'avatar-id',
+      avatarId: 'avatar-id',
     })
 
     expect(inMemorySellersRepository.items).toHaveLength(1)

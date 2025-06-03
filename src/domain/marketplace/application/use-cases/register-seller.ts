@@ -12,7 +12,7 @@ interface RegisterSellerUseCaseProps {
   phone: string
   email: string
   password: string
-  attachmentId?: string
+  avatarId?: string
 }
 
 type RegisterSellerUseCaseResponse = Either<
@@ -33,7 +33,7 @@ export class RegisterSellerUseCase {
     phone,
     email,
     password,
-    attachmentId,
+    avatarId,
   }: RegisterSellerUseCaseProps): Promise<RegisterSellerUseCaseResponse> {
     const sellerWithSameEmail = await this.sellersRepository.findByEmail(email)
 
@@ -56,10 +56,10 @@ export class RegisterSellerUseCase {
       password: hashedPassword,
     })
 
-    if (attachmentId) {
+    if (avatarId) {
       seller.avatar = UserAttachment.create({
         onwerId: seller.id,
-        attachmentId: new UniqueEntityId(attachmentId),
+        attachmentId: new UniqueEntityId(avatarId),
       })
     }
 

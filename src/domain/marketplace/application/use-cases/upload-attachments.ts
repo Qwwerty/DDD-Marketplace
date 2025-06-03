@@ -51,6 +51,7 @@ export class UploadAttachmentsUseCase {
 
     const attachments = result.map((file) =>
       Attachment.create({
+        title: file.fileName,
         path: file.path,
       }),
     )
