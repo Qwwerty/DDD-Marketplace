@@ -12,13 +12,13 @@ import { makeProduct } from 'test/factories/make-product'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { ProductStatus } from '../../enterprise/entities/product'
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
-import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
 import { makeProductAttachment } from 'test/factories/make-product-attachment'
+import { InMemoryUserAttachmentsRepository } from 'test/repositories/in-memory-user-attachments-repository'
 
 let inMemorySellersRepository: InMemorySellersRepository
 let inMemoryCategoriesRepository: InMemoryCategoriesRepository
 let inMemoryProductsRepository: InMemoryProductsRepository
-let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
+let inMemoryUserAttachmentsRepository: InMemoryUserAttachmentsRepository
 let inMemoryProductAttachmentsRepository: InMemoryProductAttachmentsRepository
 let sut: EditProductUseCase
 
@@ -27,10 +27,10 @@ describe('Edit Product Use Case', () => {
     inMemoryProductAttachmentsRepository =
       new InMemoryProductAttachmentsRepository()
 
-    inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository()
+    inMemoryUserAttachmentsRepository = new InMemoryUserAttachmentsRepository()
 
     inMemorySellersRepository = new InMemorySellersRepository(
-      inMemoryAttachmentsRepository,
+      inMemoryUserAttachmentsRepository,
     )
 
     inMemoryProductsRepository = new InMemoryProductsRepository(

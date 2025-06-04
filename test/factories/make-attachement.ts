@@ -12,6 +12,7 @@ export function makeAttachment(
 ) {
   return Attachment.create(
     {
+      title: faker.lorem.sentence(),
       path: faker.internet.url(),
       ...override,
     },

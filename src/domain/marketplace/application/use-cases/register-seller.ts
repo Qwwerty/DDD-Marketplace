@@ -4,8 +4,8 @@ import { Either, left, right } from '@/core/either'
 import { EmailAlreadyExistsError } from './errors/email-already-exists-error'
 import { PhoneAlreadyExistsError } from './errors/phone-already-exists-error'
 import { HashGenerator } from '../cryptography/hash-generator'
-import { UserAttachment } from '../../enterprise/entities/user-attachment'
-import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
+import { AttachmentsRepository } from '../repositories/attachments-repository'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 interface RegisterSellerUseCaseProps {
   name: string
@@ -26,6 +26,7 @@ export class RegisterSellerUseCase {
   constructor(
     private sellersRepository: SellersRepository,
     private hashGenerator: HashGenerator,
+    private attachmentsRepository: AttachmentsRepository,
   ) {}
 
   async execute({
@@ -57,10 +58,13 @@ export class RegisterSellerUseCase {
     })
 
     if (avatarId) {
-      seller.avatar = UserAttachment.create({
-        onwerId: seller.id,
-        attachmentId: new UniqueEntityId(avatarId),
-      })
+      const avatar = await this.attachmentsRepository.findById(avatarId)
+
+      if (!avatar) {
+        return left(new ResourceNotFoundError('avatarId', avatarId))
+      }
+
+      seller.avatar = avatar
     }
 
     await this.sellersRepository.create(seller)

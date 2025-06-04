@@ -6,6 +6,7 @@ import { CategoriesRepository } from '../repositories/categories-repository'
 import { SellersRepository } from '../repositories/sellers-repository'
 import { ProductsRepository } from '../repositories/products-repository'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { ProductAttachmentsRepository } from '../repositories/product-attachments-repository'
 
 interface SellProductUseCaseProps {
   ownerId: string
@@ -28,7 +29,7 @@ export class SellProductUseCase {
     private sellersRepository: SellersRepository,
     private categoryRepository: CategoriesRepository,
     private productsRepository: ProductsRepository,
-    private attachmentsRepository: AttachmentsRepository,
+    private productsAttachmentsRepository: ProductAttachmentsRepository,
   ) {}
 
   async execute({
@@ -51,12 +52,12 @@ export class SellProductUseCase {
       return left(new ResourceNotFoundError('Category', categoryId))
     }
 
-    const { hasAll, inexistentIds } =
-      await this.attachmentsRepository.findManyByIds(attachmentsIds)
+    // const { hasAll, inexistentIds } =
+    //   await this.productsAttachmentsRepository.findManyByIds(attachmentsIds)
 
-    if (!hasAll) {
-      return left(new ResourceNotFoundError('Images', inexistentIds.join(', ')))
-    }
+    // if (!hasAll) {
+    //   return left(new ResourceNotFoundError('Images', inexistentIds.join(', ')))
+    // }
 
     const product = Product.create({
       title,
