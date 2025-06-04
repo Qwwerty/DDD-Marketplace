@@ -7,13 +7,13 @@ import { makeCategory } from 'test/factories/make-category'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { SellProductUseCase } from './sell-product'
 import { InMemoryProductAttachmentsRepository } from 'test/repositories/in-memory-product-attachments-repository'
-import { InMemoryUserAttachmentsRepository } from 'test/repositories/in-memory-user-attachments-repository'
+import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
 
 let inMemorySellersRepository: InMemorySellersRepository
 let inMemoryCategoriesRepository: InMemoryCategoriesRepository
 let inMemoryProductsRepository: InMemoryProductsRepository
 let inMemoryProductAttachmentsRepository: InMemoryProductAttachmentsRepository
-let inMemoryUserAttachmentsRepository: InMemoryUserAttachmentsRepository
+let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
 let sut: SellProductUseCase
 
 describe('Sell Product Use Case', () => {
@@ -21,10 +21,10 @@ describe('Sell Product Use Case', () => {
     inMemoryProductAttachmentsRepository =
       new InMemoryProductAttachmentsRepository()
 
-    inMemoryUserAttachmentsRepository = new InMemoryUserAttachmentsRepository()
+    inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository()
 
     inMemorySellersRepository = new InMemorySellersRepository(
-      inMemoryUserAttachmentsRepository,
+      inMemoryAttachmentsRepository,
     )
 
     inMemoryProductsRepository = new InMemoryProductsRepository(

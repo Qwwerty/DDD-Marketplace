@@ -6,9 +6,8 @@ import { FakeEncrypter } from 'test/cryptography/fake-encrypter'
 import { WrongCrenditalsError } from './errors/wrong-crendentials-errors'
 import { makeSeller } from 'test/factories/make-seller'
 import { FakeHasher } from 'test/cryptography/fake-hasher'
-import { InMemoryUserAttachmentsRepository } from 'test/repositories/in-memory-user-attachments-repository'
 
-let inMemoryUserAttachmentsRepository: InMemoryUserAttachmentsRepository
+let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
 let inMemorySellersRepository: InMemorySellersRepository
 let fakeEncrypter: FakeEncrypter
 let fakeHasher: FakeHasher
@@ -16,9 +15,9 @@ let sut: AuthenticateSellerUseCase
 
 describe('Authenticate Seller Use Case', () => {
   beforeEach(() => {
-    inMemoryUserAttachmentsRepository = new InMemoryUserAttachmentsRepository()
+    inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository()
     inMemorySellersRepository = new InMemorySellersRepository(
-      inMemoryUserAttachmentsRepository,
+      inMemoryAttachmentsRepository,
     )
 
     fakeEncrypter = new FakeEncrypter()
