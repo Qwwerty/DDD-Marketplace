@@ -1,13 +1,13 @@
 import { hash } from 'bcryptjs'
 
 import { Either, left, right } from '@/core/either'
-import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found'
 
 import { SellersRepository } from '../repositories/sellers-repository'
 import { Seller } from '../../enterprise/entities/seller'
 import { EmailAlreadyExistsError } from './errors/email-already-exists-error'
 import { PhoneAlreadyExistsError } from './errors/phone-already-exists-error'
-import { UserAttachmentsRepository } from '../repositories/user-attachments-repository'
+import { AttachmentsRepository } from '../repositories/attachments-repository'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 interface UpdateSellerUseCaseRequest {
   userId: string
@@ -27,7 +27,7 @@ type UpdateSellerUseCaseResponse = Either<
 export class UpdateSellerUseCase {
   constructor(
     private sellersRepository: SellersRepository,
-    private userAttachmentsRepository: UserAttachmentsRepository,
+    private attachmentsRepository: AttachmentsRepository,
   ) {}
 
   async execute({
@@ -41,7 +41,7 @@ export class UpdateSellerUseCase {
     const seller = await this.sellersRepository.findById(userId)
 
     if (!seller) {
-      return left(new ResourceNotFoundError())
+      return left(new ResourceNotFoundError('seller', userId))
     }
 
     const sellerWithSameEmail = await this.sellersRepository.findByEmail(email)
@@ -64,7 +64,23 @@ export class UpdateSellerUseCase {
       seller.password = await hash(password, 8)
     }
 
+    const currentAvatar = seller.avatar
+
+    if (avatarId) {
+      const avatar = await this.attachmentsRepository.findById(avatarId)
+
+      if (!avatar) {
+        return left(new ResourceNotFoundError('avatarId', avatarId))
+      }
+
+      seller.avatar = avatar
+    }
+
     await this.sellersRepository.save(seller)
+
+    if (currentAvatar && currentAvatar.id.toString() !== avatarId) {
+      await this.attachmentsRepository.delete(currentAvatar.id.toString())
+    }
 
     return right({
       seller,

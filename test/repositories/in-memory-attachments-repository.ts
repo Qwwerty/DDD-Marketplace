@@ -47,4 +47,10 @@ export class InMemoryAttachmentsRepository implements AttachmentsRepository {
   async createMany(attachments: Attachment[]): Promise<void> {
     this.items.push(...attachments)
   }
+
+  async delete(attachmentId: string): Promise<void> {
+    this.items = this.items.filter(
+      (item) => item.id.toString() !== attachmentId,
+    )
+  }
 }
