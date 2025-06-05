@@ -1,13 +1,16 @@
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
+
 import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
 import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
 import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
 import { makeSeller } from 'test/factories/make-seller'
 import { makeCategory } from 'test/factories/make-category'
+import { InMemoryProductAttachmentsRepository } from 'test/repositories/in-memory-product-attachments-repository'
+import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
+import { makeAttachment } from 'test/factories/make-attachement'
 
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { SellProductUseCase } from './sell-product'
-import { InMemoryProductAttachmentsRepository } from 'test/repositories/in-memory-product-attachments-repository'
-import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
 
 let inMemorySellersRepository: InMemorySellersRepository
 let inMemoryCategoriesRepository: InMemoryCategoriesRepository
@@ -29,6 +32,7 @@ describe('Sell Product Use Case', () => {
 
     inMemoryProductsRepository = new InMemoryProductsRepository(
       inMemoryProductAttachmentsRepository,
+      inMemoryAttachmentsRepository,
     )
 
     inMemoryCategoriesRepository = new InMemoryCategoriesRepository()
@@ -37,11 +41,15 @@ describe('Sell Product Use Case', () => {
       inMemorySellersRepository,
       inMemoryCategoriesRepository,
       inMemoryProductsRepository,
-      inMemoryProductAttachmentsRepository,
     )
   })
 
   it('should be able to sell a product', async () => {
+    inMemoryAttachmentsRepository.items.push(
+      makeAttachment({}, new UniqueEntityId('1')),
+      makeAttachment({}, new UniqueEntityId('2')),
+    )
+
     const seller = makeSeller()
     const category = makeCategory()
 
@@ -54,10 +62,11 @@ describe('Sell Product Use Case', () => {
       title: 'Title product test',
       description: 'Description product test',
       priceInCents: 2000,
-      attachmentsIds: ['attachment-1'],
+      attachmentsIds: ['1', '2'],
     })
 
     expect(inMemoryProductsRepository.items).toHaveLength(1)
+    expect(inMemoryProductAttachmentsRepository.items).toHaveLength(2)
   })
 
   it('should not able to create a product with a non-existent user', async () => {
@@ -96,7 +105,7 @@ describe('Sell Product Use Case', () => {
     expect(result.value).toBeInstanceOf(ResourceNotFoundError)
   })
 
-  it.skip('should not able to create a product with a non-existent images', async () => {
+  it('should not able to create a product with a non-existent images', async () => {
     const seller = makeSeller()
     const category = makeCategory()
 
@@ -109,7 +118,7 @@ describe('Sell Product Use Case', () => {
       title: 'Title product test',
       description: 'Description product test',
       priceInCents: 2000,
-      attachmentsIds: ['attachment-1'],
+      attachmentsIds: ['1'],
     })
 
     expect(result.isLeft()).toBe(true)
