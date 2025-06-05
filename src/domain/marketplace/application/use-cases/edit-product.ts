@@ -70,13 +70,6 @@ export class EditProductUseCase {
       return left(new ResourceNotFoundError('Category', categoryId))
     }
 
-    // const { hasAll, inexistentIds } =
-    //   await this.attachmentsRepository.findManyByIds(attachmentsIds)
-
-    // if (!hasAll) {
-    //   return left(new ResourceNotFoundError('Images', inexistentIds.join(', ')))
-    // }
-
     const currentProductAttachments =
       await this.productAttachmentsRepository.findByProductId(productId)
 
@@ -99,10 +92,14 @@ export class EditProductUseCase {
     product.priceInCents = priceInCents
     product.attachments = productAttachmentList
 
-    await this.productsRepository.save(product)
+    try {
+      await this.productsRepository.save(product)
 
-    return right({
-      product,
-    })
+      return right({
+        product,
+      })
+    } catch (error) {
+      return left(error)
+    }
   }
 }

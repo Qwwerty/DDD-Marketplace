@@ -46,6 +46,17 @@ export class InMemoryProductsRepository implements ProductsRepository {
 
     this.items[itemIndex] = product
 
+    const attachmentsId = product.attachments.currentItems.map((attachment) =>
+      attachment.attachmentId.toString(),
+    )
+
+    const { hasAll, inexistentIds } =
+      await this.attachmentsRepository.findManyByIds(attachmentsId)
+
+    if (!hasAll) {
+      throw new ResourceNotFoundError('Images', inexistentIds.join(', '))
+    }
+
     await this.productAttachmentsRepository.createMany(
       product.attachments.getNewItems(),
     )

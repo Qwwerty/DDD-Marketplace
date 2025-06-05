@@ -35,6 +35,7 @@ describe('Edit Product Use Case', () => {
 
     inMemoryProductsRepository = new InMemoryProductsRepository(
       inMemoryProductAttachmentsRepository,
+      inMemoryAttachmentsRepository,
     )
 
     inMemoryCategoriesRepository = new InMemoryCategoriesRepository()
@@ -141,7 +142,7 @@ describe('Edit Product Use Case', () => {
     expect(result.value).toBeInstanceOf(ResourceNotFoundError)
   })
 
-  it.skip('should not able to create a product with a non-existent images', async () => {
+  it('should not able to create a product with a non-existent images', async () => {
     const seller = makeSeller()
     const category = makeCategory()
 

@@ -20,7 +20,7 @@
     - [x]  Deve ser possível armazenar o valor do produto em centavos
     - [x]  Não deve ser possível editar um Produto com um usuário inexistente 
     - [x]  Não deve ser possível editar um Produto com uma categoria inexistente
-    - [ ]  Não deve ser possível editar um Produto com imagens inexistentes
+    - [x]  Não deve ser possível editar um Produto com imagens inexistentes
     - [x]  Não deve ser possível editar um Produto inexistente
     - [x]  Não deve ser possível alterar um Produto de outro usuário
     - [x]  Não deve ser possível editar um Produto já vendido
