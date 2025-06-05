@@ -43,9 +43,9 @@
     - [ ]  Não deve ser possível alterar o Status de um Produto de outro usuário
     - [ ]  Não deve ser possível marcar como Cancelado um Produto já Vendido
     - [ ]  Não deve ser possível marcar como Vendido um Produto Cancelado
-- [ ]  Deve ser possível obter informações do perfil de um usuário
-    - [ ]  Não deve ser possível obter informações do perfil de um usuário inexistente
-    - [ ]  Não deve ser possível obter a senha do usuário
+- [x]  Deve ser possível obter informações do perfil de um usuário
+    - [x]  Não deve ser possível obter informações do perfil de um usuário inexistente
+    - [x]  Não deve ser possível obter a senha do usuário
 - [ ]  Deve ser possível registrar uma visualização em um produto
     - [ ]  Não deve ser possível registrar uma visualização em um produto inexistente
     - [ ]  Não deve ser possível registrar uma visualização de um usuário inexistente
