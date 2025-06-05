@@ -24,6 +24,7 @@ type UpdateSellerUseCaseResponse = Either<
     seller: Seller
   }
 >
+
 export class UpdateSellerUseCase {
   constructor(
     private sellersRepository: SellersRepository,
