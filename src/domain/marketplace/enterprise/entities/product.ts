@@ -80,6 +80,10 @@ export class Product extends Entity<ProductProps> {
     return this.props.attachments
   }
 
+  get createdAt() {
+    return this.props.createdAt
+  }
+
   static create(
     props: Optional<ProductProps, 'createdAt' | 'status' | 'attachments'>,
     id?: UniqueEntityId,

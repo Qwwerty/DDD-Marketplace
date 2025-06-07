@@ -1,4 +1,7 @@
-import { ProductsRepository } from '@/domain/marketplace/application/repositories/products-repository'
+import {
+  FindMany,
+  ProductsRepository,
+} from '@/domain/marketplace/application/repositories/products-repository'
 import { Product } from '@/domain/marketplace/enterprise/entities/product'
 import { InMemoryProductAttachmentsRepository } from './in-memory-product-attachments-repository'
 import { InMemoryAttachmentsRepository } from './in-memory-attachments-repository'
@@ -20,6 +23,26 @@ export class InMemoryProductsRepository implements ProductsRepository {
     }
 
     return product
+  }
+
+  async findManyRecent({ page, search, status }: FindMany): Promise<Product[]> {
+    let filtered = this.items
+
+    if (search) {
+      filtered = filtered.filter(
+        (item) =>
+          item.title.toLowerCase().includes(search.toLowerCase()) ||
+          item.description.toLowerCase().includes(search.toLowerCase()),
+      )
+    }
+
+    if (status) {
+      filtered = filtered.filter((item) => item.status === status)
+    }
+
+    return filtered
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      .slice((page - 1) * 20, page * 20)
   }
 
   async create(product: Product): Promise<void> {
