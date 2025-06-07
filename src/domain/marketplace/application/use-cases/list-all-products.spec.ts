@@ -2,15 +2,11 @@ import { ListAllProductsUseCase } from './list-all-products'
 import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
 import { InMemoryProductAttachmentsRepository } from 'test/repositories/in-memory-product-attachments-repository'
 import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
-import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
-import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
-import { makeSeller } from 'test/factories/make-seller'
 import { makeProduct } from 'test/factories/make-product'
 import { ProductStatus } from '../../enterprise/entities/product'
 
 let inMemoryProductAttachments: InMemoryProductAttachmentsRepository
 let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
-let inMemorySellersRepository: InMemorySellersRepository
 let inMemoryProductsRepository: InMemoryProductsRepository
 let sut: ListAllProductsUseCase
 
@@ -24,9 +20,6 @@ describe('List All Products Use Case', () => {
     )
 
     inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository()
-    inMemorySellersRepository = new InMemorySellersRepository(
-      inMemoryAttachmentsRepository,
-    )
 
     sut = new ListAllProductsUseCase(inMemoryProductsRepository)
   })

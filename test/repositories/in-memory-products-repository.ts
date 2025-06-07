@@ -1,5 +1,6 @@
 import {
   FindMany,
+  FindManyByOwner,
   ProductsRepository,
 } from '@/domain/marketplace/application/repositories/products-repository'
 import { Product } from '@/domain/marketplace/enterprise/entities/product'
@@ -23,6 +24,28 @@ export class InMemoryProductsRepository implements ProductsRepository {
     }
 
     return product
+  }
+
+  async findManyByOwner({
+    ownerId,
+    search,
+    status,
+  }: FindManyByOwner): Promise<Product[]> {
+    let filtered = this.items
+
+    if (search) {
+      filtered = filtered.filter(
+        (item) =>
+          item.title.toLowerCase().includes(search.toLowerCase()) ||
+          item.description.toLowerCase().includes(search.toLowerCase()),
+      )
+    }
+
+    if (status) {
+      filtered = filtered.filter((item) => item.status === status)
+    }
+
+    return filtered.filter((item) => item.onwer.id.toString() === ownerId)
   }
 
   async findManyRecent({ page, search, status }: FindMany): Promise<Product[]> {
