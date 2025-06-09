@@ -46,11 +46,11 @@
 - [x]  Deve ser possível obter informações do perfil de um usuário
     - [x]  Não deve ser possível obter informações do perfil de um usuário inexistente
     - [x]  Não deve ser possível obter a senha do usuário
-- [ ]  Deve ser possível registrar uma visualização em um produto
-    - [ ]  Não deve ser possível registrar uma visualização em um produto inexistente
-    - [ ]  Não deve ser possível registrar uma visualização de um usuário inexistente
-    - [ ]  Não deve ser possível registrar uma visualização do próprio dono do produto
-    - [ ]  Não deve ser possível registrar uma visualização duplicada
+- [x]  Deve ser possível registrar uma visualização em um produto
+    - [x]  Não deve ser possível registrar uma visualização em um produto inexistente
+    - [x]  Não deve ser possível registrar uma visualização de um usuário inexistente
+    - [x]  Não deve ser possível registrar uma visualização do próprio dono do produto
+    - [x]  Não deve ser possível registrar uma visualização duplicada
 - [ ]  Métricas
     - [ ]  Não deve ser possível obter métricas de usuários inexistentes
     - [ ]  Deve ser possível obter a métrica de produtos vendidos nos últimos 30 dias

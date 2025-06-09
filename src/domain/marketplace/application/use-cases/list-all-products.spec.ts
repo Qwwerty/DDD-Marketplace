@@ -78,9 +78,9 @@ describe('List All Products Use Case', () => {
 
   it('should search products by title or description', async () => {
     inMemoryProductsRepository.items.push(
-      makeProduct({ title: 'Title Test' }),
-      makeProduct({ description: 'Description Test' }),
-      makeProduct({}),
+      makeProduct({ title: 'Title Test' }, undefined),
+      makeProduct({ description: 'Description Test' }, undefined),
+      makeProduct({}, undefined),
     )
 
     const result = await sut.execute({ page: 1, search: 'test' })
