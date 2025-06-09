@@ -14,4 +14,8 @@ export class InMemoryViewsRepository implements ViewsRepository {
         dayjs(item.createdAt).isSame(view.createdAt, 'day'),
     )
   }
+
+  async create(view: View): Promise<void> {
+    this.items.push(view)
+  }
 }

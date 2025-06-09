@@ -1,6 +1,5 @@
-import { Either, left } from '@/core/either'
+import { Either, left, right } from '@/core/either'
 
-import { Viewer } from '../../enterprise/entities/viewer'
 import { ProductsRepository } from '../repositories/products-repository'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { ViewersRepository } from '../repositories/viewers-repository'
@@ -16,7 +15,7 @@ interface RegisterViewUseCaseRequest {
 type RegisterViewUseCaseResponse = Either<
   ResourceNotFoundError | NotAllowedError,
   {
-    viewer: Viewer
+    view: View
   }
 >
 
@@ -57,5 +56,11 @@ export class RegisterViewUseCase {
     if (isViewed) {
       return left(new NotAllowedError())
     }
+
+    await this.viewsRepository.create(view)
+
+    return right({
+      view,
+    })
   }
 }

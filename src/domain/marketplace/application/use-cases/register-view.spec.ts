@@ -113,16 +113,9 @@ describe('Register View Use Case', () => {
 
     const product = makeProduct({}, viewer1, new UniqueEntityId('product-1'))
 
-    inMemoryViewersRepository.items.push(viewer1)
+    inMemoryViewersRepository.items.push(viewer1, viewer2)
 
     inMemoryProductsRepository.items.push(product)
-
-    inMemoryViewsRepository.items.push(
-      View.create({
-        product,
-        viewer: viewer2,
-      }),
-    )
 
     await sut.execute({
       productId: 'product-1',
