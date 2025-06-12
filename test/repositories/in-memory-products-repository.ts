@@ -1,12 +1,19 @@
+import dayjs from 'dayjs'
+import isBetween from 'dayjs/plugin/isBetween'
+
 import {
+  Count,
   FindMany,
   FindManyByOwner,
   ProductsRepository,
 } from '@/domain/marketplace/application/repositories/products-repository'
 import { Product } from '@/domain/marketplace/enterprise/entities/product'
+import { ResourceNotFoundError } from '@/domain/marketplace/application/use-cases/errors/resource-not-found-error'
+
 import { InMemoryProductAttachmentsRepository } from './in-memory-product-attachments-repository'
 import { InMemoryAttachmentsRepository } from './in-memory-attachments-repository'
-import { ResourceNotFoundError } from '@/domain/marketplace/application/use-cases/errors/resource-not-found-error'
+
+dayjs.extend(isBetween)
 
 export class InMemoryProductsRepository implements ProductsRepository {
   public items: Product[] = []
@@ -15,6 +22,25 @@ export class InMemoryProductsRepository implements ProductsRepository {
     private productAttachmentsRepository: InMemoryProductAttachmentsRepository,
     private attachmentsRepository: InMemoryAttachmentsRepository,
   ) {}
+
+  async count({ sellerId, status }: Count): Promise<Product[]> {
+    const filteredProducts = this.items.filter((item) => {
+      const targetDate = dayjs(item.createdAt)
+      const todayDate = dayjs()
+      const thirtyDaysAgo = todayDate.subtract(30, 'day')
+
+      return (
+        targetDate.isBetween(thirtyDaysAgo, todayDate, 'day', '[]') &&
+        item.onwer.id.toString() === sellerId
+      )
+    })
+
+    if (status) {
+      filteredProducts.filter((item) => item.status === status)
+    }
+
+    return filteredProducts
+  }
 
   async findById(id: string): Promise<Product | null> {
     const product = this.items.find((item) => item.id.toString() === id)
