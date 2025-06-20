@@ -11,15 +11,16 @@ import { InMemoryProductAttachmentsRepository } from 'test/repositories/in-memor
 import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
 import { makeView } from 'test/factories/make-view'
 import { makeViewer } from 'test/factories/make-viewer'
+import { CountSellerViewsPerDay } from './count-seller-views-per-day'
 
 let inMemorySellersRepository: InMemorySellersRepository
 let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
 let inMemoryViewsRepository: InMemoryViewsRepository
 let inMemoryProductAttachments: InMemoryProductAttachmentsRepository
 let inMemoryProductsRepository: InMemoryProductsRepository
-let sut: CountSellerViewsUseCase
+let sut: CountSellerViewsPerDay
 
-describe('Count Seller Views Use Case', () => {
+describe('Count Seller Views Per Day Use Case', () => {
   beforeEach(() => {
     inMemorySellersRepository = new InMemorySellersRepository(
       inMemoryAttachmentsRepository,
@@ -34,7 +35,7 @@ describe('Count Seller Views Use Case', () => {
 
     inMemoryViewsRepository = new InMemoryViewsRepository()
 
-    sut = new CountSellerViewsUseCase(
+    sut = new CountSellerViewsPerDay(
       inMemorySellersRepository,
       inMemoryViewsRepository,
     )
@@ -55,7 +56,7 @@ describe('Count Seller Views Use Case', () => {
     expect(result.value).toBeInstanceOf(ResourceNotFoundError)
   })
 
-  it('should be possible to retrive the metric of the views in the last 30 days', async () => {
+  it('should be possible to retrive the metric of the views per day in the last 30 days', async () => {
     vi.setSystemTime(new Date(2025, 0, 30, 0, 0))
 
     const seller = makeSeller({}, new UniqueEntityId('seller-1'))
@@ -67,6 +68,16 @@ describe('Count Seller Views Use Case', () => {
     inMemoryViewsRepository.items.push(
       makeView(
         { createdAt: new Date(2025, 0, 25) },
+        makeViewer({}, new UniqueEntityId('seller-1')),
+        product,
+      ),
+      makeView(
+        { createdAt: new Date(2025, 0, 25) },
+        makeViewer({}, new UniqueEntityId('seller-1')),
+        product,
+      ),
+      makeView(
+        { createdAt: new Date(2025, 0, 10) },
         makeViewer({}, new UniqueEntityId('seller-1')),
         product,
       ),
@@ -83,7 +94,16 @@ describe('Count Seller Views Use Case', () => {
 
     expect(result.value).toStrictEqual(
       expect.objectContaining({
-        amount: 1,
+        viewsPerDay: expect.arrayContaining([
+          {
+            date: new Date(2025, 0, 25),
+            amount: 2,
+          },
+          {
+            date: new Date(2025, 0, 10),
+            amount: 1,
+          },
+        ]),
       }),
     )
   })
