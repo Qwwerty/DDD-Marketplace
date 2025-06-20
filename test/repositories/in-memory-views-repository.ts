@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 
 import {
+  CountByProduct,
   CountBySeller,
   ViewsPerDay,
   ViewsRepository,
@@ -19,6 +20,21 @@ export class InMemoryViewsRepository implements ViewsRepository {
       return (
         targetDate.isBetween(thirtyDaysAgo, todayDate, 'day', '[]') &&
         item.viewer.id.toString() === sellerId
+      )
+    })
+
+    return filtered.length
+  }
+
+  async countByProduct({ productId }: CountByProduct): Promise<number> {
+    const filtered = this.items.filter((item) => {
+      const targetDate = dayjs(item.createdAt)
+      const todayDate = dayjs()
+      const thirtyDaysAgo = todayDate.subtract(7, 'day')
+
+      return (
+        targetDate.isBetween(thirtyDaysAgo, todayDate, 'day', '[]') &&
+        item.product.id.toString() === productId
       )
     })
 
