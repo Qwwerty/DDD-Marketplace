@@ -1,25 +1,29 @@
-import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
-import { makeSeller } from 'test/factories/make-seller'
 import { FakeHasher } from 'test/cryptography/fake-hasher'
+import { makeSeller } from 'test/factories/make-seller'
+import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
 
-import { RegisterSellerUseCase } from './register-seller'
-import { PhoneAlreadyExistsError } from './errors/phone-already-exists-error'
-import { EmailAlreadyExistsError } from './errors/email-already-exists-error'
-import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
-import { makeAttachment } from 'test/factories/make-attachement'
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
+import { makeAttachment } from 'test/factories/make-attachement'
+import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
+import { InMemoryUserAttachmentsRepository } from 'test/repositories/in-memory-user-attachments-repository'
+import { EmailAlreadyExistsError } from './errors/email-already-exists-error'
+import { PhoneAlreadyExistsError } from './errors/phone-already-exists-error'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { RegisterSellerUseCase } from './register-seller'
 
 let fakeHasher: FakeHasher
 let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
+let inMemoryUserAttachmentsRepository: InMemoryUserAttachmentsRepository
 let inMemorySellersRepository: InMemorySellersRepository
 let sut: RegisterSellerUseCase
 
 describe('Register Seller Use Case', () => {
   beforeEach(() => {
+    inMemoryUserAttachmentsRepository = new InMemoryUserAttachmentsRepository()
+
     inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository()
     inMemorySellersRepository = new InMemorySellersRepository(
-      inMemoryAttachmentsRepository,
+      inMemoryUserAttachmentsRepository,
     )
 
     fakeHasher = new FakeHasher()
@@ -57,8 +61,11 @@ describe('Register Seller Use Case', () => {
       avatarId: '1',
     })
 
+    const userId = inMemorySellersRepository.items[0].id
+
     expect(inMemorySellersRepository.items).toHaveLength(1)
-    expect(inMemoryAttachmentsRepository.items).toHaveLength(1)
+    expect(inMemoryUserAttachmentsRepository.items).toHaveLength(1)
+    expect(inMemoryUserAttachmentsRepository.items[0].userId).toEqual(userId)
     expect(inMemorySellersRepository.items[0].email).toBe('johndoe@example.com')
   })
 

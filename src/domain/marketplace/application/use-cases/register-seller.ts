@@ -1,10 +1,15 @@
-import { Seller } from '../../enterprise/entities/seller'
-import { SellersRepository } from '../repositories/sellers-repository'
+import { Injectable } from '@nestjs/common'
+
 import { Either, left, right } from '@/core/either'
-import { EmailAlreadyExistsError } from './errors/email-already-exists-error'
-import { PhoneAlreadyExistsError } from './errors/phone-already-exists-error'
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
+
+import { Seller } from '../../enterprise/entities/seller'
+import { UserAttachment } from '../../enterprise/entities/user-attachment'
 import { HashGenerator } from '../cryptography/hash-generator'
 import { AttachmentsRepository } from '../repositories/attachments-repository'
+import { SellersRepository } from '../repositories/sellers-repository'
+import { EmailAlreadyExistsError } from './errors/email-already-exists-error'
+import { PhoneAlreadyExistsError } from './errors/phone-already-exists-error'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 interface RegisterSellerUseCaseProps {
@@ -12,7 +17,7 @@ interface RegisterSellerUseCaseProps {
   phone: string
   email: string
   password: string
-  avatarId?: string
+  avatarId?: string | null
 }
 
 type RegisterSellerUseCaseResponse = Either<
@@ -22,6 +27,7 @@ type RegisterSellerUseCaseResponse = Either<
   }
 >
 
+@Injectable()
 export class RegisterSellerUseCase {
   constructor(
     private sellersRepository: SellersRepository,
@@ -64,7 +70,12 @@ export class RegisterSellerUseCase {
         return left(new ResourceNotFoundError('avatarId', avatarId))
       }
 
-      seller.avatar = avatar
+      const userAttachment = UserAttachment.create({
+        userId: seller.id,
+        attachmentId: new UniqueEntityId(avatarId),
+      })
+
+      seller.avatar = userAttachment
     }
 
     await this.sellersRepository.create(seller)
