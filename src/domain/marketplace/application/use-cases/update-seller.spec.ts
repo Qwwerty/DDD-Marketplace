@@ -2,26 +2,30 @@ import { hash } from 'bcryptjs'
 
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 
-import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
 import { makeSeller } from 'test/factories/make-seller'
+import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
+import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
+import { InMemoryUserAttachmentsRepository } from 'test/repositories/in-memory-user-attachments-repository'
 
-import { UpdateSellerUseCase } from './update-seller'
+import { Attachment } from '../../enterprise/entities/attachment'
 import { EmailAlreadyExistsError } from './errors/email-already-exists-error'
 import { PhoneAlreadyExistsError } from './errors/phone-already-exists-error'
-import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
-import { Attachment } from '../../enterprise/entities/attachment'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { UpdateSellerUseCase } from './update-seller'
+import { UserAttachment } from '../../enterprise/entities/user-attachment'
 
 let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
+let inMemoryUserAttachmentsRepository: InMemoryUserAttachmentsRepository
 let inMemorySellersRepository: InMemorySellersRepository
 let sut: UpdateSellerUseCase
 
 describe('Update Seller Use Case', () => {
   beforeEach(() => {
+    inMemoryUserAttachmentsRepository = new InMemoryUserAttachmentsRepository()
     inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository()
 
     inMemorySellersRepository = new InMemorySellersRepository(
-      inMemoryAttachmentsRepository,
+      inMemoryUserAttachmentsRepository,
     )
 
     sut = new UpdateSellerUseCase(
@@ -108,7 +112,12 @@ describe('Update Seller Use Case', () => {
     inMemoryAttachmentsRepository.items.push(attachment1, attachment2)
 
     const newSeller = makeSeller(
-      { avatar: attachment1 },
+      {
+        avatar: UserAttachment.create({
+          userId: new UniqueEntityId('seller-1'),
+          attachmentId: new UniqueEntityId('1'),
+        }),
+      },
       new UniqueEntityId('seller-1'),
     )
 
@@ -123,11 +132,13 @@ describe('Update Seller Use Case', () => {
       avatarId: '2',
     })
 
-    expect(inMemoryAttachmentsRepository.items).toHaveLength(1)
-    expect(inMemoryAttachmentsRepository.items[0]).toMatchObject({
-      title: 'attachment-2',
-      path: 'attachment-paht-2',
-    })
+    expect(inMemoryUserAttachmentsRepository.items).toHaveLength(1)
+    expect(inMemoryUserAttachmentsRepository.items[0]).toStrictEqual(
+      expect.objectContaining({
+        userId: new UniqueEntityId('seller-1'),
+        attachmentId: new UniqueEntityId('2'),
+      }),
+    )
   })
 
   it('should not allow updating to a avatar nonexistent', async () => {

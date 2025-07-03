@@ -9,4 +9,8 @@ export class InMemoryUserAttachmentsRepository
   async create(attachment: UserAttachment): Promise<void> {
     this.items.push(attachment)
   }
+
+  async delete(attachmentId: string): Promise<void> {
+    this.items.filter((attachment) => attachment.id.toString() !== attachmentId)
+  }
 }

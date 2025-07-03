@@ -8,6 +8,8 @@ import { EmailAlreadyExistsError } from './errors/email-already-exists-error'
 import { PhoneAlreadyExistsError } from './errors/phone-already-exists-error'
 import { AttachmentsRepository } from '../repositories/attachments-repository'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { UserAttachment } from '../../enterprise/entities/user-attachment'
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 
 interface UpdateSellerUseCaseRequest {
   userId: string
@@ -65,23 +67,22 @@ export class UpdateSellerUseCase {
       seller.password = await hash(password, 8)
     }
 
-    const currentAvatar = seller.avatar
-
     if (avatarId) {
-      const avatar = await this.attachmentsRepository.findById(avatarId)
+      const existsAvatar = await this.attachmentsRepository.findById(avatarId)
 
-      if (!avatar) {
+      if (!existsAvatar) {
         return left(new ResourceNotFoundError('avatarId', avatarId))
       }
+
+      const avatar = UserAttachment.create({
+        userId: seller.id,
+        attachmentId: new UniqueEntityId(avatarId),
+      })
 
       seller.avatar = avatar
     }
 
     await this.sellersRepository.save(seller)
-
-    if (currentAvatar && currentAvatar.id.toString() !== avatarId) {
-      await this.attachmentsRepository.delete(currentAvatar.id.toString())
-    }
 
     return right({
       seller,

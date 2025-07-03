@@ -8,6 +8,7 @@ export interface UserProps {
   phone: string
   password: string
   avatar?: UserAttachment
+  oldAvatarId?: UniqueEntityId
 }
 
 export class User extends Entity<UserProps> {
@@ -43,7 +44,12 @@ export class User extends Entity<UserProps> {
     return this.props.password
   }
 
+  get oldAvatarId() {
+    return this.props.oldAvatarId
+  }
+
   set avatar(avatar: UserAttachment | undefined) {
+    this.props.oldAvatarId = this.props.avatar?.id
     this.props.avatar = avatar
   }
 
