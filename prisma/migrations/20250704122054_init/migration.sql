@@ -5,7 +5,7 @@ CREATE TABLE "users" (
     "phone" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "avatar_id" TEXT NOT NULL,
+    "avatar_id" TEXT,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
@@ -13,13 +13,18 @@ CREATE TABLE "users" (
 -- CreateTable
 CREATE TABLE "attachments" (
     "id" TEXT NOT NULL,
-    "url" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "path" TEXT NOT NULL,
+    "user_id" TEXT,
 
     CONSTRAINT "attachments_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "users_phone_key" ON "users"("phone");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- AddForeignKey
-ALTER TABLE "users" ADD CONSTRAINT "users_avatar_id_fkey" FOREIGN KEY ("avatar_id") REFERENCES "attachments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "attachments" ADD CONSTRAINT "attachments_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
