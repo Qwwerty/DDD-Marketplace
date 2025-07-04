@@ -98,7 +98,7 @@ describe('Update Seller Use Case', () => {
     expect(inMemorySellersRepository.items[0].password).toBe(currentPassword)
   })
 
-  it("should allow updating the seller's avatar", async () => {
+  it.only("should allow updating the seller's avatar", async () => {
     const attachment1 = Attachment.create(
       { title: 'attachment-1', path: 'attachment-paht-1' },
       new UniqueEntityId('1'),
