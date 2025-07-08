@@ -1,10 +1,12 @@
-import { Either, left, right } from '@/core/either'
-import { SellersRepository } from '../repositories/sellers-repository'
-import { Encrypter } from '../cryptography/encrypter'
-import { WrongCrenditalsError } from './errors/wrong-crendentials-errors'
-import { HashComparer } from '../cryptography/hash-comparer'
+import { Injectable } from '@nestjs/common'
 
-interface AuthenticateStudentUseCaseRequest {
+import { Either, left, right } from '@/core/either'
+import { Encrypter } from '../cryptography/encrypter'
+import { HashComparer } from '../cryptography/hash-comparer'
+import { SellersRepository } from '../repositories/sellers-repository'
+import { WrongCrenditalsError } from './errors/wrong-crendentials-errors'
+
+interface AuthenticateSellerUseCaseRequest {
   email: string
   password: string
 }
@@ -16,6 +18,7 @@ type AuthenticateSellerUseCaseResponse = Either<
   }
 >
 
+@Injectable()
 export class AuthenticateSellerUseCase {
   constructor(
     private sellersRepository: SellersRepository,
@@ -26,7 +29,7 @@ export class AuthenticateSellerUseCase {
   async execute({
     email,
     password,
-  }: AuthenticateStudentUseCaseRequest): Promise<AuthenticateSellerUseCaseResponse> {
+  }: AuthenticateSellerUseCaseRequest): Promise<AuthenticateSellerUseCaseResponse> {
     const seller = await this.sellersRepository.findByEmail(email)
 
     if (!seller) {

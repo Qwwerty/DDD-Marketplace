@@ -1,10 +1,13 @@
 import { faker } from '@faker-js/faker'
+import { Injectable } from '@nestjs/common'
 
 import {
   Seller,
   SellerProps,
 } from '@/domain/marketplace/enterprise/entities/seller'
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
+import { PrismaService } from '@/infra/database/prisma/prisma.service'
+import { PrismaSellerMapper } from '@/infra/database/prisma/mappers/prisma-seller-mapper'
 
 export function makeSeller(
   override: Partial<SellerProps> = {},
@@ -20,4 +23,19 @@ export function makeSeller(
     },
     id,
   )
+}
+
+@Injectable()
+export class SellerFactory {
+  constructor(private prisma: PrismaService) {}
+
+  async makePrismaSeller(data: Partial<SellerProps> = {}): Promise<Seller> {
+    const seller = makeSeller(data)
+
+    await this.prisma.user.create({
+      data: PrismaSellerMapper.toPrisma(seller),
+    })
+
+    return seller
+  }
 }
