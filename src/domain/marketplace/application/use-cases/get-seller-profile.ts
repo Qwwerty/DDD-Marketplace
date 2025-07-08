@@ -1,8 +1,8 @@
-import { Either, left, right } from '@/core/either'
-
 import { Seller } from '../../enterprise/entities/seller'
 import { SellersRepository } from '../repositories/sellers-repository'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
+
+import { Either, left, right } from '@/core/either'
 
 interface GetSellerProfileUseCaseRequest {
   sellerId: string

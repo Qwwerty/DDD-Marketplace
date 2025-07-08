@@ -1,8 +1,8 @@
-import { Either, left, right } from '@/core/either'
-
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { ProductsRepository } from '../repositories/products-repository'
 import { ViewsRepository } from '../repositories/views-repository'
+
+import { Either, left, right } from '@/core/either'
 
 interface CountProductViewsUseCaseRequest {
   productId: string

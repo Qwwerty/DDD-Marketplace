@@ -1,6 +1,7 @@
-import { Either, right } from '@/core/either'
 import { Product, ProductStatus } from '../../enterprise/entities/product'
 import { ProductsRepository } from '../repositories/products-repository'
+
+import { Either, right } from '@/core/either'
 
 interface ListAllProductsUseCaseRequest {
   page: number

@@ -1,6 +1,6 @@
+import { Either, left, right } from '@/core/either'
 import { SellersRepository } from '@/domain/marketplace/application/repositories/sellers-repository'
 import { ViewsRepository } from '@/domain/marketplace/application/repositories/views-repository'
-import { Either, left, right } from '@/core/either'
 import { ResourceNotFoundError } from '@/domain/marketplace/application/use-cases/errors/resource-not-found-error'
 
 interface CountSellerViewsPerDayUseCaseRequest {

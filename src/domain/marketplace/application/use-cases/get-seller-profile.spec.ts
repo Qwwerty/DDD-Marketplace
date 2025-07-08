@@ -1,9 +1,11 @@
-import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
-import { GetSellerProfileUseCase } from './get-seller-profile'
-import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
 import { makeSeller } from 'test/factories/make-seller'
-import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
+import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
+import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
+
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { GetSellerProfileUseCase } from './get-seller-profile'
+
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 
 let inMemorySellersRepository: InMemorySellersRepository
 let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository

@@ -1,13 +1,13 @@
-import { Either, left, right } from '@/core/either'
-
 import { Product } from '../../enterprise/entities/product'
-import { CategoriesRepository } from '../repositories/categories-repository'
-import { SellersRepository } from '../repositories/sellers-repository'
-import { ProductsRepository } from '../repositories/products-repository'
-import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { ProductAttachment } from '../../enterprise/entities/product-attachment'
-import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 import { ProductAttachmentList } from '../../enterprise/entities/product-attachments-list'
+import { CategoriesRepository } from '../repositories/categories-repository'
+import { ProductsRepository } from '../repositories/products-repository'
+import { SellersRepository } from '../repositories/sellers-repository'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
+
+import { Either, left, right } from '@/core/either'
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 
 interface SellProductUseCaseProps {
   ownerId: string

@@ -1,10 +1,10 @@
-import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
-import { Entity } from '@/core/entities/entity'
-import { Optional } from '@/core/types/optional'
-
-import { Seller } from './seller'
 import { Category } from './category'
 import { ProductAttachmentList } from './product-attachments-list'
+import { Seller } from './seller'
+
+import { Entity } from '@/core/entities/entity'
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
+import { Optional } from '@/core/types/optional'
 
 export enum ProductStatus {
   AVAILABLE = 'available',

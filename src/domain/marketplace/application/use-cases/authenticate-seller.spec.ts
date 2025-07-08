@@ -1,11 +1,11 @@
-import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
+import { FakeEncrypter } from 'test/cryptography/fake-encrypter'
+import { FakeHasher } from 'test/cryptography/fake-hasher'
+import { makeSeller } from 'test/factories/make-seller'
 import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
+import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
 
 import { AuthenticateSellerUseCase } from './authenticate-seller'
-import { FakeEncrypter } from 'test/cryptography/fake-encrypter'
 import { WrongCrenditalsError } from './errors/wrong-crendentials-errors'
-import { makeSeller } from 'test/factories/make-seller'
-import { FakeHasher } from 'test/cryptography/fake-hasher'
 
 let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
 let inMemorySellersRepository: InMemorySellersRepository

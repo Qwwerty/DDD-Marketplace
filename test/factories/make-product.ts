@@ -1,13 +1,14 @@
 import { faker } from '@faker-js/faker'
 
+import { makeSeller } from './make-seller'
+
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
+import { Category } from '@/domain/marketplace/enterprise/entities/category'
 import {
   Product,
   ProductProps,
 } from '@/domain/marketplace/enterprise/entities/product'
 import { Seller } from '@/domain/marketplace/enterprise/entities/seller'
-import { Category } from '@/domain/marketplace/enterprise/entities/category'
-import { makeSeller } from './make-seller'
 
 export function makeProduct(
   override: Partial<ProductProps> = {},

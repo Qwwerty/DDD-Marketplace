@@ -1,6 +1,7 @@
+import { CategoriesRepository } from '../repositories/categories-repository'
+
 import { Either, right } from '@/core/either'
 import { Category } from '@/domain/marketplace/enterprise/entities/category'
-import { CategoriesRepository } from '../repositories/categories-repository'
 
 type ListAllCategoriesResponse = Either<
   null,

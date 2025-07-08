@@ -1,8 +1,9 @@
-import { Either, left, right } from '@/core/either'
 import { ProductsRepository } from '../repositories/products-repository'
 import { SellersRepository } from '../repositories/sellers-repository'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { ProductStatus } from '../../enterprise/entities/product'
+
+import { Either, left, right } from '@/core/either'
 
 interface CountSellerAvailableUseCaseRequest {
   sellerId: string

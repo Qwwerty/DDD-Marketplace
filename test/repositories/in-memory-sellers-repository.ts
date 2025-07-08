@@ -1,7 +1,7 @@
+import { InMemoryUserAttachmentsRepository } from './in-memory-user-attachments-repository'
+
 import { SellersRepository } from '@/domain/marketplace/application/repositories/sellers-repository'
 import { Seller } from '@/domain/marketplace/enterprise/entities/seller'
-
-import { InMemoryUserAttachmentsRepository } from './in-memory-user-attachments-repository'
 
 export class InMemorySellersRepository implements SellersRepository {
   public items: Seller[] = []

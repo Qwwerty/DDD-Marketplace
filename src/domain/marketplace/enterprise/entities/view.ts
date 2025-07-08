@@ -1,8 +1,9 @@
-import { Entity } from '@/core/entities/entity'
-import { Viewer } from './viewer'
 import { Product } from './product'
-import { Optional } from '@/core/types/optional'
+import { Viewer } from './viewer'
+
+import { Entity } from '@/core/entities/entity'
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
+import { Optional } from '@/core/types/optional'
 
 export interface ViewProps {
   viewer: Viewer

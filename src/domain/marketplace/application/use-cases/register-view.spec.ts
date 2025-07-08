@@ -1,17 +1,17 @@
-import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
-import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
-
-import { InMemoryProductAttachmentsRepository } from 'test/repositories/in-memory-product-attachments-repository'
-import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
-import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
-import { InMemoryViewersRepository } from 'test/repositories/in-memory-viewers-repository'
 import { makeProduct } from 'test/factories/make-product'
 import { makeViewer } from 'test/factories/make-viewer'
+import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
+import { InMemoryProductAttachmentsRepository } from 'test/repositories/in-memory-product-attachments-repository'
+import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
+import { InMemoryViewersRepository } from 'test/repositories/in-memory-viewers-repository'
+import { InMemoryViewsRepository } from 'test/repositories/in-memory-views-repository'
 
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { RegisterViewUseCase } from './register-view'
-import { InMemoryViewsRepository } from 'test/repositories/in-memory-views-repository'
 import { View } from '../../enterprise/entities/view'
+
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 
 let inMemoryProductAttachments: InMemoryProductAttachmentsRepository
 let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository

@@ -1,5 +1,4 @@
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
-
 import {
   ProductAttachment,
   ProductAttachmentProps,

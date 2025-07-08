@@ -1,17 +1,18 @@
-import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
-
-import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
-import { ResourceNotFoundError } from './errors/resource-not-found-error'
-import { CountSellerViewsUseCase } from './count-seller-views'
-import { InMemoryViewsRepository } from 'test/repositories/in-memory-views-repository'
-import { makeSeller } from 'test/factories/make-seller'
-import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 import { makeProduct } from 'test/factories/make-product'
-import { InMemoryProductAttachmentsRepository } from 'test/repositories/in-memory-product-attachments-repository'
-import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
+import { makeSeller } from 'test/factories/make-seller'
 import { makeView } from 'test/factories/make-view'
 import { makeViewer } from 'test/factories/make-viewer'
+import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
+import { InMemoryProductAttachmentsRepository } from 'test/repositories/in-memory-product-attachments-repository'
+import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
+import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
+import { InMemoryViewsRepository } from 'test/repositories/in-memory-views-repository'
+
+import { CountSellerViewsUseCase } from './count-seller-views'
 import { CountSellerViewsPerDay } from './count-seller-views-per-day'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
+
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 
 let inMemorySellersRepository: InMemorySellersRepository
 let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository

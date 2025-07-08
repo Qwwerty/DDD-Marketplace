@@ -1,8 +1,9 @@
-import { ListAllProductsUseCase } from './list-all-products'
+import { makeProduct } from 'test/factories/make-product'
 import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
 import { InMemoryProductAttachmentsRepository } from 'test/repositories/in-memory-product-attachments-repository'
 import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
-import { makeProduct } from 'test/factories/make-product'
+
+import { ListAllProductsUseCase } from './list-all-products'
 import { ProductStatus } from '../../enterprise/entities/product'
 
 let inMemoryProductAttachments: InMemoryProductAttachmentsRepository

@@ -1,6 +1,7 @@
+import { UserAttachment } from './user-attachment'
+
 import { Entity } from '@/core/entities/entity'
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
-import { UserAttachment } from './user-attachment'
 
 export interface UserProps {
   name: string

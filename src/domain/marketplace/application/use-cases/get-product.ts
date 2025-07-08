@@ -1,7 +1,8 @@
-import { Either, left, right } from '@/core/either'
 import { Product } from '../../enterprise/entities/product'
 import { ProductsRepository } from '../repositories/products-repository'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
+
+import { Either, left, right } from '@/core/either'
 
 interface GetProductUseCaseRequest {
   productId: string

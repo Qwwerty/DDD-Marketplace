@@ -1,9 +1,9 @@
-import { Either, left, right } from '@/core/either'
-
-import { AttachmentsRepository } from '../repositories/attachments-repository'
 import { Attachment } from '../../enterprise/entities/attachment'
+import { AttachmentsRepository } from '../repositories/attachments-repository'
 import { Uploader } from '../storage/uploader'
 import { InvalidAttachemntTypeError } from './errors/invalid-attachment-error'
+
+import { Either, left, right } from '@/core/either'
 
 interface IFile {
   fileName: string

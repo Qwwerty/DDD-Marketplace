@@ -1,15 +1,15 @@
-import { Either, left, right } from '@/core/either'
-import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
-import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
-
 import { Product, ProductStatus } from '../../enterprise/entities/product'
-import { CategoriesRepository } from '../repositories/categories-repository'
-import { SellersRepository } from '../repositories/sellers-repository'
-import { ProductsRepository } from '../repositories/products-repository'
-import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { ProductAttachment } from '../../enterprise/entities/product-attachment'
-import { ProductAttachmentsRepository } from '../repositories/product-attachments-repository'
 import { ProductAttachmentList } from '../../enterprise/entities/product-attachments-list'
+import { CategoriesRepository } from '../repositories/categories-repository'
+import { ProductsRepository } from '../repositories/products-repository'
+import { SellersRepository } from '../repositories/sellers-repository'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { ProductAttachmentsRepository } from '../repositories/product-attachments-repository'
+
+import { Either, left, right } from '@/core/either'
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 
 interface EditProductUseCaseProps {
   productId: string

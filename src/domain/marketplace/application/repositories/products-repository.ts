@@ -1,6 +1,6 @@
-import { PaginationParams } from '@/core/repositories/pagination-params'
-
 import { Product, ProductStatus } from '../../enterprise/entities/product'
+
+import { PaginationParams } from '@/core/repositories/pagination-params'
 
 export interface FindManyByOwner {
   ownerId: string

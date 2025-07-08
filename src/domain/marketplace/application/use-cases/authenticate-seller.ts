@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common'
 
-import { Either, left, right } from '@/core/either'
 import { Encrypter } from '../cryptography/encrypter'
 import { HashComparer } from '../cryptography/hash-comparer'
 import { SellersRepository } from '../repositories/sellers-repository'
 import { WrongCrenditalsError } from './errors/wrong-crendentials-errors'
+
+import { Either, left, right } from '@/core/either'
 
 interface AuthenticateSellerUseCaseRequest {
   email: string

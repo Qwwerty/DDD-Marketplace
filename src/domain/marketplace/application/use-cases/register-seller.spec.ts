@@ -1,15 +1,16 @@
 import { FakeHasher } from 'test/cryptography/fake-hasher'
-import { makeSeller } from 'test/factories/make-seller'
-import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
-
-import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 import { makeAttachment } from 'test/factories/make-attachement'
+import { makeSeller } from 'test/factories/make-seller'
 import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
+import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
 import { InMemoryUserAttachmentsRepository } from 'test/repositories/in-memory-user-attachments-repository'
+
 import { EmailAlreadyExistsError } from './errors/email-already-exists-error'
 import { PhoneAlreadyExistsError } from './errors/phone-already-exists-error'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { RegisterSellerUseCase } from './register-seller'
+
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 
 let fakeHasher: FakeHasher
 let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository

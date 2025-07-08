@@ -1,6 +1,7 @@
-import { Category } from '../../enterprise/entities/category'
-import { ListAllCategoriesUseCase } from './list-all-categories'
 import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
+
+import { ListAllCategoriesUseCase } from './list-all-categories'
+import { Category } from '../../enterprise/entities/category'
 
 let inMemoryCategoriesRepository: InMemoryCategoriesRepository
 let sut: ListAllCategoriesUseCase

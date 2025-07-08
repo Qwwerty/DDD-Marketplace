@@ -10,7 +10,7 @@ export class SellerPresenter {
       avatar: seller.avatar
         ? {
             id: seller.avatar.id.toString(),
-            url: seller.avatar.path,
+            url: seller.avatar.attachmentId.toString(),
           }
         : null,
     }

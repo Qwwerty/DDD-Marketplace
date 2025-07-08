@@ -1,17 +1,17 @@
 import dayjs from 'dayjs'
 import isBetween from 'dayjs/plugin/isBetween'
 
+import { InMemoryAttachmentsRepository } from './in-memory-attachments-repository'
+import { InMemoryProductAttachmentsRepository } from './in-memory-product-attachments-repository'
+
 import {
   Count,
   FindMany,
   FindManyByOwner,
   ProductsRepository,
 } from '@/domain/marketplace/application/repositories/products-repository'
-import { Product } from '@/domain/marketplace/enterprise/entities/product'
 import { ResourceNotFoundError } from '@/domain/marketplace/application/use-cases/errors/resource-not-found-error'
-
-import { InMemoryProductAttachmentsRepository } from './in-memory-product-attachments-repository'
-import { InMemoryAttachmentsRepository } from './in-memory-attachments-repository'
+import { Product } from '@/domain/marketplace/enterprise/entities/product'
 
 dayjs.extend(isBetween)
 

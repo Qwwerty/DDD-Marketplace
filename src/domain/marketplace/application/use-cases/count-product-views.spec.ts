@@ -1,14 +1,15 @@
-import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
-import { InMemoryViewsRepository } from 'test/repositories/in-memory-views-repository'
-import { InMemoryProductAttachmentsRepository } from 'test/repositories/in-memory-product-attachments-repository'
-import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
-
-import { ResourceNotFoundError } from './errors/resource-not-found-error'
-import { CountProductViewsUseCase } from './count-product-views'
 import { makeProduct } from 'test/factories/make-product'
-import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 import { makeView } from 'test/factories/make-view'
 import { makeViewer } from 'test/factories/make-viewer'
+import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
+import { InMemoryProductAttachmentsRepository } from 'test/repositories/in-memory-product-attachments-repository'
+import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
+import { InMemoryViewsRepository } from 'test/repositories/in-memory-views-repository'
+
+import { CountProductViewsUseCase } from './count-product-views'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
+
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 
 let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
 let inMemoryViewsRepository: InMemoryViewsRepository

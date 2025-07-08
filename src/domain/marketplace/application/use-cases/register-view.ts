@@ -1,11 +1,11 @@
-import { Either, left, right } from '@/core/either'
-
 import { ProductsRepository } from '../repositories/products-repository'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
-import { ViewersRepository } from '../repositories/viewers-repository'
-import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
-import { ViewsRepository } from '../repositories/views-repository'
 import { View } from '../../enterprise/entities/view'
+import { ViewersRepository } from '../repositories/viewers-repository'
+import { ViewsRepository } from '../repositories/views-repository'
+
+import { Either, left, right } from '@/core/either'
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 
 interface RegisterViewUseCaseRequest {
   productId: string

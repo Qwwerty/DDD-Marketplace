@@ -15,12 +15,12 @@ export class PrismaAttachmentsMapper {
   }
 
   static toPrisma(
-    attachmet: Attachment,
+    attachment: Attachment,
   ): Prisma.AttachmentUncheckedCreateInput {
     return {
-      id: attachmet.id.toString(),
-      title: attachmet.title,
-      path: attachmet.path,
+      id: attachment.id.toString(),
+      title: attachment.title,
+      path: attachment.path,
     }
   }
 }

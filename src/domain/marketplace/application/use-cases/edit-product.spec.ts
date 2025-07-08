@@ -1,19 +1,19 @@
-import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
-
-import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
-import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
-import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
-import { InMemoryProductAttachmentsRepository } from 'test/repositories/in-memory-product-attachments-repository'
-import { makeSeller } from 'test/factories/make-seller'
 import { makeCategory } from 'test/factories/make-category'
+import { makeProduct } from 'test/factories/make-product'
+import { makeProductAttachment } from 'test/factories/make-product-attachment'
+import { makeSeller } from 'test/factories/make-seller'
+import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
+import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
+import { InMemoryProductAttachmentsRepository } from 'test/repositories/in-memory-product-attachments-repository'
+import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
+import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
 
 import { EditProductUseCase } from './edit-product'
-import { makeProduct } from 'test/factories/make-product'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { ProductStatus } from '../../enterprise/entities/product'
+
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
-import { makeProductAttachment } from 'test/factories/make-product-attachment'
-import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
 
 let inMemorySellersRepository: InMemorySellersRepository
 let inMemoryCategoriesRepository: InMemoryCategoriesRepository

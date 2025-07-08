@@ -1,16 +1,16 @@
-import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
-
-import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
-import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
-import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
-import { makeSeller } from 'test/factories/make-seller'
-import { makeCategory } from 'test/factories/make-category'
-import { InMemoryProductAttachmentsRepository } from 'test/repositories/in-memory-product-attachments-repository'
-import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
 import { makeAttachment } from 'test/factories/make-attachement'
+import { makeCategory } from 'test/factories/make-category'
+import { makeSeller } from 'test/factories/make-seller'
+import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
+import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
+import { InMemoryProductAttachmentsRepository } from 'test/repositories/in-memory-product-attachments-repository'
+import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
+import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
 
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { SellProductUseCase } from './sell-product'
+
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 
 let inMemorySellersRepository: InMemorySellersRepository
 let inMemoryCategoriesRepository: InMemoryCategoriesRepository

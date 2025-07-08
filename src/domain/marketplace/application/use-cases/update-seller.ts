@@ -1,14 +1,15 @@
+import { Injectable } from '@nestjs/common'
 import { hash } from 'bcryptjs'
 
-import { Either, left, right } from '@/core/either'
-
-import { SellersRepository } from '../repositories/sellers-repository'
 import { Seller } from '../../enterprise/entities/seller'
+import { UserAttachment } from '../../enterprise/entities/user-attachment'
+import { AttachmentsRepository } from '../repositories/attachments-repository'
+import { SellersRepository } from '../repositories/sellers-repository'
 import { EmailAlreadyExistsError } from './errors/email-already-exists-error'
 import { PhoneAlreadyExistsError } from './errors/phone-already-exists-error'
-import { AttachmentsRepository } from '../repositories/attachments-repository'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
-import { UserAttachment } from '../../enterprise/entities/user-attachment'
+
+import { Either, left, right } from '@/core/either'
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 
 interface UpdateSellerUseCaseRequest {
@@ -27,6 +28,7 @@ type UpdateSellerUseCaseResponse = Either<
   }
 >
 
+@Injectable()
 export class UpdateSellerUseCase {
   constructor(
     private sellersRepository: SellersRepository,

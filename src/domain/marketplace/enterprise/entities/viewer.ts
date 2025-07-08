@@ -1,6 +1,6 @@
-import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
-
 import { User, UserProps } from './user'
+
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 
 export interface ViewerProps extends UserProps {}
 

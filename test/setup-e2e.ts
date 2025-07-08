@@ -1,10 +1,11 @@
 import 'dotenv'
 
-import { PrismaClient } from '@prisma/client'
+import { execSync } from 'node:child_process'
 import { randomUUID } from 'node:crypto'
 
+import { PrismaClient } from '@prisma/client'
+
 import { envSchema } from '@/infra/env/env'
-import { execSync } from 'node:child_process'
 
 const env = envSchema.parse(process.env)
 

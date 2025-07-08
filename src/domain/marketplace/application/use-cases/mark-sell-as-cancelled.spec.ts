@@ -1,16 +1,16 @@
-import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
-import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
-
-import { InMemoryProductAttachmentsRepository } from 'test/repositories/in-memory-product-attachments-repository'
-import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
-import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
 import { makeProduct } from 'test/factories/make-product'
 import { makeSeller } from 'test/factories/make-seller'
+import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
+import { InMemoryProductAttachmentsRepository } from 'test/repositories/in-memory-product-attachments-repository'
+import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
 import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
 
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
-import { ProductStatus } from '../../enterprise/entities/product'
 import { MarkSellAsCancelledUseCase } from './mark-sell-as-cancelled'
+import { ProductStatus } from '../../enterprise/entities/product'
+
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 
 let inMemoryProductAttachments: InMemoryProductAttachmentsRepository
 let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository

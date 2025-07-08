@@ -1,5 +1,5 @@
-import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 import { Entity } from '@/core/entities/entity'
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 
 export interface CategoryProps {
   title: string

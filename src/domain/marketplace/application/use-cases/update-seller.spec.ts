@@ -1,18 +1,17 @@
 import { hash } from 'bcryptjs'
-
-import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
-
 import { makeSeller } from 'test/factories/make-seller'
 import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
 import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
 import { InMemoryUserAttachmentsRepository } from 'test/repositories/in-memory-user-attachments-repository'
 
-import { Attachment } from '../../enterprise/entities/attachment'
 import { EmailAlreadyExistsError } from './errors/email-already-exists-error'
 import { PhoneAlreadyExistsError } from './errors/phone-already-exists-error'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { UpdateSellerUseCase } from './update-seller'
+import { Attachment } from '../../enterprise/entities/attachment'
 import { UserAttachment } from '../../enterprise/entities/user-attachment'
+
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 
 let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
 let inMemoryUserAttachmentsRepository: InMemoryUserAttachmentsRepository

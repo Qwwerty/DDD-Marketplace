@@ -8,9 +8,11 @@ import {
 } from '@nestjs/common'
 import { z } from 'zod'
 
+import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
+
 import { AuthenticateSellerUseCase } from '@/domain/marketplace/application/use-cases/authenticate-seller'
 import { WrongCrenditalsError } from '@/domain/marketplace/application/use-cases/errors/wrong-crendentials-errors'
-import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
+import { Public } from '@/infra/auth/public'
 
 const authenticateBodySchema = z.object({
   email: z.string().email(),
@@ -22,6 +24,7 @@ const bodyValidationPipe = new ZodValidationPipe(authenticateBodySchema)
 type AuthenticateBodySchema = z.infer<typeof authenticateBodySchema>
 
 @Controller('/sellers/sessions')
+@Public()
 export class AuthenticateController {
   constructor(private authenticateSeller: AuthenticateSellerUseCase) {}
 

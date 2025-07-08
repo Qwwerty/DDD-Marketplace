@@ -1,15 +1,15 @@
-import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
-
+import { makeProduct } from 'test/factories/make-product'
+import { makeSeller } from 'test/factories/make-seller'
 import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
 import { InMemoryProductAttachmentsRepository } from 'test/repositories/in-memory-product-attachments-repository'
 import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
-import { makeProduct } from 'test/factories/make-product'
-import { makeSeller } from 'test/factories/make-seller'
 import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
 
-import { ListAllSellerProductsUseCase } from './list-all-seller-products'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { ListAllSellerProductsUseCase } from './list-all-seller-products'
 import { ProductStatus } from '../../enterprise/entities/product'
+
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 
 let inMemorySellersRepository: InMemorySellersRepository
 let inMemoryAttachemntsRepository: InMemoryAttachmentsRepository

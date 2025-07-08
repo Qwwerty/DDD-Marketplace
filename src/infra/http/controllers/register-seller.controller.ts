@@ -9,13 +9,14 @@ import {
 } from '@nestjs/common'
 import { z } from 'zod'
 
-import { RegisterSellerUseCase } from '@/domain/marketplace/application/use-cases/register-seller'
-
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 import { SellerPresenter } from '../presenters/seller-presenter'
-import { PhoneAlreadyExistsError } from '@/domain/marketplace/application/use-cases/errors/phone-already-exists-error'
+
 import { EmailAlreadyExistsError } from '@/domain/marketplace/application/use-cases/errors/email-already-exists-error'
+import { PhoneAlreadyExistsError } from '@/domain/marketplace/application/use-cases/errors/phone-already-exists-error'
 import { ResourceNotFoundError } from '@/domain/marketplace/application/use-cases/errors/resource-not-found-error'
+import { RegisterSellerUseCase } from '@/domain/marketplace/application/use-cases/register-seller'
+import { Public } from '@/infra/auth/public'
 
 const registerSellerBodySchema = z
   .object({
@@ -35,6 +36,7 @@ const bodyValidationPipe = new ZodValidationPipe(registerSellerBodySchema)
 type CreateSellerBodySchema = z.infer<typeof registerSellerBodySchema>
 
 @Controller('/sellers')
+@Public()
 export class RegisterSellerController {
   constructor(private registerSeller: RegisterSellerUseCase) {}
 

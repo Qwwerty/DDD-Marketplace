@@ -1,8 +1,5 @@
 import { Injectable } from '@nestjs/common'
 
-import { Either, left, right } from '@/core/either'
-import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
-
 import { Seller } from '../../enterprise/entities/seller'
 import { UserAttachment } from '../../enterprise/entities/user-attachment'
 import { HashGenerator } from '../cryptography/hash-generator'
@@ -11,6 +8,9 @@ import { SellersRepository } from '../repositories/sellers-repository'
 import { EmailAlreadyExistsError } from './errors/email-already-exists-error'
 import { PhoneAlreadyExistsError } from './errors/phone-already-exists-error'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
+
+import { Either, left, right } from '@/core/either'
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 
 interface RegisterSellerUseCaseProps {
   name: string

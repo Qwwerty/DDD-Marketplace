@@ -1,14 +1,18 @@
 import { Injectable } from '@nestjs/common'
 
-import { SellersRepository } from '@/domain/marketplace/application/repositories/sellers-repository'
-import { Seller } from '@/domain/marketplace/enterprise/entities/seller'
-
-import { PrismaService } from '../prisma.service'
 import { PrismaSellerMapper } from '../mappers/prisma-seller-mapper'
+import { PrismaService } from '../prisma.service'
+
+import { SellersRepository } from '@/domain/marketplace/application/repositories/sellers-repository'
+import { UserAttachmentsRepository } from '@/domain/marketplace/application/repositories/user-attachments-repository'
+import { Seller } from '@/domain/marketplace/enterprise/entities/seller'
 
 @Injectable()
 export class PrismaSellersRepository implements SellersRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private userAttachmentRepository: UserAttachmentsRepository,
+  ) {}
 
   async findById(sellerId: string): Promise<Seller | null> {
     const seller = await this.prisma.user.findUnique({
@@ -63,18 +67,26 @@ export class PrismaSellersRepository implements SellersRepository {
     })
 
     if (seller.avatar) {
-      await this.prisma.attachment.update({
-        where: {
-          id: seller.avatar.attachmentId.toString(),
-        },
-        data: {
-          user_id: seller.id.toString(),
-        },
-      })
+      await this.userAttachmentRepository.create(seller.avatar)
     }
   }
 
-  save(seller: Seller): Promise<void> {
-    throw new Error('Method not implemented.')
+  async save(seller: Seller): Promise<void> {
+    const data = PrismaSellerMapper.toPrisma(seller)
+
+    await this.prisma.user.update({
+      where: {
+        id: data.id,
+      },
+      data,
+    })
+
+    if (seller.oldAvatarId) {
+      await this.userAttachmentRepository.delete(seller.oldAvatarId.toString())
+    }
+
+    if (seller.avatar) {
+      await this.userAttachmentRepository.create(seller.avatar)
+    }
   }
 }

@@ -1,7 +1,7 @@
 import { User as PrismaUser, Prisma } from '@prisma/client'
 
-import { Seller } from '@/domain/marketplace/enterprise/entities/seller'
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
+import { Seller } from '@/domain/marketplace/enterprise/entities/seller'
 
 export class PrismaSellerMapper {
   static toDomain(raw: PrismaUser): Seller {
