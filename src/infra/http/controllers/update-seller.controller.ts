@@ -1,8 +1,10 @@
 import {
   BadRequestException,
   Body,
+  ConflictException,
   Controller,
   HttpCode,
+  NotFoundException,
   Put,
 } from '@nestjs/common'
 import { z } from 'zod'
@@ -10,6 +12,9 @@ import { z } from 'zod'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 import { SellerPresenter } from '../presenters/seller-presenter'
 
+import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found'
+import { EmailAlreadyExistsError } from '@/domain/marketplace/application/use-cases/errors/email-already-exists-error'
+import { PhoneAlreadyExistsError } from '@/domain/marketplace/application/use-cases/errors/phone-already-exists-error'
 import { UpdateSellerUseCase } from '@/domain/marketplace/application/use-cases/update-seller'
 import { CurrentUser } from '@/infra/auth/current-user-decorator'
 import { UserPayload } from '@/infra/auth/jwt.strategy'
@@ -62,7 +67,16 @@ export class UpdateSellerController {
     })
 
     if (result.isLeft()) {
-      throw new BadRequestException()
+      const error = result.value
+
+      switch (error.constructor) {
+        case PhoneAlreadyExistsError || EmailAlreadyExistsError:
+          throw new ConflictException(error.message)
+        case ResourceNotFoundError:
+          throw new NotFoundException(error.message)
+        default:
+          throw new BadRequestException(error.message)
+      }
     }
 
     return SellerPresenter.toHTTP(result.value.seller)
