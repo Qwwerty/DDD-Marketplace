@@ -1,3 +1,5 @@
+import { Injectable } from '@nestjs/common'
+
 import { Attachment } from '../../enterprise/entities/attachment'
 import { AttachmentsRepository } from '../repositories/attachments-repository'
 import { Uploader } from '../storage/uploader'
@@ -22,6 +24,7 @@ type UploadAttachmentsUseCaseResponse = Either<
   }
 >
 
+@Injectable()
 export class UploadAttachmentsUseCase {
   constructor(
     private attachmentsRepository: AttachmentsRepository,

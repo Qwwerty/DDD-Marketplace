@@ -31,11 +31,23 @@ export class PrismaAttachmentsRepository implements AttachmentsRepository {
     throw new Error('Method not implemented.')
   }
 
-  createMany(attachement: Attachment[]): Promise<void> {
-    throw new Error('Method not implemented.')
+  async createMany(attachements: Attachment[]): Promise<void> {
+    if (attachements.length === 0) {
+      return
+    }
+
+    const data = attachements.map((attachment) =>
+      PrismaAttachmentsMapper.toPrisma(attachment),
+    )
+
+    await this.prisma.attachment.createMany({ data })
   }
 
-  delete(attachmentId: string): Promise<void> {
-    throw new Error('Method not implemented.')
+  async delete(attachmentId: string): Promise<void> {
+    await this.prisma.attachment.delete({
+      where: {
+        id: attachmentId,
+      },
+    })
   }
 }
