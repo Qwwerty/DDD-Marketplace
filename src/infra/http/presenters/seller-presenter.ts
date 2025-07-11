@@ -7,12 +7,7 @@ export class SellerPresenter {
       name: seller.name,
       phone: seller.phone,
       email: seller.email,
-      avatar: seller.avatar
-        ? {
-            id: seller.avatar.id.toString(),
-            url: seller.avatar.attachmentId.toString(),
-          }
-        : null,
+      avatar: null,
     }
   }
 }
