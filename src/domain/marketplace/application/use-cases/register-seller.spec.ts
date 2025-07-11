@@ -21,10 +21,11 @@ let sut: RegisterSellerUseCase
 describe('Register Seller Use Case', () => {
   beforeEach(() => {
     inMemoryUserAttachmentsRepository = new InMemoryUserAttachmentsRepository()
-
     inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository()
+
     inMemorySellersRepository = new InMemorySellersRepository(
       inMemoryUserAttachmentsRepository,
+      inMemoryAttachmentsRepository,
     )
 
     fakeHasher = new FakeHasher()

@@ -6,17 +6,19 @@ import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-catego
 import { InMemoryProductAttachmentsRepository } from 'test/repositories/in-memory-product-attachments-repository'
 import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
 import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
+import { InMemoryUserAttachmentsRepository } from 'test/repositories/in-memory-user-attachments-repository'
 
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { SellProductUseCase } from './sell-product'
 
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 
+let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
+let inMemoryUserAttachmentsRepository: InMemoryUserAttachmentsRepository
 let inMemorySellersRepository: InMemorySellersRepository
 let inMemoryCategoriesRepository: InMemoryCategoriesRepository
 let inMemoryProductsRepository: InMemoryProductsRepository
 let inMemoryProductAttachmentsRepository: InMemoryProductAttachmentsRepository
-let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
 let sut: SellProductUseCase
 
 describe('Sell Product Use Case', () => {
@@ -25,8 +27,10 @@ describe('Sell Product Use Case', () => {
       new InMemoryProductAttachmentsRepository()
 
     inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository()
+    inMemoryUserAttachmentsRepository = new InMemoryUserAttachmentsRepository()
 
     inMemorySellersRepository = new InMemorySellersRepository(
+      inMemoryUserAttachmentsRepository,
       inMemoryAttachmentsRepository,
     )
 

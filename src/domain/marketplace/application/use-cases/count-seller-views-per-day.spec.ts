@@ -6,16 +6,17 @@ import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attac
 import { InMemoryProductAttachmentsRepository } from 'test/repositories/in-memory-product-attachments-repository'
 import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
 import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
+import { InMemoryUserAttachmentsRepository } from 'test/repositories/in-memory-user-attachments-repository'
 import { InMemoryViewsRepository } from 'test/repositories/in-memory-views-repository'
 
-import { CountSellerViewsUseCase } from './count-seller-views'
 import { CountSellerViewsPerDay } from './count-seller-views-per-day'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 
-let inMemorySellersRepository: InMemorySellersRepository
 let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
+let inMemoryUserAttachmentsRepository: InMemoryUserAttachmentsRepository
+let inMemorySellersRepository: InMemorySellersRepository
 let inMemoryViewsRepository: InMemoryViewsRepository
 let inMemoryProductAttachments: InMemoryProductAttachmentsRepository
 let inMemoryProductsRepository: InMemoryProductsRepository
@@ -23,11 +24,14 @@ let sut: CountSellerViewsPerDay
 
 describe('Count Seller Views Per Day Use Case', () => {
   beforeEach(() => {
+    inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository()
+    inMemoryUserAttachmentsRepository = new InMemoryUserAttachmentsRepository()
+
     inMemorySellersRepository = new InMemorySellersRepository(
+      inMemoryUserAttachmentsRepository,
       inMemoryAttachmentsRepository,
     )
 
-    inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository()
     inMemoryProductAttachments = new InMemoryProductAttachmentsRepository()
     inMemoryProductsRepository = new InMemoryProductsRepository(
       inMemoryProductAttachments,

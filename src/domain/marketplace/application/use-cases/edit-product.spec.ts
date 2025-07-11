@@ -7,6 +7,7 @@ import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-catego
 import { InMemoryProductAttachmentsRepository } from 'test/repositories/in-memory-product-attachments-repository'
 import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
 import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
+import { InMemoryUserAttachmentsRepository } from 'test/repositories/in-memory-user-attachments-repository'
 
 import { EditProductUseCase } from './edit-product'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
@@ -15,21 +16,26 @@ import { ProductStatus } from '../../enterprise/entities/product'
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 
+let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
+let inMemoryUserAttachmentsRepository: InMemoryUserAttachmentsRepository
 let inMemorySellersRepository: InMemorySellersRepository
 let inMemoryCategoriesRepository: InMemoryCategoriesRepository
 let inMemoryProductsRepository: InMemoryProductsRepository
-let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
 let inMemoryProductAttachmentsRepository: InMemoryProductAttachmentsRepository
 let sut: EditProductUseCase
 
 describe('Edit Product Use Case', () => {
   beforeEach(() => {
+    inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository()
+    inMemoryUserAttachmentsRepository = new InMemoryUserAttachmentsRepository()
+
     inMemoryProductAttachmentsRepository =
       new InMemoryProductAttachmentsRepository()
 
     inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository()
 
     inMemorySellersRepository = new InMemorySellersRepository(
+      inMemoryUserAttachmentsRepository,
       inMemoryAttachmentsRepository,
     )
 

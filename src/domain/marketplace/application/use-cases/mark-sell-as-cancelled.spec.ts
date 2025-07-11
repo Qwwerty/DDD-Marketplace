@@ -4,6 +4,7 @@ import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attac
 import { InMemoryProductAttachmentsRepository } from 'test/repositories/in-memory-product-attachments-repository'
 import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
 import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
+import { InMemoryUserAttachmentsRepository } from 'test/repositories/in-memory-user-attachments-repository'
 
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { MarkSellAsCancelledUseCase } from './mark-sell-as-cancelled'
@@ -12,8 +13,9 @@ import { ProductStatus } from '../../enterprise/entities/product'
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 
-let inMemoryProductAttachments: InMemoryProductAttachmentsRepository
 let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
+let inMemoryUserAttachmentsRepository: InMemoryUserAttachmentsRepository
+let inMemoryProductAttachments: InMemoryProductAttachmentsRepository
 let inMemorySellersRepository: InMemorySellersRepository
 let inMemoryProductsRepository: InMemoryProductsRepository
 let sut: MarkSellAsCancelledUseCase
@@ -28,7 +30,9 @@ describe('Mark Sell As Cancelled Use Case', () => {
     )
 
     inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository()
+    inMemoryUserAttachmentsRepository = new InMemoryUserAttachmentsRepository()
     inMemorySellersRepository = new InMemorySellersRepository(
+      inMemoryUserAttachmentsRepository,
       inMemoryAttachmentsRepository,
     )
 

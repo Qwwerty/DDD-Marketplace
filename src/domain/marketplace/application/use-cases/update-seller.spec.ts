@@ -25,6 +25,7 @@ describe('Update Seller Use Case', () => {
 
     inMemorySellersRepository = new InMemorySellersRepository(
       inMemoryUserAttachmentsRepository,
+      inMemoryAttachmentsRepository,
     )
 
     sut = new UpdateSellerUseCase(
