@@ -52,10 +52,10 @@ describe('Register Seller Use Case', () => {
 
   it('should be possible to register new seller with avatar', async () => {
     inMemoryAttachmentsRepository.items.push(
-      makeAttachment({}, new UniqueEntityId('1')),
+      makeAttachment({ path: 'path/test' }, new UniqueEntityId('1')),
     )
 
-    await sut.execute({
+    const result = await sut.execute({
       name: 'John Doe',
       email: 'johndoe@example.com',
       phone: '32989903212',
@@ -69,6 +69,21 @@ describe('Register Seller Use Case', () => {
     expect(inMemoryUserAttachmentsRepository.items).toHaveLength(1)
     expect(inMemoryUserAttachmentsRepository.items[0].userId).toEqual(userId)
     expect(inMemorySellersRepository.items[0].email).toBe('johndoe@example.com')
+
+    console.log(result.value)
+
+    expect(result.value).toStrictEqual({
+      seller: expect.objectContaining({
+        userId,
+        name: 'John Doe',
+        email: 'johndoe@example.com',
+        phone: '32989903212',
+        avatar: {
+          id: new UniqueEntityId('1'),
+          path: 'path/test',
+        },
+      }),
+    })
   })
 
   it("should generate a hash of the seller's password", async () => {
