@@ -31,12 +31,10 @@ export class CountSellerAvailableUseCase {
       return left(new ResourceNotFoundError('sellerId', sellerId))
     }
 
-    const products = await this.productsRepository.count({
+    const amount = await this.productsRepository.count({
       sellerId,
       status: ProductStatus.AVAILABLE,
     })
-
-    const amount = products.length
 
     return right({
       amount,

@@ -70,8 +70,6 @@ describe('Register Seller Use Case', () => {
     expect(inMemoryUserAttachmentsRepository.items[0].userId).toEqual(userId)
     expect(inMemorySellersRepository.items[0].email).toBe('johndoe@example.com')
 
-    console.log(result.value)
-
     expect(result.value).toStrictEqual({
       seller: expect.objectContaining({
         userId,

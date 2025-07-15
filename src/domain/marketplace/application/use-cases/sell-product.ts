@@ -1,3 +1,5 @@
+import { Injectable } from '@nestjs/common'
+
 import { Product } from '../../enterprise/entities/product'
 import { ProductAttachment } from '../../enterprise/entities/product-attachment'
 import { ProductAttachmentList } from '../../enterprise/entities/product-attachments-list'
@@ -25,6 +27,7 @@ type SellProductUseCaseResponse = Either<
   }
 >
 
+@Injectable()
 export class SellProductUseCase {
   constructor(
     private sellersRepository: SellersRepository,
