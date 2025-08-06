@@ -12,6 +12,7 @@ import {
 } from '@/domain/marketplace/application/repositories/products-repository'
 import { ResourceNotFoundError } from '@/domain/marketplace/application/use-cases/errors/resource-not-found-error'
 import { Product } from '@/domain/marketplace/enterprise/entities/product'
+import { ProductDetails } from '@/domain/marketplace/enterprise/entities/value-objects/product-details'
 
 dayjs.extend(isBetween)
 
@@ -23,7 +24,7 @@ export class InMemoryProductsRepository implements ProductsRepository {
     private attachmentsRepository: InMemoryAttachmentsRepository,
   ) {}
 
-  async count({ sellerId, status }: Count): Promise<Product[]> {
+  async count({ sellerId, status }: Count): Promise<number> {
     const filteredProducts = this.items.filter((item) => {
       const targetDate = dayjs(item.createdAt)
       const todayDate = dayjs()
@@ -39,7 +40,7 @@ export class InMemoryProductsRepository implements ProductsRepository {
       filteredProducts.filter((item) => item.status === status)
     }
 
-    return filteredProducts
+    return filteredProducts.length
   }
 
   async findById(id: string): Promise<Product | null> {
@@ -94,15 +95,18 @@ export class InMemoryProductsRepository implements ProductsRepository {
       .slice((page - 1) * 20, page * 20)
   }
 
-  async create(product: Product): Promise<void> {
+  async create(product: Product): Promise<ProductDetails> {
     this.items.push(product)
 
     const attachmentsId = product.attachments.currentItems.map((attachment) =>
       attachment.attachmentId.toString(),
     )
 
-    const { hasAll, inexistentIds } =
-      await this.attachmentsRepository.findManyByIds(attachmentsId)
+    const {
+      hasAll,
+      inexistentIds,
+      data: attachments,
+    } = await this.attachmentsRepository.findManyByIds(attachmentsId)
 
     if (!hasAll) {
       throw new ResourceNotFoundError('Images', inexistentIds.join(', '))
@@ -111,6 +115,36 @@ export class InMemoryProductsRepository implements ProductsRepository {
     await this.productAttachmentsRepository.createMany(
       product.attachments.getItems(),
     )
+
+    const hasAvatar = attachments.find(
+      (attachment) => attachment.id === product.onwer.avatar?.attachmentId,
+    )
+
+    return ProductDetails.create({
+      productId: product.id,
+      title: product.title,
+      description: product.description,
+      priceInCents: product.priceInCents,
+      status: product.status,
+      owner: {
+        id: product.onwer.id,
+        name: product.onwer.name,
+        phone: product.onwer.phone,
+        email: product.onwer.email,
+        avatar: hasAvatar
+          ? {
+              id: hasAvatar.id,
+              path: hasAvatar.path,
+            }
+          : undefined,
+      },
+      category: {
+        id: product.category.id,
+        title: product.category.title,
+        slug: product.category.slug,
+      },
+      attachments,
+    })
   }
 
   async save(product: Product): Promise<void> {

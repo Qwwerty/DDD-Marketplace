@@ -60,7 +60,7 @@ describe('Sell Product Use Case', () => {
     inMemorySellersRepository.items.push(seller)
     inMemoryCategoriesRepository.items.push(category)
 
-    await sut.execute({
+    const result = await sut.execute({
       ownerId: seller.id.toString(),
       categoryId: category.id.toString(),
       title: 'Title product test',
@@ -71,6 +71,21 @@ describe('Sell Product Use Case', () => {
 
     expect(inMemoryProductsRepository.items).toHaveLength(1)
     expect(inMemoryProductAttachmentsRepository.items).toHaveLength(2)
+    expect(result.value).toStrictEqual({
+      product: expect.objectContaining({
+        productId: expect.any(UniqueEntityId),
+        attachments: [
+          expect.objectContaining({
+            id: new UniqueEntityId('1'),
+            path: expect.any(String),
+          }),
+          expect.objectContaining({
+            id: new UniqueEntityId('2'),
+            path: expect.any(String),
+          }),
+        ],
+      }),
+    })
   })
 
   it('should not able to create a product with a non-existent user', async () => {

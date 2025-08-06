@@ -1,4 +1,5 @@
 import { Product, ProductStatus } from '../../enterprise/entities/product'
+import { ProductDetails } from '../../enterprise/entities/value-objects/product-details'
 
 import { PaginationParams } from '@/core/repositories/pagination-params'
 
@@ -23,6 +24,6 @@ export abstract class ProductsRepository {
   abstract findById(id: string): Promise<Product | null>
   abstract findManyByOwner(params: FindManyByOwner): Promise<Product[]>
   abstract findManyRecent(params: FindMany): Promise<Product[]>
-  abstract create(product: Product): Promise<void>
+  abstract create(product: Product): Promise<ProductDetails>
   abstract save(product: Product): Promise<void>
 }

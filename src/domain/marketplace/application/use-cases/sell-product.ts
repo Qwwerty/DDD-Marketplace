@@ -7,6 +7,7 @@ import { CategoriesRepository } from '../repositories/categories-repository'
 import { ProductsRepository } from '../repositories/products-repository'
 import { SellersRepository } from '../repositories/sellers-repository'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { ProductDetails } from '../../enterprise/entities/value-objects/product-details'
 
 import { Either, left, right } from '@/core/either'
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
@@ -23,7 +24,7 @@ interface SellProductUseCaseProps {
 type SellProductUseCaseResponse = Either<
   ResourceNotFoundError,
   {
-    product: Product
+    product: ProductDetails
   }
 >
 
@@ -73,10 +74,10 @@ export class SellProductUseCase {
     product.attachments = new ProductAttachmentList(productAttachments)
 
     try {
-      await this.productsRepository.create(product)
+      const result = await this.productsRepository.create(product)
 
       return right({
-        product,
+        product: result,
       })
     } catch (error) {
       return left(error)
