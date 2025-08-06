@@ -96,8 +96,6 @@ export class InMemoryProductsRepository implements ProductsRepository {
   }
 
   async create(product: Product): Promise<ProductDetails> {
-    this.items.push(product)
-
     const attachmentsId = product.attachments.currentItems.map((attachment) =>
       attachment.attachmentId.toString(),
     )
@@ -111,6 +109,8 @@ export class InMemoryProductsRepository implements ProductsRepository {
     if (!hasAll) {
       throw new ResourceNotFoundError('Images', inexistentIds.join(', '))
     }
+
+    this.items.push(product)
 
     await this.productAttachmentsRepository.createMany(
       product.attachments.getItems(),
