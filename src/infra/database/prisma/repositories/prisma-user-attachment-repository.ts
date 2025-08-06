@@ -17,7 +17,7 @@ export class PrismaUserAttachmentsRepository
         id: attachment.attachmentId.toString(),
       },
       data: {
-        user_id: attachment.userId.toString(),
+        userId: attachment.userId.toString(),
       },
     })
   }

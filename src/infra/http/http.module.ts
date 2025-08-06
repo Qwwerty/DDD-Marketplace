@@ -8,10 +8,12 @@ import { UpdateSellerController } from './controllers/update-seller.controller'
 import { UploadAttachmentsController } from './controllers/upload-attachments.controller'
 import { StorageModule } from '../storage/storage.module'
 import { GetSellerProfileController } from './controllers/get-seller-profile.controller'
+import { SellProductController } from './controllers/sell-product.controller'
 
 import { AuthenticateSellerUseCase } from '@/domain/marketplace/application/use-cases/authenticate-seller'
 import { GetSellerProfileUseCase } from '@/domain/marketplace/application/use-cases/get-seller-profile'
 import { RegisterSellerUseCase } from '@/domain/marketplace/application/use-cases/register-seller'
+import { SellProductUseCase } from '@/domain/marketplace/application/use-cases/sell-product'
 import { UpdateSellerUseCase } from '@/domain/marketplace/application/use-cases/update-seller'
 import { UploadAttachmentsUseCase } from '@/domain/marketplace/application/use-cases/upload-attachments'
 
@@ -23,6 +25,7 @@ import { UploadAttachmentsUseCase } from '@/domain/marketplace/application/use-c
     UpdateSellerController,
     UploadAttachmentsController,
     GetSellerProfileController,
+    SellProductController,
   ],
   providers: [
     RegisterSellerUseCase,
@@ -30,6 +33,7 @@ import { UploadAttachmentsUseCase } from '@/domain/marketplace/application/use-c
     UpdateSellerUseCase,
     UploadAttachmentsUseCase,
     GetSellerProfileUseCase,
+    SellProductUseCase,
   ],
 })
 export class HttpModule {}

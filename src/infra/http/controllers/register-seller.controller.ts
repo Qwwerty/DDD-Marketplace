@@ -10,7 +10,7 @@ import {
 import { z } from 'zod'
 
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
-import { SellerPresenter } from '../presenters/seller-presenter'
+import { SellerDetailsPresenter } from '../presenters/seller-deteils-presenter'
 
 import { EmailAlreadyExistsError } from '@/domain/marketplace/application/use-cases/errors/email-already-exists-error'
 import { PhoneAlreadyExistsError } from '@/domain/marketplace/application/use-cases/errors/phone-already-exists-error'
@@ -69,7 +69,7 @@ export class RegisterSellerController {
     const seller = result.value.seller
 
     return {
-      seller: SellerPresenter.toHTTP(seller),
+      seller: SellerDetailsPresenter.toHTTP(seller),
     }
   }
 }

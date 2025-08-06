@@ -53,7 +53,7 @@ export class EditProductUseCase {
 
     if (
       product.status === ProductStatus.SOLD ||
-      product.onwer.id.toString() !== ownerId
+      product.owner.id.toString() !== ownerId
     ) {
       return left(new NotAllowedError())
     }

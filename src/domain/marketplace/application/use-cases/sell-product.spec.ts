@@ -94,7 +94,7 @@ describe('Sell Product Use Case', () => {
     inMemoryCategoriesRepository.items.push(category)
 
     const result = await sut.execute({
-      ownerId: 'onwer-id',
+      ownerId: 'owner-id',
       categoryId: category.id.toString(),
       title: 'Title product test',
       description: 'Description product test',

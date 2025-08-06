@@ -17,7 +17,7 @@ export interface ProductProps {
   description: string
   priceInCents: number
   status: ProductStatus
-  onwer: Seller
+  owner: Seller
   category: Category
   attachments: ProductAttachmentList
   createdAt: Date
@@ -56,12 +56,12 @@ export class Product extends Entity<ProductProps> {
     return this.props.status
   }
 
-  set onwer(value: Seller) {
-    this.props.onwer = value
+  set owner(value: Seller) {
+    this.props.owner = value
   }
 
-  get onwer() {
-    return this.props.onwer
+  get owner() {
+    return this.props.owner
   }
 
   set category(value: Category) {

@@ -16,17 +16,53 @@ model User {
   avatarId String? @map("avatar_id")
 
   attachments Attachment[]
+  products    Product[]
 
   @@map("users")
 }
 
 model Attachment {
-  id      String  @id @default(uuid())
-  title   String
-  path    String
-  user_id String?
+  id        String  @id @default(uuid())
+  title     String
+  path      String
+  userId    String? @map("user_id")
+  productId String? @map("product_id")
 
-  user User? @relation(fields: [user_id], references: [id])
+  user    User?    @relation(fields: [userId], references: [id])
+  Product Product? @relation(fields: [productId], references: [id])
 
   @@map("attachments")
+}
+
+enum Status {
+  AVAILABLE
+  SOLD
+  CANCELLED
+}
+
+model Product {
+  id           String   @id @default(uuid())
+  title        String
+  description  String
+  priceInCents Int
+  status       Status   @default(AVAILABLE)
+  categoryId   String   @map("category_id")
+  userId       String
+  createdAt    DateTime @default(now())
+
+  attachments Attachment[]
+
+  category Category @relation(fields: [categoryId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+
+  @@map("products")
+}
+
+model Category {
+  id      String    @id @default(uuid())
+  title   String
+  slug    String    @unique
+  Product Product[]
+
+  @@map("categories")
 }

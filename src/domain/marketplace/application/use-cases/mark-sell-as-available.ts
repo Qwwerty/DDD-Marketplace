@@ -40,7 +40,7 @@ export class MarkSellAsAvailableUseCase {
       return left(new ResourceNotFoundError('productId', productId))
     }
 
-    if (product.onwer.id.toString() !== ownerId) {
+    if (product.owner.id.toString() !== ownerId) {
       return left(new NotAllowedError())
     }
 

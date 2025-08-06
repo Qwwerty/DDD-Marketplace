@@ -2,7 +2,6 @@ import { INestApplication } from '@nestjs/common'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
 import { AttachmentFactory } from 'test/factories/make-attachement'
-import { SellerFactory } from 'test/factories/make-seller'
 
 import { AppModule } from '@/infra/app.module'
 import { DatabaseModule } from '@/infra/database/database.module'
@@ -15,7 +14,7 @@ describe('Get seller profile (E2E)', () => {
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [SellerFactory, AttachmentFactory],
+      providers: [AttachmentFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()

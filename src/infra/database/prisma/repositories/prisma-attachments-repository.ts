@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common'
 import { PrismaAttachmentsMapper } from '../mappers/prisma-attachments-mapper'
 import { PrismaService } from '../prisma.service'
 
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 import {
   AsyncFindMany,
   AttachmentsRepository,
@@ -27,8 +28,41 @@ export class PrismaAttachmentsRepository implements AttachmentsRepository {
     return PrismaAttachmentsMapper.toDomain(attachment)
   }
 
-  findManyByIds(ids: string[]): AsyncFindMany<Attachment> {
-    throw new Error('Method not implemented.')
+  async findManyByIds(ids: string[]): AsyncFindMany<Attachment> {
+    const attachments = await this.prisma.attachment.findMany({
+      where: {
+        id: { in: ids },
+      },
+    })
+
+    const itemsById = new Map(attachments.map((item) => [item.id, item]))
+
+    const data: Attachment[] = []
+    const inexistentIds: string[] = []
+
+    for (const id of ids) {
+      const found = itemsById.get(id)
+
+      if (found) {
+        data.push(
+          Attachment.create(
+            {
+              title: found.title,
+              path: found.path,
+            },
+            new UniqueEntityId(found.id),
+          ),
+        )
+      } else {
+        inexistentIds.push(id)
+      }
+    }
+
+    return {
+      data,
+      inexistentIds,
+      hasAll: inexistentIds.length === 0,
+    }
   }
 
   async createMany(attachements: Attachment[]): Promise<void> {

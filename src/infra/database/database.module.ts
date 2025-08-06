@@ -2,10 +2,16 @@ import { Module } from '@nestjs/common'
 
 import { PrismaService } from './prisma/prisma.service'
 import { PrismaAttachmentsRepository } from './prisma/repositories/prisma-attachments-repository'
+import { PrismaCategoriesRepository } from './prisma/repositories/prisma-categories-repository'
+import { PrismaProductAttachmentsRepository } from './prisma/repositories/prisma-product-attachments-repository'
+import { PrismaProductsRepository } from './prisma/repositories/prisma-products-repository'
 import { PrismaSellersRepository } from './prisma/repositories/prisma-sellers-repository'
 import { PrismaUserAttachmentsRepository } from './prisma/repositories/prisma-user-attachment-repository'
 
 import { AttachmentsRepository } from '@/domain/marketplace/application/repositories/attachments-repository'
+import { CategoriesRepository } from '@/domain/marketplace/application/repositories/categories-repository'
+import { ProductAttachmentsRepository } from '@/domain/marketplace/application/repositories/product-attachments-repository'
+import { ProductsRepository } from '@/domain/marketplace/application/repositories/products-repository'
 import { SellersRepository } from '@/domain/marketplace/application/repositories/sellers-repository'
 import { UserAttachmentsRepository } from '@/domain/marketplace/application/repositories/user-attachments-repository'
 
@@ -24,7 +30,26 @@ import { UserAttachmentsRepository } from '@/domain/marketplace/application/repo
       provide: UserAttachmentsRepository,
       useClass: PrismaUserAttachmentsRepository,
     },
+    {
+      provide: CategoriesRepository,
+      useClass: PrismaCategoriesRepository,
+    },
+    {
+      provide: ProductsRepository,
+      useClass: PrismaProductsRepository,
+    },
+    {
+      provide: ProductAttachmentsRepository,
+      useClass: PrismaProductAttachmentsRepository,
+    },
   ],
-  exports: [PrismaService, SellersRepository, AttachmentsRepository],
+  exports: [
+    PrismaService,
+    SellersRepository,
+    AttachmentsRepository,
+    CategoriesRepository,
+    ProductsRepository,
+    ProductAttachmentsRepository,
+  ],
 })
 export class DatabaseModule {}

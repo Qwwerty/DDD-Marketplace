@@ -59,7 +59,7 @@ export class SellProductUseCase {
     const product = Product.create({
       title,
       description,
-      onwer: seller,
+      owner: seller,
       category,
       priceInCents,
     })

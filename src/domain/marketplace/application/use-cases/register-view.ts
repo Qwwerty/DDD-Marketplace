@@ -42,7 +42,7 @@ export class RegisterViewUseCase {
       return left(new ResourceNotFoundError('viewerId', viewerId))
     }
 
-    if (product.onwer.id.toString() === viewerId) {
+    if (product.owner.id.toString() === viewerId) {
       return left(new NotAllowedError())
     }
 

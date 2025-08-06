@@ -32,7 +32,7 @@ export class InMemoryProductsRepository implements ProductsRepository {
 
       return (
         targetDate.isBetween(thirtyDaysAgo, todayDate, 'day', '[]') &&
-        item.onwer.id.toString() === sellerId
+        item.owner.id.toString() === sellerId
       )
     })
 
@@ -72,7 +72,7 @@ export class InMemoryProductsRepository implements ProductsRepository {
       filtered = filtered.filter((item) => item.status === status)
     }
 
-    return filtered.filter((item) => item.onwer.id.toString() === ownerId)
+    return filtered.filter((item) => item.owner.id.toString() === ownerId)
   }
 
   async findManyRecent({ page, search, status }: FindMany): Promise<Product[]> {
@@ -96,28 +96,27 @@ export class InMemoryProductsRepository implements ProductsRepository {
   }
 
   async create(product: Product): Promise<ProductDetails> {
-    const attachmentsId = product.attachments.currentItems.map((attachment) =>
-      attachment.attachmentId.toString(),
+    const attachmentsIds = product.attachments.currentItems.map((a) =>
+      a.attachmentId.toString(),
     )
 
     const {
       hasAll,
       inexistentIds,
       data: attachments,
-    } = await this.attachmentsRepository.findManyByIds(attachmentsId)
+    } = await this.attachmentsRepository.findManyByIds(attachmentsIds)
 
     if (!hasAll) {
       throw new ResourceNotFoundError('Images', inexistentIds.join(', '))
     }
 
     this.items.push(product)
-
     await this.productAttachmentsRepository.createMany(
       product.attachments.getItems(),
     )
 
-    const hasAvatar = attachments.find(
-      (attachment) => attachment.id === product.onwer.avatar?.attachmentId,
+    const avatar = attachments.find(
+      (a) => a.id === product.owner.avatar?.attachmentId,
     )
 
     return ProductDetails.create({
@@ -127,16 +126,11 @@ export class InMemoryProductsRepository implements ProductsRepository {
       priceInCents: product.priceInCents,
       status: product.status,
       owner: {
-        id: product.onwer.id,
-        name: product.onwer.name,
-        phone: product.onwer.phone,
-        email: product.onwer.email,
-        avatar: hasAvatar
-          ? {
-              id: hasAvatar.id,
-              path: hasAvatar.path,
-            }
-          : undefined,
+        id: product.owner.id,
+        name: product.owner.name,
+        phone: product.owner.phone,
+        email: product.owner.email,
+        avatar: avatar ? { id: avatar.id, path: avatar.path } : undefined,
       },
       category: {
         id: product.category.id,
