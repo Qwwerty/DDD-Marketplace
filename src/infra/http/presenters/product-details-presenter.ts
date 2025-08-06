@@ -15,7 +15,7 @@ export class ProductDetailsPresenter {
         email: product.owner.email,
         avatar: product.owner.avatar
           ? {
-              id: product.owner.avatar.id,
+              id: product.owner.avatar.id.toString(),
               url: product.owner.avatar.path,
             }
           : null,

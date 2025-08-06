@@ -16,6 +16,8 @@ import { RegisterSellerUseCase } from '@/domain/marketplace/application/use-case
 import { SellProductUseCase } from '@/domain/marketplace/application/use-cases/sell-product'
 import { UpdateSellerUseCase } from '@/domain/marketplace/application/use-cases/update-seller'
 import { UploadAttachmentsUseCase } from '@/domain/marketplace/application/use-cases/upload-attachments'
+import { ListAllCategoriesController } from './controllers/list-all-categories.controller'
+import { ListAllCategoriesUseCase } from '@/domain/marketplace/application/use-cases/list-all-categories'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, StorageModule],
@@ -26,6 +28,7 @@ import { UploadAttachmentsUseCase } from '@/domain/marketplace/application/use-c
     UploadAttachmentsController,
     GetSellerProfileController,
     SellProductController,
+    ListAllCategoriesController
   ],
   providers: [
     RegisterSellerUseCase,
@@ -34,6 +37,7 @@ import { UploadAttachmentsUseCase } from '@/domain/marketplace/application/use-c
     UploadAttachmentsUseCase,
     GetSellerProfileUseCase,
     SellProductUseCase,
+    ListAllCategoriesUseCase
   ],
 })
 export class HttpModule {}
