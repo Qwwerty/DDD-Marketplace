@@ -10,6 +10,8 @@ import { ProductAttachmentsRepository } from '../repositories/product-attachment
 import { Either, left, right } from '@/core/either'
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
+import { Injectable } from '@nestjs/common'
+import { ProductDetails } from '../../enterprise/entities/value-objects/product-details'
 
 interface EditProductUseCaseProps {
   productId: string
@@ -24,10 +26,11 @@ interface EditProductUseCaseProps {
 type EditProductUseCaseResponse = Either<
   ResourceNotFoundError | NotAllowedError,
   {
-    product: Product
+    product: ProductDetails
   }
 >
 
+@Injectable()
 export class EditProductUseCase {
   constructor(
     private sellersRepository: SellersRepository,
@@ -93,10 +96,10 @@ export class EditProductUseCase {
     product.attachments = productAttachmentList
 
     try {
-      await this.productsRepository.save(product)
+      const result = await this.productsRepository.save(product)
 
       return right({
-        product,
+        product: result,
       })
     } catch (error) {
       return left(error)

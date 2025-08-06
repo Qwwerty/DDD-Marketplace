@@ -25,5 +25,5 @@ export abstract class ProductsRepository {
   abstract findManyByOwner(params: FindManyByOwner): Promise<Product[]>
   abstract findManyRecent(params: FindMany): Promise<Product[]>
   abstract create(product: Product): Promise<ProductDetails>
-  abstract save(product: Product): Promise<void>
+  abstract save(product: Product): Promise<ProductDetails>
 }

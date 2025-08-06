@@ -22,7 +22,7 @@ export class InMemoryProductsRepository implements ProductsRepository {
   constructor(
     private productAttachmentsRepository: InMemoryProductAttachmentsRepository,
     private attachmentsRepository: InMemoryAttachmentsRepository,
-  ) {}
+  ) { }
 
   async count({ sellerId, status }: Count): Promise<number> {
     const filteredProducts = this.items.filter((item) => {
@@ -141,17 +141,24 @@ export class InMemoryProductsRepository implements ProductsRepository {
     })
   }
 
-  async save(product: Product): Promise<void> {
+  async save(product: Product): Promise<ProductDetails> {
+    const attachmentsIds = product.attachments.currentItems.map((a) =>
+      a.attachmentId.toString(),
+    )
+
+    const {
+      hasAll,
+      inexistentIds,
+      data: attachments,
+    } = await this.attachmentsRepository.findManyByIds(attachmentsIds)
+
+    if (!hasAll) {
+      throw new ResourceNotFoundError('Images', inexistentIds.join(', '))
+    }
+
     const itemIndex = this.items.findIndex((item) => item.id === product.id)
 
     this.items[itemIndex] = product
-
-    const attachmentsId = product.attachments.currentItems.map((attachment) =>
-      attachment.attachmentId.toString(),
-    )
-
-    const { hasAll, inexistentIds } =
-      await this.attachmentsRepository.findManyByIds(attachmentsId)
 
     if (!hasAll) {
       throw new ResourceNotFoundError('Images', inexistentIds.join(', '))
@@ -164,5 +171,30 @@ export class InMemoryProductsRepository implements ProductsRepository {
     await this.productAttachmentsRepository.deleteMany(
       product.attachments.getRemovedItems(),
     )
+
+    const avatar = attachments.find(
+      (a) => a.id === product.owner.avatar?.attachmentId,
+    )
+
+    return ProductDetails.create({
+      productId: product.id,
+      title: product.title,
+      description: product.description,
+      priceInCents: product.priceInCents,
+      status: product.status,
+      owner: {
+        id: product.owner.id,
+        name: product.owner.name,
+        phone: product.owner.phone,
+        email: product.owner.email,
+        avatar: avatar ? { id: avatar.id, path: avatar.path } : undefined,
+      },
+      category: {
+        id: product.category.id,
+        title: product.category.title,
+        slug: product.category.slug,
+      },
+      attachments,
+    })
   }
 }
