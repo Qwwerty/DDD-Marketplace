@@ -5,12 +5,12 @@ import { PrismaService } from '../prisma.service'
 
 import { ProductAttachmentsRepository } from '@/domain/marketplace/application/repositories/product-attachments-repository'
 import { ProductAttachment } from '@/domain/marketplace/enterprise/entities/product-attachment'
+import { PrismaAttachmentsMapper } from '../mappers/prisma-attachments-mapper'
 
 @Injectable()
 export class PrismaProductAttachmentsRepository
-  implements ProductAttachmentsRepository
-{
-  constructor(private prisma: PrismaService) {}
+  implements ProductAttachmentsRepository {
+  constructor(private prisma: PrismaService) { }
 
   async createMany(attachments: ProductAttachment[]): Promise<void> {
     if (attachments.length === 0) {
@@ -22,11 +22,23 @@ export class PrismaProductAttachmentsRepository
     await this.prisma.attachment.updateMany(data)
   }
 
-  deleteMany(attachments: ProductAttachment[]): Promise<void> {
-    throw new Error('Method not implemented.')
+  async deleteMany(attachments: ProductAttachment[]): Promise<void> {
+    if (attachments.length === 0) {
+      return
+    }
+
+    const data = PrismaProductAttachmentMapper.toPrismaDeleteMany(attachments)
+
+    await this.prisma.attachment.updateMany(data)
   }
 
-  findByProductId(productId: string): Promise<ProductAttachment[]> {
-    throw new Error('Method not implemented.')
+  async findByProductId(productId: string): Promise<ProductAttachment[]> {
+    const attachments = await this.prisma.attachment.findMany({
+      where: {
+        productId
+      }
+    })
+
+    return attachments.map(attachment => PrismaProductAttachmentMapper.toDomain(attachment))
   }
 }

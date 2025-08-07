@@ -18,6 +18,8 @@ import { UpdateSellerUseCase } from '@/domain/marketplace/application/use-cases/
 import { UploadAttachmentsUseCase } from '@/domain/marketplace/application/use-cases/upload-attachments'
 import { ListAllCategoriesController } from './controllers/list-all-categories.controller'
 import { ListAllCategoriesUseCase } from '@/domain/marketplace/application/use-cases/list-all-categories'
+import { EditProductController } from './controllers/edit-product.controller'
+import { EditProductUseCase } from '@/domain/marketplace/application/use-cases/edit-product'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, StorageModule],
@@ -28,7 +30,8 @@ import { ListAllCategoriesUseCase } from '@/domain/marketplace/application/use-c
     UploadAttachmentsController,
     GetSellerProfileController,
     SellProductController,
-    ListAllCategoriesController
+    EditProductController,
+    ListAllCategoriesController,
   ],
   providers: [
     RegisterSellerUseCase,
@@ -37,6 +40,7 @@ import { ListAllCategoriesUseCase } from '@/domain/marketplace/application/use-c
     UploadAttachmentsUseCase,
     GetSellerProfileUseCase,
     SellProductUseCase,
+    EditProductUseCase,
     ListAllCategoriesUseCase
   ],
 })

@@ -24,7 +24,7 @@ export class PrismaProductsRepository implements ProductsRepository {
     private prisma: PrismaService,
     private productAttachmentsRepository: ProductAttachmentsRepository,
     private attachmentsRepository: AttachmentsRepository,
-  ) {}
+  ) { }
 
   async count({ sellerId, status }: Count): Promise<number> {
     const today = dayjs().endOf('day').toDate()
@@ -119,9 +119,9 @@ export class PrismaProductsRepository implements ProductsRepository {
         avatar:
           owner.attachments.length > 0
             ? {
-                id: new UniqueEntityId(owner.attachments[0].id),
-                path: owner.attachments[0].path,
-              }
+              id: new UniqueEntityId(owner.attachments[0].id),
+              path: owner.attachments[0].path,
+            }
             : undefined,
       },
       category: {
@@ -133,7 +133,72 @@ export class PrismaProductsRepository implements ProductsRepository {
     })
   }
 
-  save(product: Product): Promise<void> {
-    throw new Error('Method not implemented.')
+  async save(product: Product): Promise<ProductDetails> {
+    const attachmentsId = product.attachments.currentItems.map((attachment) =>
+      attachment.attachmentId.toString(),
+    )
+
+    const {
+      hasAll,
+      inexistentIds,
+      data: attachments,
+    } = await this.attachmentsRepository.findManyByIds(attachmentsId)
+
+    if (!hasAll) {
+      throw new ResourceNotFoundError('Images', inexistentIds.join(', '))
+    }
+
+    const data = PrismaProductMapper.toPrisma(product)
+
+    const owner = await this.prisma.user.findUniqueOrThrow({
+      where: {
+        id: product.owner.id.toString(),
+      },
+      include: {
+        attachments: true,
+      },
+    })
+
+    await Promise.all([
+      this.prisma.product.update({
+        where: {
+          id: product.id.toString()
+        },
+        data,
+      }),
+      this.productAttachmentsRepository.createMany(
+        product.attachments.getItems(),
+      ),
+      this.productAttachmentsRepository.deleteMany(
+        product.attachments.getRemovedItems(),
+      )
+    ])
+
+    return ProductDetails.create({
+      productId: product.id,
+      title: product.title,
+      description: product.description,
+      priceInCents: product.priceInCents,
+      status: product.status,
+      owner: {
+        id: new UniqueEntityId(owner.id),
+        name: owner.name,
+        phone: owner.phone,
+        email: owner.email,
+        avatar:
+          owner.attachments.length > 0
+            ? {
+              id: new UniqueEntityId(owner.attachments[0].id),
+              path: owner.attachments[0].path,
+            }
+            : undefined,
+      },
+      category: {
+        id: product.category.id,
+        title: product.category.title,
+        slug: product.category.slug,
+      },
+      attachments,
+    })
   }
 }
