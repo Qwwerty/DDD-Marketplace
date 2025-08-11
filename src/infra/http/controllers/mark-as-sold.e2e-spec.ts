@@ -61,7 +61,7 @@ describe('Mark as sold product (E2E)', () => {
       .set('Authorization', `Bearer ${accessToken}`)
       .expect(200)
 
-    const product = await prisma.product.findUnique({
+    const product = await prisma.product.findUniqueOrThrow({
       where: { id: productId },
     })
 
