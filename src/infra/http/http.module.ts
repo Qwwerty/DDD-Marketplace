@@ -3,6 +3,9 @@ import { Module } from '@nestjs/common'
 import { CryptographyModule } from '../criptography/cryptography.module'
 import { DatabaseModule } from '../database/database.module'
 import { AuthenticateController } from './controllers/authenticate.controller'
+import { EditProductController } from './controllers/edit-product.controller'
+import { ListAllCategoriesController } from './controllers/list-all-categories.controller'
+import { MarkAsSoldController } from './controllers/mark-as-sold.controller'
 import { RegisterSellerController } from './controllers/register-seller.controller'
 import { UpdateSellerController } from './controllers/update-seller.controller'
 import { UploadAttachmentsController } from './controllers/upload-attachments.controller'
@@ -11,17 +14,16 @@ import { GetSellerProfileController } from './controllers/get-seller-profile.con
 import { SellProductController } from './controllers/sell-product.controller'
 
 import { AuthenticateSellerUseCase } from '@/domain/marketplace/application/use-cases/authenticate-seller'
+import { EditProductUseCase } from '@/domain/marketplace/application/use-cases/edit-product'
 import { GetSellerProfileUseCase } from '@/domain/marketplace/application/use-cases/get-seller-profile'
+import { ListAllCategoriesUseCase } from '@/domain/marketplace/application/use-cases/list-all-categories'
+import { MarkSellAsCancelledUseCase } from '@/domain/marketplace/application/use-cases/mark-sell-as-cancelled'
+import { MarkSellAsSolddUseCase } from '@/domain/marketplace/application/use-cases/mark-sell-as-sold'
 import { RegisterSellerUseCase } from '@/domain/marketplace/application/use-cases/register-seller'
 import { SellProductUseCase } from '@/domain/marketplace/application/use-cases/sell-product'
 import { UpdateSellerUseCase } from '@/domain/marketplace/application/use-cases/update-seller'
 import { UploadAttachmentsUseCase } from '@/domain/marketplace/application/use-cases/upload-attachments'
-import { ListAllCategoriesController } from './controllers/list-all-categories.controller'
-import { ListAllCategoriesUseCase } from '@/domain/marketplace/application/use-cases/list-all-categories'
-import { EditProductController } from './controllers/edit-product.controller'
-import { EditProductUseCase } from '@/domain/marketplace/application/use-cases/edit-product'
-import { MarkAsSoldController } from './controllers/mark-as-sold.controller'
-import { MarkSellAsSolddUseCase } from '@/domain/marketplace/application/use-cases/mark-sell-as-sold'
+import { MarkAsCancelledController } from '@/infra/http/controllers/mark-as-cancelled.controller'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, StorageModule],
@@ -34,7 +36,8 @@ import { MarkSellAsSolddUseCase } from '@/domain/marketplace/application/use-cas
     SellProductController,
     EditProductController,
     ListAllCategoriesController,
-    MarkAsSoldController
+    MarkAsSoldController,
+    MarkAsCancelledController,
   ],
   providers: [
     RegisterSellerUseCase,
@@ -45,7 +48,8 @@ import { MarkSellAsSolddUseCase } from '@/domain/marketplace/application/use-cas
     SellProductUseCase,
     EditProductUseCase,
     ListAllCategoriesUseCase,
-    MarkSellAsSolddUseCase
+    MarkSellAsSolddUseCase,
+    MarkSellAsCancelledUseCase,
   ],
 })
 export class HttpModule {}
