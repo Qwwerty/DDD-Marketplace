@@ -56,6 +56,15 @@ describe('Mark as available product (E2E)', () => {
 
     const productId = response.body.product.id
 
+    await prisma.product.update({
+      where: {
+        id: productId,
+      },
+      data: {
+        status: 'CANCELLED',
+      },
+    })
+
     await request(app.getHttpServer())
       .patch(`/products/${productId}/available`)
       .set('Authorization', `Bearer ${accessToken}`)
