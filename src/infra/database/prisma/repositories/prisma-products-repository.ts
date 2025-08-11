@@ -7,7 +7,9 @@ import { PrismaService } from '../prisma.service'
 
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 import { AttachmentsRepository } from '@/domain/marketplace/application/repositories/attachments-repository'
-import { ProductAttachmentsRepository } from '@/domain/marketplace/application/repositories/product-attachments-repository'
+import {
+  ProductAttachmentsRepository,
+} from '@/domain/marketplace/application/repositories/product-attachments-repository'
 import {
   Count,
   FindMany,
@@ -24,13 +26,13 @@ export class PrismaProductsRepository implements ProductsRepository {
     private prisma: PrismaService,
     private productAttachmentsRepository: ProductAttachmentsRepository,
     private attachmentsRepository: AttachmentsRepository,
-  ) { }
+  ) {}
 
   async count({ sellerId, status }: Count): Promise<number> {
     const today = dayjs().endOf('day').toDate()
     const thirtyDaysAgo = dayjs().subtract(30, 'day').startOf('day').toDate()
 
-    const amount = await this.prisma.product.count({
+    return this.prisma.product.count({
       where: {
         userId: sellerId,
         createdAt: {
@@ -40,8 +42,6 @@ export class PrismaProductsRepository implements ProductsRepository {
         ...(status && { status: status.toUpperCase() as Status }),
       },
     })
-
-    return amount
   }
 
   async findById(id: string): Promise<Product | null> {
@@ -162,7 +162,7 @@ export class PrismaProductsRepository implements ProductsRepository {
     await Promise.all([
       this.prisma.product.update({
         where: {
-          id: product.id.toString()
+          id: product.id.toString(),
         },
         data,
       }),
@@ -171,7 +171,7 @@ export class PrismaProductsRepository implements ProductsRepository {
       ),
       this.productAttachmentsRepository.deleteMany(
         product.attachments.getRemovedItems(),
-      )
+      ),
     ])
 
     return ProductDetails.create({
