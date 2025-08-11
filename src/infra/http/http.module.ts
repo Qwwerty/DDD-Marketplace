@@ -20,6 +20,8 @@ import { ListAllCategoriesController } from './controllers/list-all-categories.c
 import { ListAllCategoriesUseCase } from '@/domain/marketplace/application/use-cases/list-all-categories'
 import { EditProductController } from './controllers/edit-product.controller'
 import { EditProductUseCase } from '@/domain/marketplace/application/use-cases/edit-product'
+import { MarkAsSoldController } from './controllers/mark-as-sold.controller'
+import { MarkSellAsSolddUseCase } from '@/domain/marketplace/application/use-cases/mark-sell-as-sold'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, StorageModule],
@@ -32,6 +34,7 @@ import { EditProductUseCase } from '@/domain/marketplace/application/use-cases/e
     SellProductController,
     EditProductController,
     ListAllCategoriesController,
+    MarkAsSoldController
   ],
   providers: [
     RegisterSellerUseCase,
@@ -41,7 +44,8 @@ import { EditProductUseCase } from '@/domain/marketplace/application/use-cases/e
     GetSellerProfileUseCase,
     SellProductUseCase,
     EditProductUseCase,
-    ListAllCategoriesUseCase
+    ListAllCategoriesUseCase,
+    MarkSellAsSolddUseCase
   ],
 })
 export class HttpModule {}
