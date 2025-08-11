@@ -1,3 +1,5 @@
+import { Injectable } from '@nestjs/common'
+
 import { ProductsRepository } from '../repositories/products-repository'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { Product, ProductStatus } from '../../enterprise/entities/product'
@@ -18,6 +20,7 @@ type MarkSellAsAvaiableUseCaseResponse = Either<
   }
 >
 
+@Injectable()
 export class MarkSellAsAvailableUseCase {
   constructor(
     private productsRepository: ProductsRepository,
@@ -50,7 +53,7 @@ export class MarkSellAsAvailableUseCase {
 
     product.status = ProductStatus.AVAILABLE
 
-    this.productsRepository.save(product)
+    await this.productsRepository.save(product)
 
     return right({
       product,
