@@ -132,7 +132,7 @@ describe('List All Seller Products Use Case', () => {
       makeProduct({}, seller),
     )
 
-    const result = await sut.execute({ sellerId: 'seller-1' })
+    await sut.execute({ sellerId: 'seller-1' })
 
     // @ts-ignore
     expect(result.value.products).toHaveLength(3)

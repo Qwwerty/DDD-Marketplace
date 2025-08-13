@@ -4,6 +4,7 @@ import isBetween from 'dayjs/plugin/isBetween'
 import { InMemoryAttachmentsRepository } from './in-memory-attachments-repository'
 import { InMemoryProductAttachmentsRepository } from './in-memory-product-attachments-repository'
 
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 import {
   Count,
   FindMany,
@@ -11,6 +12,7 @@ import {
   ProductsRepository,
 } from '@/domain/marketplace/application/repositories/products-repository'
 import { ResourceNotFoundError } from '@/domain/marketplace/application/use-cases/errors/resource-not-found-error'
+import { Attachment } from '@/domain/marketplace/enterprise/entities/attachment'
 import { Product } from '@/domain/marketplace/enterprise/entities/product'
 import { ProductDetails } from '@/domain/marketplace/enterprise/entities/value-objects/product-details'
 
@@ -22,7 +24,8 @@ export class InMemoryProductsRepository implements ProductsRepository {
   constructor(
     private productAttachmentsRepository: InMemoryProductAttachmentsRepository,
     private attachmentsRepository: InMemoryAttachmentsRepository,
-  ) { }
+  ) {
+  }
 
   async count({ sellerId, status }: Count): Promise<number> {
     const filteredProducts = this.items.filter((item) => {
@@ -57,7 +60,7 @@ export class InMemoryProductsRepository implements ProductsRepository {
     ownerId,
     search,
     status,
-  }: FindManyByOwner): Promise<Product[]> {
+  }: FindManyByOwner): Promise<ProductDetails[]> {
     let filtered = this.items
 
     if (search) {
@@ -72,7 +75,49 @@ export class InMemoryProductsRepository implements ProductsRepository {
       filtered = filtered.filter((item) => item.status === status)
     }
 
-    return filtered.filter((item) => item.owner.id.toString() === ownerId)
+    const filteredProducts = filtered.filter(
+      (item) => item.owner.id.toString() === ownerId,
+    )
+
+    return Promise.all(filteredProducts.map(async (product) => {
+      let attachment: Attachment | null = null
+
+      const attachmentsIds = product.attachments.currentItems.map((a) =>
+        a.attachmentId.toString(),
+      )
+
+      const { data: attachments } =
+        await this.attachmentsRepository.findManyByIds(attachmentsIds)
+
+      if (product.owner.avatar) {
+        attachment = await this.attachmentsRepository.findById(
+          product.owner.avatar?.attachmentId.toString(),
+        )
+      }
+
+      return ProductDetails.create({
+        productId: product.id,
+        title: product.title,
+        description: product.description,
+        priceInCents: product.priceInCents,
+        status: product.status,
+        owner: {
+          id: product.owner.id,
+          name: product.owner.name,
+          phone: product.owner.phone,
+          email: product.owner.email,
+          avatar: attachment
+            ? { id: attachment.id, path: attachment.path }
+            : undefined,
+        },
+        category: {
+          id: product.category.id,
+          title: product.category.title,
+          slug: product.category.slug,
+        },
+        attachments,
+      })
+    }))
   }
 
   async findManyRecent({ page, search, status }: FindMany): Promise<Product[]> {
