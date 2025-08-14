@@ -65,17 +65,17 @@ describe('Count Seller Sold products Use Case', () => {
 
     inMemoryProductsRepository.items.push(
       makeProduct(
-        { createdAt: new Date(2025, 0, 25, 0, 0), status: ProductStatus.SOLD },
+        { createdAt: new Date(2025, 0, 25, 0, 0), status: ProductStatus.sold },
         seller,
         new UniqueEntityId('product-1'),
       ),
       makeProduct(
-        { createdAt: new Date(2024, 11, 20, 0, 0), status: ProductStatus.SOLD },
+        { createdAt: new Date(2024, 11, 20, 0, 0), status: ProductStatus.sold },
         seller,
         new UniqueEntityId('product-1'),
       ),
       makeProduct(
-        { createdAt: new Date(2025, 0, 25, 0, 0), status: ProductStatus.SOLD },
+        { createdAt: new Date(2025, 0, 25, 0, 0), status: ProductStatus.sold },
         undefined,
         new UniqueEntityId('product-1'),
       ),

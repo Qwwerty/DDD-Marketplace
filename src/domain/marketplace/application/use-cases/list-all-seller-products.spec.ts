@@ -60,19 +60,19 @@ describe('List All Seller Products Use Case', () => {
 
     inMemoryProductsRepository.items.push(
       makeProduct({
-        status: ProductStatus.AVAILABLE,
+        status: ProductStatus.available,
       }),
       makeProduct(
         {
           title: 'product 1',
-          status: ProductStatus.SOLD,
+          status: ProductStatus.sold,
         },
         seller,
       ),
       makeProduct(
         {
           title: 'product 2',
-          status: ProductStatus.SOLD,
+          status: ProductStatus.sold,
         },
         seller,
       ),

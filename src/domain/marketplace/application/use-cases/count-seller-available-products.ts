@@ -33,7 +33,7 @@ export class CountSellerAvailableUseCase {
 
     const amount = await this.productsRepository.count({
       sellerId,
-      status: ProductStatus.AVAILABLE,
+      status: ProductStatus.available,
     })
 
     return right({

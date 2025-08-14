@@ -57,19 +57,19 @@ describe('List All Products Use Case', () => {
     inMemoryProductsRepository.items.push(
       makeProduct({
         createdAt: new Date(2025, 0, 20),
-        status: ProductStatus.AVAILABLE,
+        status: ProductStatus.available,
       }),
       makeProduct({
         createdAt: new Date(2025, 0, 18),
-        status: ProductStatus.SOLD,
+        status: ProductStatus.sold,
       }),
       makeProduct({
         createdAt: new Date(2025, 0, 23),
-        status: ProductStatus.SOLD,
+        status: ProductStatus.sold,
       }),
     )
 
-    const result = await sut.execute({ page: 1, status: ProductStatus.SOLD })
+    const result = await sut.execute({ page: 1, status: ProductStatus.sold })
 
     expect(result.value?.products).toEqual([
       expect.objectContaining({ createdAt: new Date(2025, 0, 23) }),

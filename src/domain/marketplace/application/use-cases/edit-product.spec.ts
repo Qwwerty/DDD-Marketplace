@@ -177,7 +177,7 @@ describe('Edit Product Use Case', () => {
     const category = makeCategory()
 
     const product = makeProduct(
-      { status: ProductStatus.SOLD },
+      { status: ProductStatus.sold },
       seller,
       new UniqueEntityId('product-1'),
     )

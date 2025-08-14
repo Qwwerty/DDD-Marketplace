@@ -47,11 +47,11 @@ export class MarkSellAsAvailableUseCase {
       return left(new NotAllowedError())
     }
 
-    if (product.status === ProductStatus.SOLD) {
+    if (product.status === ProductStatus.sold) {
       return left(new NotAllowedError())
     }
 
-    product.status = ProductStatus.AVAILABLE
+    product.status = ProductStatus.available
 
     await this.productsRepository.save(product)
 

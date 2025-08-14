@@ -67,7 +67,7 @@ describe('Count Seller Available products Use Case', () => {
       makeProduct(
         {
           createdAt: new Date(2025, 0, 25, 0, 0),
-          status: ProductStatus.AVAILABLE,
+          status: ProductStatus.available,
         },
         seller,
         new UniqueEntityId('product-1'),
@@ -75,7 +75,7 @@ describe('Count Seller Available products Use Case', () => {
       makeProduct(
         {
           createdAt: new Date(2024, 11, 20, 0, 0),
-          status: ProductStatus.AVAILABLE,
+          status: ProductStatus.available,
         },
         seller,
         new UniqueEntityId('product-1'),
@@ -83,7 +83,7 @@ describe('Count Seller Available products Use Case', () => {
       makeProduct(
         {
           createdAt: new Date(2025, 0, 25, 0, 0),
-          status: ProductStatus.AVAILABLE,
+          status: ProductStatus.available,
         },
         undefined,
         new UniqueEntityId('product-1'),

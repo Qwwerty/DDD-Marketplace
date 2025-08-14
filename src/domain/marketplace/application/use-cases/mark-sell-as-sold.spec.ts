@@ -49,7 +49,7 @@ describe('Mark Sell As Sold Use Case', () => {
       {
         title: 'product title',
         description: 'product description',
-        status: ProductStatus.CANCELLED,
+        status: ProductStatus.cancelled,
       },
       seller,
       new UniqueEntityId('product-1'),
@@ -88,7 +88,7 @@ describe('Mark Sell As Sold Use Case', () => {
       {
         title: 'product title',
         description: 'product description',
-        status: ProductStatus.CANCELLED,
+        status: ProductStatus.cancelled,
       },
       seller1,
       new UniqueEntityId('product-1'),
@@ -114,7 +114,7 @@ describe('Mark Sell As Sold Use Case', () => {
       {
         title: 'product title',
         description: 'product description',
-        status: ProductStatus.CANCELLED,
+        status: ProductStatus.cancelled,
       },
       seller1,
       new UniqueEntityId('product-1'),
@@ -140,7 +140,7 @@ describe('Mark Sell As Sold Use Case', () => {
       {
         title: 'product title',
         description: 'product description',
-        status: ProductStatus.AVAILABLE,
+        status: ProductStatus.available,
       },
       seller,
       new UniqueEntityId('product-1'),
@@ -156,7 +156,7 @@ describe('Mark Sell As Sold Use Case', () => {
     expect(result.value).toStrictEqual(
       expect.objectContaining({
         product: expect.objectContaining({
-          status: 'sold',
+          status: 'SOLD',
         }),
       }),
     )

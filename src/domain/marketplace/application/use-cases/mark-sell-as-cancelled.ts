@@ -47,11 +47,11 @@ export class MarkSellAsCancelledUseCase {
       return left(new NotAllowedError())
     }
 
-    if (product.status === ProductStatus.SOLD) {
+    if (product.status === ProductStatus.sold) {
       return left(new NotAllowedError())
     }
 
-    product.status = ProductStatus.CANCELLED
+    product.status = ProductStatus.cancelled
 
     await this.productsRepository.save(product)
 
