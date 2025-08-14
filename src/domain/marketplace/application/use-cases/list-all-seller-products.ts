@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common'
-import { Product, ProductStatus } from '../../enterprise/entities/product'
+import { ProductStatus } from '../../enterprise/entities/product'
 import { ProductsRepository } from '../repositories/products-repository'
 import { SellersRepository } from '../repositories/sellers-repository'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 import { Either, left, right } from '@/core/either'
+import { ProductDetails } from '../../enterprise/entities/value-objects/product-details'
 
 interface ListAllSellerProductsUseCaseRequest {
   sellerId: string
@@ -15,7 +16,7 @@ interface ListAllSellerProductsUseCaseRequest {
 type ListAllSellerProductsUseCaseRequestResponse = Either<
   ResourceNotFoundError,
   {
-    products: Product[]
+    products: ProductDetails[]
   }
 >
 

@@ -63,7 +63,7 @@ export class PrismaProductMapper {
       title: product.title,
       description: product.description,
       priceInCents: product.priceInCents,
-      status: product.status.toUpperCase() as Status,
+      status: product.status,
       categoryId: product.category.id.toString(),
       userId: product.owner.id.toString(),
     }

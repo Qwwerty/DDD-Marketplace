@@ -7,9 +7,9 @@ import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 import { Optional } from '@/core/types/optional'
 
 export enum ProductStatus {
-  AVAILABLE = 'available',
-  SOLD = 'sold',
-  CANCELLED = 'cancelled',
+  available = 'AVAILABLE',
+  sold = 'SOLD',
+  cancelled = 'CANCELLED',
 }
 
 export interface ProductProps {

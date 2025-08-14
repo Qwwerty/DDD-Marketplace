@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common'
-import { Status } from '@prisma/client'
 import dayjs from 'dayjs'
 
 import { PrismaProductMapper } from '../mappers/prisma-product-mapper'
@@ -19,6 +18,8 @@ import {
 import { ResourceNotFoundError } from '@/domain/marketplace/application/use-cases/errors/resource-not-found-error'
 import { Product } from '@/domain/marketplace/enterprise/entities/product'
 import { ProductDetails } from '@/domain/marketplace/enterprise/entities/value-objects/product-details'
+import { Prisma, Status } from '@prisma/client'
+import { PrismaProductDetailsMapper } from '../mappers/prisma-product-deitals-mapper'
 
 @Injectable()
 export class PrismaProductsRepository implements ProductsRepository {
@@ -26,7 +27,7 @@ export class PrismaProductsRepository implements ProductsRepository {
     private prisma: PrismaService,
     private productAttachmentsRepository: ProductAttachmentsRepository,
     private attachmentsRepository: AttachmentsRepository,
-  ) {}
+  ) { }
 
   async count({ sellerId, status }: Count): Promise<number> {
     const today = dayjs().endOf('day').toDate()
@@ -63,8 +64,33 @@ export class PrismaProductsRepository implements ProductsRepository {
     return PrismaProductMapper.toDomain(product)
   }
 
-  findManyByOwner(params: FindManyByOwner): Promise<Product[]> {
-    throw new Error('Method not implemented.')
+  async findManyByOwner({ ownerId, status, search }: FindManyByOwner): Promise<ProductDetails[]> {
+    const where: Prisma.ProductWhereInput = {
+      userId: ownerId,
+      description: {
+        contains: search,
+        mode: 'insensitive'
+      }
+    }
+
+    if (status) {
+      where.status = status
+    }
+
+    const products = await this.prisma.product.findMany({
+      where,
+      include: {
+        user: {
+          include: {
+            attachments: true
+          }
+        },
+        category: true,
+        attachments: true
+      }
+    })
+
+    return products.map(product => PrismaProductDetailsMapper.toDomain(product))
   }
 
   findManyRecent(params: FindMany): Promise<Product[]> {

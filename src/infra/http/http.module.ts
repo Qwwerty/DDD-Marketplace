@@ -26,6 +26,8 @@ import { UpdateSellerUseCase } from '@/domain/marketplace/application/use-cases/
 import { UploadAttachmentsUseCase } from '@/domain/marketplace/application/use-cases/upload-attachments'
 import { MarkAsAvailableController } from '@/infra/http/controllers/mark-as-available.controller'
 import { MarkAsCancelledController } from '@/infra/http/controllers/mark-as-cancelled.controller'
+import { ListAllSellerProductsController } from './controllers/list-all-seller-products.controller'
+import { ListAllSellerProductsUseCase } from '@/domain/marketplace/application/use-cases/list-all-seller-products'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, StorageModule],
@@ -41,6 +43,7 @@ import { MarkAsCancelledController } from '@/infra/http/controllers/mark-as-canc
     MarkAsSoldController,
     MarkAsCancelledController,
     MarkAsAvailableController,
+    ListAllSellerProductsController
   ],
   providers: [
     RegisterSellerUseCase,
@@ -54,6 +57,7 @@ import { MarkAsCancelledController } from '@/infra/http/controllers/mark-as-canc
     MarkSellAsSolddUseCase,
     MarkSellAsCancelledUseCase,
     MarkSellAsAvailableUseCase,
+    ListAllSellerProductsUseCase
   ],
 })
 export class HttpModule {}
