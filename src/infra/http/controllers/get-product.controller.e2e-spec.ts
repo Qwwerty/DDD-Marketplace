@@ -2,45 +2,41 @@ import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
-import { AttachmentFactory } from 'test/factories/make-attachement'
-
-import { ProductFactory } from '../../../../test/factories/make-product'
-import { SellerFactory } from '../../../../test/factories/make-seller'
+import { ProductFactory } from 'test/factories/make-product'
+import { SellerFactory } from 'test/factories/make-seller'
 
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 import { Category } from '@/domain/marketplace/enterprise/entities/category'
 import { ProductStatus } from '@/domain/marketplace/enterprise/entities/product'
 import { AppModule } from '@/infra/app.module'
 import { DatabaseModule } from '@/infra/database/database.module'
-import { PrismaService } from '@/infra/database/prisma/prisma.service'
 
-describe('List all seller products (E2E)', () => {
+describe('Get product by id (E2E)', () => {
   let app: INestApplication
-  let jwt: JwtService
-  let prisma: PrismaService
   let sellerFactory: SellerFactory
   let productFactory: ProductFactory
+  let jwt: JwtService
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [SellerFactory, ProductFactory, AttachmentFactory],
+      providers: [SellerFactory, ProductFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()
 
-    jwt = moduleRef.get(JwtService)
-    prisma = moduleRef.get(PrismaService)
     sellerFactory = moduleRef.get(SellerFactory)
     productFactory = moduleRef.get(ProductFactory)
+    jwt = moduleRef.get(JwtService)
 
     await app.init()
   })
 
-  test('[GET] /products/me', async () => {
+  test('[GET] /products/:id', async () => {
     const owner = await sellerFactory.makePrismaSeller({
       name: 'John Doe',
       email: 'johndoe@example.com',
+      phone: '32988003322',
     })
 
     const category = Category.create(
@@ -51,38 +47,32 @@ describe('List all seller products (E2E)', () => {
       new UniqueEntityId('electronics'),
     )
 
-    await Promise.all([
-      productFactory.makePrismaProduct({
-        description: 'Iphone 16',
-        owner,
-        status: ProductStatus.cancelled,
-        category,
-      }),
-      productFactory.makePrismaProduct({
-        description: 'Iphone 14',
-        owner,
-        status: ProductStatus.sold,
-        category,
-      }),
-      productFactory.makePrismaProduct({ owner, category }),
-    ])
+    const product = await productFactory.makePrismaProduct({
+      description: 'Iphone 16',
+      owner,
+      status: ProductStatus.available,
+      category,
+    })
+
+    const productId = product.id.toString()
 
     const accessToken = jwt.sign({ sub: owner.id.toString() })
 
     const response = await request(app.getHttpServer())
-      .get('/products/me')
+      .get(`/products/${productId}`)
       .set('Authorization', `Bearer ${accessToken}`)
-      .query('status=cancelled')
+      .send()
 
-    expect(response.body.products).toStrictEqual([
-      expect.objectContaining({
+    expect(response.body).toEqual({
+      product: expect.objectContaining({
         id: expect.any(String),
         description: 'Iphone 16',
         owner: expect.objectContaining({
           name: 'John Doe',
+          phone: '32988003322',
           email: 'johndoe@example.com',
         }),
       }),
-    ])
+    })
   })
 })

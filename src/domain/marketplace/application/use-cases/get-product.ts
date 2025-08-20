@@ -1,3 +1,5 @@
+import { Injectable } from '@nestjs/common'
+
 import { ProductsRepository } from '../repositories/products-repository'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
@@ -15,6 +17,7 @@ type GetProductUseCaseResponse = Either<
   }
 >
 
+@Injectable()
 export class GetProductUseCase {
   constructor(private productsRepository: ProductsRepository) {}
 

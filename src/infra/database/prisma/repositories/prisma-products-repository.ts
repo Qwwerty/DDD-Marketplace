@@ -43,13 +43,17 @@ export class PrismaProductsRepository implements ProductsRepository {
     })
   }
 
-  async findById(id: string): Promise<Product | null> {
+  async findById(id: string): Promise<ProductDetails | null> {
     const product = await this.prisma.product.findUnique({
       where: {
         id,
       },
       include: {
-        user: true,
+        user: {
+          include: {
+            attachments: true,
+          },
+        },
         category: true,
         attachments: true,
       },
@@ -59,7 +63,7 @@ export class PrismaProductsRepository implements ProductsRepository {
       return null
     }
 
-    return PrismaProductMapper.toDomain(product)
+    return PrismaProductDetailsMapper.toDomain(product)
   }
 
   async findManyByOwner({

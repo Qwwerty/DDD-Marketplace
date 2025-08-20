@@ -17,6 +17,7 @@ import { SellProductController } from './controllers/sell-product.controller'
 
 import { AuthenticateSellerUseCase } from '@/domain/marketplace/application/use-cases/authenticate-seller'
 import { EditProductUseCase } from '@/domain/marketplace/application/use-cases/edit-product'
+import { GetProductUseCase } from '@/domain/marketplace/application/use-cases/get-product'
 import { GetSellerProfileUseCase } from '@/domain/marketplace/application/use-cases/get-seller-profile'
 import { ListAllCategoriesUseCase } from '@/domain/marketplace/application/use-cases/list-all-categories'
 import { ListAllProductsUseCase } from '@/domain/marketplace/application/use-cases/list-all-products'
@@ -28,6 +29,7 @@ import { RegisterSellerUseCase } from '@/domain/marketplace/application/use-case
 import { SellProductUseCase } from '@/domain/marketplace/application/use-cases/sell-product'
 import { UpdateSellerUseCase } from '@/domain/marketplace/application/use-cases/update-seller'
 import { UploadAttachmentsUseCase } from '@/domain/marketplace/application/use-cases/upload-attachments'
+import { GetProductController } from '@/infra/http/controllers/get-product.controller'
 import { MarkAsAvailableController } from '@/infra/http/controllers/mark-as-available.controller'
 import { MarkAsCancelledController } from '@/infra/http/controllers/mark-as-cancelled.controller'
 
@@ -47,6 +49,7 @@ import { MarkAsCancelledController } from '@/infra/http/controllers/mark-as-canc
     MarkAsAvailableController,
     ListAllSellerProductsController,
     ListAllProductsController,
+    GetProductController,
   ],
   providers: [
     RegisterSellerUseCase,
@@ -62,6 +65,7 @@ import { MarkAsCancelledController } from '@/infra/http/controllers/mark-as-canc
     MarkSellAsAvailableUseCase,
     ListAllSellerProductsUseCase,
     ListAllProductsUseCase,
+    GetProductUseCase,
   ],
 })
 export class HttpModule {}
