@@ -45,14 +45,50 @@ export class InMemoryProductsRepository implements ProductsRepository {
     return filteredProducts.length
   }
 
-  async findById(id: string): Promise<Product | null> {
+  async findById(id: string): Promise<ProductDetails | null> {
     const product = this.items.find((item) => item.id.toString() === id)
 
     if (!product) {
       return null
     }
 
-    return product
+    let attachment: Attachment | null = null
+
+    const attachmentsIds = product.attachments.currentItems.map((a) =>
+      a.attachmentId.toString(),
+    )
+
+    const { data: attachments } =
+      await this.attachmentsRepository.findManyByIds(attachmentsIds)
+
+    if (product.owner.avatar) {
+      attachment = await this.attachmentsRepository.findById(
+        product.owner.avatar?.attachmentId.toString(),
+      )
+    }
+
+    return ProductDetails.create({
+      productId: product.id,
+      title: product.title,
+      description: product.description,
+      priceInCents: product.priceInCents,
+      status: product.status,
+      owner: {
+        id: product.owner.id,
+        name: product.owner.name,
+        phone: product.owner.phone,
+        email: product.owner.email,
+        avatar: attachment
+          ? { id: attachment.id, path: attachment.path }
+          : undefined,
+      },
+      category: {
+        id: product.category.id,
+        title: product.category.title,
+        slug: product.category.slug,
+      },
+      attachments,
+    })
   }
 
   async findManyByOwner({

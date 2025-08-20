@@ -1,8 +1,8 @@
-import { Product } from '../../enterprise/entities/product'
 import { ProductsRepository } from '../repositories/products-repository'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 import { Either, left, right } from '@/core/either'
+import { ProductDetails } from '@/domain/marketplace/enterprise/entities/value-objects/product-details'
 
 interface GetProductUseCaseRequest {
   productId: string
@@ -11,7 +11,7 @@ interface GetProductUseCaseRequest {
 type GetProductUseCaseResponse = Either<
   ResourceNotFoundError,
   {
-    product: Product
+    product: ProductDetails
   }
 >
 
