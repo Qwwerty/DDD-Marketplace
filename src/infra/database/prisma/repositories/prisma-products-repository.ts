@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common'
+import { Prisma, Status } from '@prisma/client'
 import dayjs from 'dayjs'
 
+import { PrismaProductDetailsMapper } from '../mappers/prisma-product-deitals-mapper'
 import { PrismaProductMapper } from '../mappers/prisma-product-mapper'
 import { PrismaService } from '../prisma.service'
 
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 import { AttachmentsRepository } from '@/domain/marketplace/application/repositories/attachments-repository'
-import {
-  ProductAttachmentsRepository,
-} from '@/domain/marketplace/application/repositories/product-attachments-repository'
+import { ProductAttachmentsRepository } from '@/domain/marketplace/application/repositories/product-attachments-repository'
 import {
   Count,
   FindMany,
@@ -18,8 +18,6 @@ import {
 import { ResourceNotFoundError } from '@/domain/marketplace/application/use-cases/errors/resource-not-found-error'
 import { Product } from '@/domain/marketplace/enterprise/entities/product'
 import { ProductDetails } from '@/domain/marketplace/enterprise/entities/value-objects/product-details'
-import { Prisma, Status } from '@prisma/client'
-import { PrismaProductDetailsMapper } from '../mappers/prisma-product-deitals-mapper'
 
 @Injectable()
 export class PrismaProductsRepository implements ProductsRepository {
@@ -27,7 +25,7 @@ export class PrismaProductsRepository implements ProductsRepository {
     private prisma: PrismaService,
     private productAttachmentsRepository: ProductAttachmentsRepository,
     private attachmentsRepository: AttachmentsRepository,
-  ) { }
+  ) {}
 
   async count({ sellerId, status }: Count): Promise<number> {
     const today = dayjs().endOf('day').toDate()
@@ -64,13 +62,17 @@ export class PrismaProductsRepository implements ProductsRepository {
     return PrismaProductMapper.toDomain(product)
   }
 
-  async findManyByOwner({ ownerId, status, search }: FindManyByOwner): Promise<ProductDetails[]> {
+  async findManyByOwner({
+    ownerId,
+    status,
+    search,
+  }: FindManyByOwner): Promise<ProductDetails[]> {
     const where: Prisma.ProductWhereInput = {
       userId: ownerId,
       description: {
         contains: search,
-        mode: 'insensitive'
-      }
+        mode: 'insensitive',
+      },
     }
 
     if (status) {
@@ -82,19 +84,56 @@ export class PrismaProductsRepository implements ProductsRepository {
       include: {
         user: {
           include: {
-            attachments: true
-          }
+            attachments: true,
+          },
         },
         category: true,
-        attachments: true
-      }
+        attachments: true,
+      },
     })
 
-    return products.map(product => PrismaProductDetailsMapper.toDomain(product))
+    return products.map((product) =>
+      PrismaProductDetailsMapper.toDomain(product),
+    )
   }
 
-  findManyRecent(params: FindMany): Promise<Product[]> {
-    throw new Error('Method not implemented.')
+  async findManyRecent({
+    search,
+    page,
+    status,
+  }: FindMany): Promise<ProductDetails[]> {
+    const where: Prisma.ProductWhereInput = {
+      description: {
+        contains: search,
+        mode: 'insensitive',
+      },
+    }
+
+    if (status) {
+      where.status = status
+    }
+
+    const products = await this.prisma.product.findMany({
+      where,
+      include: {
+        user: {
+          include: {
+            attachments: true,
+          },
+        },
+        category: true,
+        attachments: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: 20,
+      skip: (page - 1) * 20,
+    })
+
+    return products.map((product) =>
+      PrismaProductDetailsMapper.toDomain(product),
+    )
   }
 
   async create(product: Product): Promise<ProductDetails> {
@@ -145,9 +184,9 @@ export class PrismaProductsRepository implements ProductsRepository {
         avatar:
           owner.attachments.length > 0
             ? {
-              id: new UniqueEntityId(owner.attachments[0].id),
-              path: owner.attachments[0].path,
-            }
+                id: new UniqueEntityId(owner.attachments[0].id),
+                path: owner.attachments[0].path,
+              }
             : undefined,
       },
       category: {
@@ -214,9 +253,9 @@ export class PrismaProductsRepository implements ProductsRepository {
         avatar:
           owner.attachments.length > 0
             ? {
-              id: new UniqueEntityId(owner.attachments[0].id),
-              path: owner.attachments[0].path,
-            }
+                id: new UniqueEntityId(owner.attachments[0].id),
+                path: owner.attachments[0].path,
+              }
             : undefined,
       },
       category: {

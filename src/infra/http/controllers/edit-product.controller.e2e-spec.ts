@@ -1,5 +1,4 @@
 import { INestApplication } from '@nestjs/common'
-
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
@@ -61,7 +60,6 @@ describe('Edit product (E2E)', () => {
 
     const productId = productResponse.body.product.id
 
-
     const response = await request(app.getHttpServer())
       .put(`/products/${productId}`)
       .set('Authorization', `Bearer ${accessToken}`)
@@ -73,14 +71,13 @@ describe('Edit product (E2E)', () => {
         attachmentsIds: ['1'],
       })
 
-
     expect(response.body).toEqual({
       product: expect.objectContaining({
         id: expect.any(String),
         title: 'Iphone 16',
         description: 'Description product',
         priceInCents: 39900,
-        status: 'available',
+        status: 'AVAILABLE',
         owner: {
           id: expect.any(String),
           name: 'John Doe',
@@ -97,7 +94,7 @@ describe('Edit product (E2E)', () => {
           {
             id: '1',
             url: 'apple-watch-series-10.jpeg',
-          }
+          },
         ],
       }),
     })

@@ -24,8 +24,7 @@ export class InMemoryProductsRepository implements ProductsRepository {
   constructor(
     private productAttachmentsRepository: InMemoryProductAttachmentsRepository,
     private attachmentsRepository: InMemoryAttachmentsRepository,
-  ) {
-  }
+  ) {}
 
   async count({ sellerId, status }: Count): Promise<number> {
     const filteredProducts = this.items.filter((item) => {
@@ -79,48 +78,54 @@ export class InMemoryProductsRepository implements ProductsRepository {
       (item) => item.owner.id.toString() === ownerId,
     )
 
-    return Promise.all(filteredProducts.map(async (product) => {
-      let attachment: Attachment | null = null
+    return Promise.all(
+      filteredProducts.map(async (product) => {
+        let attachment: Attachment | null = null
 
-      const attachmentsIds = product.attachments.currentItems.map((a) =>
-        a.attachmentId.toString(),
-      )
-
-      const { data: attachments } =
-        await this.attachmentsRepository.findManyByIds(attachmentsIds)
-
-      if (product.owner.avatar) {
-        attachment = await this.attachmentsRepository.findById(
-          product.owner.avatar?.attachmentId.toString(),
+        const attachmentsIds = product.attachments.currentItems.map((a) =>
+          a.attachmentId.toString(),
         )
-      }
 
-      return ProductDetails.create({
-        productId: product.id,
-        title: product.title,
-        description: product.description,
-        priceInCents: product.priceInCents,
-        status: product.status,
-        owner: {
-          id: product.owner.id,
-          name: product.owner.name,
-          phone: product.owner.phone,
-          email: product.owner.email,
-          avatar: attachment
-            ? { id: attachment.id, path: attachment.path }
-            : undefined,
-        },
-        category: {
-          id: product.category.id,
-          title: product.category.title,
-          slug: product.category.slug,
-        },
-        attachments,
-      })
-    }))
+        const { data: attachments } =
+          await this.attachmentsRepository.findManyByIds(attachmentsIds)
+
+        if (product.owner.avatar) {
+          attachment = await this.attachmentsRepository.findById(
+            product.owner.avatar?.attachmentId.toString(),
+          )
+        }
+
+        return ProductDetails.create({
+          productId: product.id,
+          title: product.title,
+          description: product.description,
+          priceInCents: product.priceInCents,
+          status: product.status,
+          owner: {
+            id: product.owner.id,
+            name: product.owner.name,
+            phone: product.owner.phone,
+            email: product.owner.email,
+            avatar: attachment
+              ? { id: attachment.id, path: attachment.path }
+              : undefined,
+          },
+          category: {
+            id: product.category.id,
+            title: product.category.title,
+            slug: product.category.slug,
+          },
+          attachments,
+        })
+      }),
+    )
   }
 
-  async findManyRecent({ page, search, status }: FindMany): Promise<Product[]> {
+  async findManyRecent({
+    page,
+    search,
+    status,
+  }: FindMany): Promise<ProductDetails[]> {
     let filtered = this.items
 
     if (search) {
@@ -135,9 +140,51 @@ export class InMemoryProductsRepository implements ProductsRepository {
       filtered = filtered.filter((item) => item.status === status)
     }
 
-    return filtered
+    const filteredProducts = filtered
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
       .slice((page - 1) * 20, page * 20)
+
+    return Promise.all(
+      filteredProducts.map(async (product) => {
+        let attachment: Attachment | null = null
+
+        const attachmentsIds = product.attachments.currentItems.map((a) =>
+          a.attachmentId.toString(),
+        )
+
+        const { data: attachments } =
+          await this.attachmentsRepository.findManyByIds(attachmentsIds)
+
+        if (product.owner.avatar) {
+          attachment = await this.attachmentsRepository.findById(
+            product.owner.avatar?.attachmentId.toString(),
+          )
+        }
+
+        return ProductDetails.create({
+          productId: product.id,
+          title: product.title,
+          description: product.description,
+          priceInCents: product.priceInCents,
+          status: product.status,
+          owner: {
+            id: product.owner.id,
+            name: product.owner.name,
+            phone: product.owner.phone,
+            email: product.owner.email,
+            avatar: attachment
+              ? { id: attachment.id, path: attachment.path }
+              : undefined,
+          },
+          category: {
+            id: product.category.id,
+            title: product.category.title,
+            slug: product.category.slug,
+          },
+          attachments,
+        })
+      }),
+    )
   }
 
   async create(product: Product): Promise<ProductDetails> {

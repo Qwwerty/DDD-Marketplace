@@ -72,7 +72,7 @@ describe('Sell product (E2E)', () => {
         title: 'Iphone 16',
         description: 'Description product',
         priceInCents: 15000,
-        status: 'available',
+        status: 'AVAILABLE',
         owner: expect.objectContaining({
           id: expect.any(String),
           name: 'John Doe',
