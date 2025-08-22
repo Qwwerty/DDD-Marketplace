@@ -24,7 +24,7 @@ export class GetProductUseCase {
   async execute({
     productId,
   }: GetProductUseCaseRequest): Promise<GetProductUseCaseResponse> {
-    const product = await this.productsRepository.findById(productId)
+    const product = await this.productsRepository.findByIdWithDetails(productId)
 
     if (!product) {
       return left(new ResourceNotFoundError('product', productId))

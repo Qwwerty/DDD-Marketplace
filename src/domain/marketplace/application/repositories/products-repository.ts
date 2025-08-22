@@ -21,7 +21,8 @@ export interface Count {
 
 export abstract class ProductsRepository {
   abstract count(params: Count): Promise<number>
-  abstract findById(id: string): Promise<ProductDetails | null>
+  abstract findById(id: string): Promise<Product | null>
+  abstract findByIdWithDetails(id: string): Promise<ProductDetails | null>
   abstract findManyByOwner(params: FindManyByOwner): Promise<ProductDetails[]>
   abstract findManyRecent(params: FindMany): Promise<ProductDetails[]>
   abstract create(product: Product): Promise<ProductDetails>
