@@ -43,7 +43,30 @@ export class PrismaProductsRepository implements ProductsRepository {
     })
   }
 
-  async findById(id: string): Promise<ProductDetails | null> {
+  async findById(id: string): Promise<Product | null> {
+    const product = await this.prisma.product.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        user: {
+          include: {
+            attachments: true,
+          },
+        },
+        category: true,
+        attachments: true,
+      },
+    })
+
+    if (!product) {
+      return null
+    }
+
+    return PrismaProductMapper.toDomain(product)
+  }
+
+  async findByIdWithDetails(id: string): Promise<ProductDetails | null> {
     const product = await this.prisma.product.findUnique({
       where: {
         id,
