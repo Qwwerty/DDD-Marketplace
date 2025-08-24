@@ -32,9 +32,11 @@ import { UploadAttachmentsUseCase } from '@/domain/marketplace/application/use-c
 import { GetProductController } from '@/infra/http/controllers/get-product.controller'
 import { MarkAsAvailableController } from '@/infra/http/controllers/mark-as-available.controller'
 import { MarkAsCancelledController } from '@/infra/http/controllers/mark-as-cancelled.controller'
+import { SignOutController } from './controllers/sign-out.controller'
+import { CacheModule } from '../cache/cache.module'
 
 @Module({
-  imports: [DatabaseModule, CryptographyModule, StorageModule],
+  imports: [DatabaseModule, CryptographyModule, StorageModule, CacheModule],
   controllers: [
     RegisterSellerController,
     AuthenticateController,
@@ -50,6 +52,7 @@ import { MarkAsCancelledController } from '@/infra/http/controllers/mark-as-canc
     ListAllSellerProductsController,
     ListAllProductsController,
     GetProductController,
+    SignOutController
   ],
   providers: [
     RegisterSellerUseCase,
@@ -65,7 +68,7 @@ import { MarkAsCancelledController } from '@/infra/http/controllers/mark-as-canc
     MarkSellAsAvailableUseCase,
     ListAllSellerProductsUseCase,
     ListAllProductsUseCase,
-    GetProductUseCase,
+    GetProductUseCase
   ],
 })
-export class HttpModule {}
+export class HttpModule { }
