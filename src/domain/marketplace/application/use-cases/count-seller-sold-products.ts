@@ -4,6 +4,7 @@ import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { ProductStatus } from '../../enterprise/entities/product'
 
 import { Either, left, right } from '@/core/either'
+import { Injectable } from '@nestjs/common'
 
 interface CountSellerSoldUseCaseRequest {
   sellerId: string
@@ -16,6 +17,7 @@ type CountSellerSoldUseCaseRequestResponse = Either<
   }
 >
 
+@Injectable()
 export class CountSellerSoldUseCase {
   constructor(
     private sellersRepository: SellersRepository,

@@ -34,6 +34,8 @@ import { MarkAsAvailableController } from '@/infra/http/controllers/mark-as-avai
 import { MarkAsCancelledController } from '@/infra/http/controllers/mark-as-cancelled.controller'
 import { SignOutController } from './controllers/sign-out.controller'
 import { CacheModule } from '../cache/cache.module'
+import { CountSellerSoldProductsController } from './controllers/count-seller-sold-products.controller'
+import { CountSellerSoldUseCase } from '@/domain/marketplace/application/use-cases/count-seller-sold-products'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, StorageModule, CacheModule],
@@ -52,7 +54,8 @@ import { CacheModule } from '../cache/cache.module'
     ListAllSellerProductsController,
     ListAllProductsController,
     GetProductController,
-    SignOutController
+    SignOutController,
+    CountSellerSoldProductsController
   ],
   providers: [
     RegisterSellerUseCase,
@@ -68,7 +71,8 @@ import { CacheModule } from '../cache/cache.module'
     MarkSellAsAvailableUseCase,
     ListAllSellerProductsUseCase,
     ListAllProductsUseCase,
-    GetProductUseCase
+    GetProductUseCase,
+    CountSellerSoldUseCase
   ],
 })
 export class HttpModule { }
