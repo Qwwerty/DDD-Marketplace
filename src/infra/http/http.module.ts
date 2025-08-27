@@ -36,6 +36,8 @@ import { SignOutController } from './controllers/sign-out.controller'
 import { CacheModule } from '../cache/cache.module'
 import { CountSellerSoldProductsController } from './controllers/count-seller-sold-products.controller'
 import { CountSellerSoldUseCase } from '@/domain/marketplace/application/use-cases/count-seller-sold-products'
+import { CountSellerAvailableProductsController } from './controllers/count-seller-available-products.controller'
+import { CountSellerAvailableUseCase } from '@/domain/marketplace/application/use-cases/count-seller-available-products'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, StorageModule, CacheModule],
@@ -55,7 +57,8 @@ import { CountSellerSoldUseCase } from '@/domain/marketplace/application/use-cas
     ListAllProductsController,
     GetProductController,
     SignOutController,
-    CountSellerSoldProductsController
+    CountSellerSoldProductsController,
+    CountSellerAvailableProductsController,
   ],
   providers: [
     RegisterSellerUseCase,
@@ -72,7 +75,8 @@ import { CountSellerSoldUseCase } from '@/domain/marketplace/application/use-cas
     ListAllSellerProductsUseCase,
     ListAllProductsUseCase,
     GetProductUseCase,
-    CountSellerSoldUseCase
+    CountSellerSoldUseCase,
+    CountSellerAvailableUseCase,
   ],
 })
 export class HttpModule { }
