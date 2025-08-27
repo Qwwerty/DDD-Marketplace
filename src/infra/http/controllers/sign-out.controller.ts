@@ -19,7 +19,7 @@ export class SignOutController {
     const existsAuthenticate = await this.cache.get(`user-token-${sub}`)
 
     if (!existsAuthenticate) {
-      await this.cache.set(`user-token-${sub}`, '', ttl)
+      await this.cache.set(`user-token:${sub}`, 'true', ttl)
     }
   }
 }

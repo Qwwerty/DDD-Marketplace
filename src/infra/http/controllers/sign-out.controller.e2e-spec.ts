@@ -44,8 +44,13 @@ describe('Sign out (E2E)', () => {
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 
-    const blackListToken = await redis.get(`user-token-${seller.id.toString()}`)
-    
+    const blackListToken = await redis.get(`user-token:${seller.id.toString()}`)
     expect(blackListToken).not.toBeNull()
+
+    await request(app.getHttpServer())
+      .get('/sellers/me')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send()
+      .expect(401)
   })
 })

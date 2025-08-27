@@ -20,4 +20,4 @@ import { CacheModule } from './cache/cache.module'
   ],
   providers: [EnvService],
 })
-export class AppModule {}
+export class AppModule { }

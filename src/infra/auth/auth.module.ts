@@ -7,6 +7,10 @@ import { JwtAuthGuard } from './jwt-auth.guard'
 import { JwtStrategy } from './jwt.strategy'
 import { EnvModule } from '../env/env.module'
 import { EnvService } from '../env/env.service'
+import { JwtBlacklistGuard } from './jwt-blacklist-guard'
+import { CacheRepository } from '../cache/cache-repository'
+import { RedisCacheRepository } from '../cache/redis/redis-cache-repository'
+import { CacheModule } from '../cache/cache.module'
 
 @Module({
   imports: [
@@ -26,6 +30,7 @@ import { EnvService } from '../env/env.service'
         }
       },
     }),
+    CacheModule
   ],
   providers: [
     JwtStrategy,
@@ -34,6 +39,10 @@ import { EnvService } from '../env/env.service'
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
+    {
+      provide: APP_GUARD,
+      useClass: JwtBlacklistGuard
+    }
   ],
 })
-export class AuthModule {}
+export class AuthModule { }
