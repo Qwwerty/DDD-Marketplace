@@ -10,7 +10,7 @@ export class CountSellerAvailableProductsController {
   constructor(private countSellerAvailable: CountSellerAvailableUseCase) { }
 
   @Get()
-  async handle(@CurrentUser() user: UserPayload,) {
+  async handle(@CurrentUser() user: UserPayload) {
     const sellerId = user.sub
 
     const result = await this.countSellerAvailable.execute({

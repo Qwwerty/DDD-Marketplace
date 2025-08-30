@@ -6,7 +6,6 @@ import { envSchema } from './env/env'
 import { EnvModule } from './env/env.module'
 import { EnvService } from './env/env.service'
 import { HttpModule } from './http/http.module'
-import { CacheModule } from './cache/cache.module'
 
 @Module({
   imports: [
