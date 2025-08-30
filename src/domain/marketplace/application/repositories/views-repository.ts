@@ -1,3 +1,4 @@
+import { ViewDetails } from '../../enterprise/entities/value-objects/view-details'
 import { View } from '../../enterprise/entities/view'
 
 export interface CountBySeller {
@@ -18,5 +19,5 @@ export abstract class ViewsRepository {
   abstract countByProduct(params: CountByProduct): Promise<number>
   abstract countPerDay(params: CountBySeller): Promise<ViewsPerDay[]>
   abstract isViewed(view: View): Promise<boolean>
-  abstract create(view: View): Promise<void>
+  abstract create(view: View): Promise<ViewDetails>
 }

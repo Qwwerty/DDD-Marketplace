@@ -7,8 +7,12 @@ import {
   ViewsRepository,
 } from '@/domain/marketplace/application/repositories/views-repository'
 import { View } from '@/domain/marketplace/enterprise/entities/view'
+import { ViewDetails } from '@/domain/marketplace/enterprise/entities/value-objects/view-details'
+import { InMemoryAttachmentsRepository } from './in-memory-attachments-repository'
 
 export class InMemoryViewsRepository implements ViewsRepository {
+  constructor(private attachmentsRepository: InMemoryAttachmentsRepository) { }
+
   public items: View[] = []
 
   async countBySeller({ sellerId }: CountBySeller): Promise<number> {
@@ -78,7 +82,57 @@ export class InMemoryViewsRepository implements ViewsRepository {
     )
   }
 
-  async create(view: View): Promise<void> {
+  async create(view: View): Promise<ViewDetails> {
     this.items.push(view)
+
+    let viewerAvatar
+
+    if (view.viewer.avatar) {
+      viewerAvatar = await this.attachmentsRepository.findById(view.viewer.avatar?.attachmentId.toString())
+    }
+
+    let productOwnerAvatar
+
+    if (view.product.owner.avatar) {
+      productOwnerAvatar = await this.attachmentsRepository.findById(view.product.owner.avatar?.attachmentId.toString())
+    }
+
+    const attachmentsIds = view.product.attachments.currentItems.map((a) =>
+      a.attachmentId.toString(),
+    )
+
+    const {
+      data: attachments,
+    } = await this.attachmentsRepository.findManyByIds(attachmentsIds)
+
+    return ViewDetails.create({
+      viewer: {
+        id: view.viewer.id,
+        name: view.viewer.name,
+        email: view.viewer.email,
+        phone: view.viewer.phone,
+        avatar: viewerAvatar ? { id: viewerAvatar.id, path: viewerAvatar.path } : null,
+      },
+      product: {
+        productId: view.product.id,
+        title: view.product.title,
+        description: view.product.description,
+        priceInCents: view.product.priceInCents,
+        status: view.product.status,
+        owner: {
+          id: view.product.owner.id,
+          name: view.product.owner.name,
+          phone: view.product.owner.phone,
+          email: view.product.owner.email,
+          avatar: productOwnerAvatar ? { id: productOwnerAvatar.id, path: productOwnerAvatar.path } : null,
+        },
+        category: {
+          id: view.product.category.id,
+          title: view.product.category.title,
+          slug: view.product.category.slug,
+        },
+        attachments,
+      }
+    })
   }
 }

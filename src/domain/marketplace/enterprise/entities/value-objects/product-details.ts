@@ -19,7 +19,7 @@ export interface ProductDetailsProps {
           id: UniqueEntityId
           path: string
         }
-      | undefined
+      | null
   }
   category: {
     id: UniqueEntityId

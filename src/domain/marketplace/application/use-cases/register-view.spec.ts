@@ -12,6 +12,8 @@ import { View } from '../../enterprise/entities/view'
 
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
+import { makeAttachment } from 'test/factories/make-attachement'
+import { UserAttachment } from '../../enterprise/entities/user-attachment'
 
 let inMemoryProductAttachments: InMemoryProductAttachmentsRepository
 let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
@@ -30,7 +32,7 @@ describe('Register View Use Case', () => {
     )
 
     inMemoryViewersRepository = new InMemoryViewersRepository()
-    inMemoryViewsRepository = new InMemoryViewsRepository()
+    inMemoryViewsRepository = new InMemoryViewsRepository(inMemoryAttachmentsRepository)
 
     sut = new RegisterViewUseCase(
       inMemoryProductsRepository,
@@ -108,8 +110,17 @@ describe('Register View Use Case', () => {
   })
 
   it('should be possible to register a view', async () => {
+    inMemoryAttachmentsRepository.items.push(
+      makeAttachment({ path: 'path/test' }, new UniqueEntityId('1')),
+    )
+
     const viewer1 = makeViewer({}, new UniqueEntityId('viewer-1'))
-    const viewer2 = makeViewer({}, new UniqueEntityId('viewer-2'))
+    const viewer2 = makeViewer({
+      avatar: UserAttachment.create({
+        userId: new UniqueEntityId('viewer-2'),
+        attachmentId: new UniqueEntityId('1')
+      })
+    }, new UniqueEntityId('viewer-2'))
 
     const product = makeProduct({}, viewer1, new UniqueEntityId('product-1'))
 
@@ -117,11 +128,21 @@ describe('Register View Use Case', () => {
 
     inMemoryProductsRepository.items.push(product)
 
-    await sut.execute({
+    const result = await sut.execute({
       productId: 'product-1',
       viewerId: 'viewer-2',
     })
 
     expect(inMemoryViewsRepository.items).toHaveLength(1)
+    expect(result.value).toStrictEqual({
+      view: expect.objectContaining({
+        viewer: expect.objectContaining({
+          id: new UniqueEntityId('viewer-2')
+        }),
+        product: expect.objectContaining({
+          productId: new UniqueEntityId('product-1')
+        })
+      })
+    })
   })
 })
