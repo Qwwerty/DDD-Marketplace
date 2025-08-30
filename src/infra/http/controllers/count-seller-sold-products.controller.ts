@@ -1,20 +1,25 @@
-import { BadRequestException, Controller, Get, NotFoundException } from '@nestjs/common'
+import {
+  BadRequestException,
+  Controller,
+  Get,
+  NotFoundException,
+} from '@nestjs/common'
 
-import { CurrentUser } from '@/infra/auth/current-user-decorator';
-import { CountSellerSoldUseCase } from '@/domain/marketplace/application/use-cases/count-seller-sold-products';
-import { UserPayload } from '@/infra/auth/jwt.strategy';
-import { ResourceNotFoundError } from '@/domain/marketplace/application/use-cases/errors/resource-not-found-error';
+import { CountSellerSoldUseCase } from '@/domain/marketplace/application/use-cases/count-seller-sold-products'
+import { ResourceNotFoundError } from '@/domain/marketplace/application/use-cases/errors/resource-not-found-error'
+import { CurrentUser } from '@/infra/auth/current-user-decorator'
+import { UserPayload } from '@/infra/auth/jwt.strategy'
 
 @Controller('/sellers/metrics/products/sold')
 export class CountSellerSoldProductsController {
-  constructor(private countSellerSold: CountSellerSoldUseCase) { }
+  constructor(private countSellerSold: CountSellerSoldUseCase) {}
 
   @Get()
-  async handle(@CurrentUser() user: UserPayload,) {
+  async handle(@CurrentUser() user: UserPayload) {
     const sellerId = user.sub
 
     const result = await this.countSellerSold.execute({
-      sellerId
+      sellerId,
     })
 
     if (result.isLeft()) {

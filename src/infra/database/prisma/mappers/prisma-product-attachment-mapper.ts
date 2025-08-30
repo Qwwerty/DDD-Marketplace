@@ -1,20 +1,17 @@
 import { Injectable } from '@nestjs/common'
 import { Attachment as PrismaAttachment, Prisma } from '@prisma/client'
 
-import { ProductAttachment } from '@/domain/marketplace/enterprise/entities/product-attachment'
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
+import { ProductAttachment } from '@/domain/marketplace/enterprise/entities/product-attachment'
 
 @Injectable()
 export class PrismaProductAttachmentMapper {
   static toDomain(raw: PrismaAttachment): ProductAttachment {
-    return ProductAttachment.create(
-      {
-        productId: new UniqueEntityId(String(raw.productId)),
-        attachmentId: new UniqueEntityId(raw.id)
-      }
-    )
+    return ProductAttachment.create({
+      productId: new UniqueEntityId(String(raw.productId)),
+      attachmentId: new UniqueEntityId(raw.id),
+    })
   }
-
 
   static toPrismaUpdateMany(
     attachments: ProductAttachment[],

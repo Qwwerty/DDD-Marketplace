@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common'
-import { Product, ProductStatus } from '../../enterprise/entities/product'
+
+import { ProductStatus } from '../../enterprise/entities/product'
+import { ProductDetails } from '../../enterprise/entities/value-objects/product-details'
 import { ProductsRepository } from '../repositories/products-repository'
 
 import { Either, right } from '@/core/either'
-import { ProductDetails } from '../../enterprise/entities/value-objects/product-details'
 
 interface ListAllProductsUseCaseRequest {
   page: number

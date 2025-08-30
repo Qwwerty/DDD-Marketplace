@@ -1,6 +1,7 @@
-import { UniqueEntityId } from "@/core/entities/unique-entidy-id";
-import { ProductDetailsProps } from "./product-details";
-import { ValueObject } from "@/core/entities/value-object";
+import { ProductDetailsProps } from './product-details'
+
+import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
+import { ValueObject } from '@/core/entities/value-object'
 
 export interface ViewDetailsProps {
   product: ProductDetailsProps
@@ -14,7 +15,6 @@ export interface ViewDetailsProps {
       path: string
     } | null
   }
-
 }
 
 export class ViewDetails extends ValueObject<ViewDetailsProps> {

@@ -7,6 +7,8 @@ import { PrismaProductAttachmentsRepository } from './prisma/repositories/prisma
 import { PrismaProductsRepository } from './prisma/repositories/prisma-products-repository'
 import { PrismaSellersRepository } from './prisma/repositories/prisma-sellers-repository'
 import { PrismaUserAttachmentsRepository } from './prisma/repositories/prisma-user-attachment-repository'
+import { PrismaViewersRepository } from './prisma/repositories/prisma-viewers-repository'
+import { PrismaViewsRepository } from './prisma/repositories/prisma-views-repository'
 
 import { AttachmentsRepository } from '@/domain/marketplace/application/repositories/attachments-repository'
 import { CategoriesRepository } from '@/domain/marketplace/application/repositories/categories-repository'
@@ -14,6 +16,8 @@ import { ProductAttachmentsRepository } from '@/domain/marketplace/application/r
 import { ProductsRepository } from '@/domain/marketplace/application/repositories/products-repository'
 import { SellersRepository } from '@/domain/marketplace/application/repositories/sellers-repository'
 import { UserAttachmentsRepository } from '@/domain/marketplace/application/repositories/user-attachments-repository'
+import { ViewersRepository } from '@/domain/marketplace/application/repositories/viewers-repository'
+import { ViewsRepository } from '@/domain/marketplace/application/repositories/views-repository'
 
 @Module({
   providers: [
@@ -42,6 +46,14 @@ import { UserAttachmentsRepository } from '@/domain/marketplace/application/repo
       provide: ProductAttachmentsRepository,
       useClass: PrismaProductAttachmentsRepository,
     },
+    {
+      provide: ViewersRepository,
+      useClass: PrismaViewersRepository,
+    },
+    {
+      provide: ViewsRepository,
+      useClass: PrismaViewsRepository,
+    },
   ],
   exports: [
     PrismaService,
@@ -50,6 +62,8 @@ import { UserAttachmentsRepository } from '@/domain/marketplace/application/repo
     CategoriesRepository,
     ProductsRepository,
     ProductAttachmentsRepository,
+    ViewersRepository,
+    ViewsRepository,
   ],
 })
 export class DatabaseModule {}

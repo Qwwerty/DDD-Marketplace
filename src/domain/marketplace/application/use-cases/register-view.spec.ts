@@ -1,3 +1,4 @@
+import { makeAttachment } from 'test/factories/make-attachement'
 import { makeProduct } from 'test/factories/make-product'
 import { makeViewer } from 'test/factories/make-viewer'
 import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
@@ -8,12 +9,11 @@ import { InMemoryViewsRepository } from 'test/repositories/in-memory-views-repos
 
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { RegisterViewUseCase } from './register-view'
+import { UserAttachment } from '../../enterprise/entities/user-attachment'
 import { View } from '../../enterprise/entities/view'
 
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
-import { makeAttachment } from 'test/factories/make-attachement'
-import { UserAttachment } from '../../enterprise/entities/user-attachment'
 
 let inMemoryProductAttachments: InMemoryProductAttachmentsRepository
 let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
@@ -32,7 +32,9 @@ describe('Register View Use Case', () => {
     )
 
     inMemoryViewersRepository = new InMemoryViewersRepository()
-    inMemoryViewsRepository = new InMemoryViewsRepository(inMemoryAttachmentsRepository)
+    inMemoryViewsRepository = new InMemoryViewsRepository(
+      inMemoryAttachmentsRepository,
+    )
 
     sut = new RegisterViewUseCase(
       inMemoryProductsRepository,
@@ -115,12 +117,15 @@ describe('Register View Use Case', () => {
     )
 
     const viewer1 = makeViewer({}, new UniqueEntityId('viewer-1'))
-    const viewer2 = makeViewer({
-      avatar: UserAttachment.create({
-        userId: new UniqueEntityId('viewer-2'),
-        attachmentId: new UniqueEntityId('1')
-      })
-    }, new UniqueEntityId('viewer-2'))
+    const viewer2 = makeViewer(
+      {
+        avatar: UserAttachment.create({
+          userId: new UniqueEntityId('viewer-2'),
+          attachmentId: new UniqueEntityId('1'),
+        }),
+      },
+      new UniqueEntityId('viewer-2'),
+    )
 
     const product = makeProduct({}, viewer1, new UniqueEntityId('product-1'))
 
@@ -137,12 +142,12 @@ describe('Register View Use Case', () => {
     expect(result.value).toStrictEqual({
       view: expect.objectContaining({
         viewer: expect.objectContaining({
-          id: new UniqueEntityId('viewer-2')
+          id: new UniqueEntityId('viewer-2'),
         }),
         product: expect.objectContaining({
-          productId: new UniqueEntityId('product-1')
-        })
-      })
+          productId: new UniqueEntityId('product-1'),
+        }),
+      }),
     })
   })
 })

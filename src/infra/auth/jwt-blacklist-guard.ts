@@ -1,9 +1,15 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
-import { CacheRepository } from "../cache/cache-repository";
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common'
+
+import { CacheRepository } from '../cache/cache-repository'
 
 @Injectable()
 export class JwtBlacklistGuard implements CanActivate {
-  constructor(private cache: CacheRepository) { }
+  constructor(private cache: CacheRepository) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest()
@@ -20,6 +26,6 @@ export class JwtBlacklistGuard implements CanActivate {
       throw new UnauthorizedException('Token revogado')
     }
 
-    return true;
+    return true
   }
 }

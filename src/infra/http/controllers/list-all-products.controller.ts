@@ -1,15 +1,8 @@
-import {
-  BadRequestException,
-  Controller,
-  Get,
-  NotFoundException,
-  Query,
-} from '@nestjs/common'
+import { BadRequestException, Controller, Get, Query } from '@nestjs/common'
 import { z } from 'zod'
 
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
-import { ResourceNotFoundError } from '@/domain/marketplace/application/use-cases/errors/resource-not-found-error'
 import { ListAllProductsUseCase } from '@/domain/marketplace/application/use-cases/list-all-products'
 import { ProductStatus } from '@/domain/marketplace/enterprise/entities/product'
 import { Public } from '@/infra/auth/public'

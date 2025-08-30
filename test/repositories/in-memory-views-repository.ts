@@ -1,17 +1,18 @@
 import dayjs from 'dayjs'
 
+import { InMemoryAttachmentsRepository } from './in-memory-attachments-repository'
+
 import {
   CountByProduct,
   CountBySeller,
   ViewsPerDay,
   ViewsRepository,
 } from '@/domain/marketplace/application/repositories/views-repository'
-import { View } from '@/domain/marketplace/enterprise/entities/view'
 import { ViewDetails } from '@/domain/marketplace/enterprise/entities/value-objects/view-details'
-import { InMemoryAttachmentsRepository } from './in-memory-attachments-repository'
+import { View } from '@/domain/marketplace/enterprise/entities/view'
 
 export class InMemoryViewsRepository implements ViewsRepository {
-  constructor(private attachmentsRepository: InMemoryAttachmentsRepository) { }
+  constructor(private attachmentsRepository: InMemoryAttachmentsRepository) {}
 
   public items: View[] = []
 
@@ -88,22 +89,25 @@ export class InMemoryViewsRepository implements ViewsRepository {
     let viewerAvatar
 
     if (view.viewer.avatar) {
-      viewerAvatar = await this.attachmentsRepository.findById(view.viewer.avatar?.attachmentId.toString())
+      viewerAvatar = await this.attachmentsRepository.findById(
+        view.viewer.avatar?.attachmentId.toString(),
+      )
     }
 
     let productOwnerAvatar
 
     if (view.product.owner.avatar) {
-      productOwnerAvatar = await this.attachmentsRepository.findById(view.product.owner.avatar?.attachmentId.toString())
+      productOwnerAvatar = await this.attachmentsRepository.findById(
+        view.product.owner.avatar?.attachmentId.toString(),
+      )
     }
 
     const attachmentsIds = view.product.attachments.currentItems.map((a) =>
       a.attachmentId.toString(),
     )
 
-    const {
-      data: attachments,
-    } = await this.attachmentsRepository.findManyByIds(attachmentsIds)
+    const { data: attachments } =
+      await this.attachmentsRepository.findManyByIds(attachmentsIds)
 
     return ViewDetails.create({
       viewer: {
@@ -111,7 +115,9 @@ export class InMemoryViewsRepository implements ViewsRepository {
         name: view.viewer.name,
         email: view.viewer.email,
         phone: view.viewer.phone,
-        avatar: viewerAvatar ? { id: viewerAvatar.id, path: viewerAvatar.path } : null,
+        avatar: viewerAvatar
+          ? { id: viewerAvatar.id, path: viewerAvatar.path }
+          : null,
       },
       product: {
         productId: view.product.id,
@@ -124,7 +130,9 @@ export class InMemoryViewsRepository implements ViewsRepository {
           name: view.product.owner.name,
           phone: view.product.owner.phone,
           email: view.product.owner.email,
-          avatar: productOwnerAvatar ? { id: productOwnerAvatar.id, path: productOwnerAvatar.path } : null,
+          avatar: productOwnerAvatar
+            ? { id: productOwnerAvatar.id, path: productOwnerAvatar.path }
+            : null,
         },
         category: {
           id: view.product.category.id,
@@ -132,7 +140,7 @@ export class InMemoryViewsRepository implements ViewsRepository {
           slug: view.product.category.slug,
         },
         attachments,
-      }
+      },
     })
   }
 }

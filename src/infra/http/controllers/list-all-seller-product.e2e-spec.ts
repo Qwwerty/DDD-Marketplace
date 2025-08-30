@@ -12,12 +12,10 @@ import { Category } from '@/domain/marketplace/enterprise/entities/category'
 import { ProductStatus } from '@/domain/marketplace/enterprise/entities/product'
 import { AppModule } from '@/infra/app.module'
 import { DatabaseModule } from '@/infra/database/database.module'
-import { PrismaService } from '@/infra/database/prisma/prisma.service'
 
 describe('List all seller products (E2E)', () => {
   let app: INestApplication
   let jwt: JwtService
-  let prisma: PrismaService
   let sellerFactory: SellerFactory
   let productFactory: ProductFactory
 
@@ -30,7 +28,6 @@ describe('List all seller products (E2E)', () => {
     app = moduleRef.createNestApplication()
 
     jwt = moduleRef.get(JwtService)
-    prisma = moduleRef.get(PrismaService)
     sellerFactory = moduleRef.get(SellerFactory)
     productFactory = moduleRef.get(ProductFactory)
 

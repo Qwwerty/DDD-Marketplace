@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common'
+import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
-
 import { ProductFactory } from 'test/factories/make-product'
 import { SellerFactory } from 'test/factories/make-seller'
 
@@ -9,8 +9,6 @@ import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 import { Category } from '@/domain/marketplace/enterprise/entities/category'
 import { AppModule } from '@/infra/app.module'
 import { DatabaseModule } from '@/infra/database/database.module'
-import { ProductStatus } from '@/domain/marketplace/enterprise/entities/product'
-import { JwtService } from '@nestjs/jwt'
 
 describe('Count seller available products (E2E)', () => {
   let app: INestApplication
@@ -62,7 +60,7 @@ describe('Count seller available products (E2E)', () => {
       .set('Authorization', `Bearer ${accessToken}`)
 
     expect(response.body).toStrictEqual({
-      amount: 3
+      amount: 3,
     })
   })
 })

@@ -6,13 +6,13 @@ import {
 } from '@prisma/client'
 
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
-import { ProductDetails } from '@/domain/marketplace/enterprise/entities/value-objects/product-details'
 import { ProductStatus } from '@/domain/marketplace/enterprise/entities/product'
+import { ProductDetails } from '@/domain/marketplace/enterprise/entities/value-objects/product-details'
 
 type PrismaProductDetails = PrismaProduct & {
   user: PrismaUser & {
     attachments: PrismaAttachment[]
-  },
+  }
   category: PrismaCategory
   attachments: PrismaAttachment[]
 }
@@ -30,21 +30,22 @@ export class PrismaProductDetailsMapper {
         name: raw.user.name,
         phone: raw.user.phone,
         email: raw.user.email,
-        avatar: raw.user.attachments.length > 0
-          ? {
-            id: new UniqueEntityId(raw.user.attachments[0].id),
-            path: raw.user.attachments[0].path,
-          }
-          : undefined,
+        avatar:
+          raw.user.attachments.length > 0
+            ? {
+                id: new UniqueEntityId(raw.user.attachments[0].id),
+                path: raw.user.attachments[0].path,
+              }
+            : null,
       },
       category: {
         id: new UniqueEntityId(raw.category.id),
         title: raw.category.title,
         slug: raw.category.slug,
       },
-      attachments: raw.attachments.map(attachment => ({
+      attachments: raw.attachments.map((attachment) => ({
         id: new UniqueEntityId(attachment.id),
-        path: attachment.path
+        path: attachment.path,
       })),
     })
   }

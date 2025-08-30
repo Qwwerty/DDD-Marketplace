@@ -1,13 +1,14 @@
+import { Injectable } from '@nestjs/common'
+
 import { ProductsRepository } from '../repositories/products-repository'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { ViewDetails } from '../../enterprise/entities/value-objects/view-details'
 import { View } from '../../enterprise/entities/view'
 import { ViewersRepository } from '../repositories/viewers-repository'
 import { ViewsRepository } from '../repositories/views-repository'
 
 import { Either, left, right } from '@/core/either'
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
-import { Injectable } from '@nestjs/common'
-import { ViewDetails } from '../../enterprise/entities/value-objects/view-details'
 
 interface RegisterViewUseCaseRequest {
   productId: string

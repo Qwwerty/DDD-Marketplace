@@ -214,7 +214,7 @@ export class PrismaProductsRepository implements ProductsRepository {
                 id: new UniqueEntityId(owner.attachments[0].id),
                 path: owner.attachments[0].path,
               }
-            : undefined,
+            : null,
       },
       category: {
         id: product.category.id,
@@ -283,7 +283,7 @@ export class PrismaProductsRepository implements ProductsRepository {
                 id: new UniqueEntityId(owner.attachments[0].id),
                 path: owner.attachments[0].path,
               }
-            : undefined,
+            : null,
       },
       category: {
         id: product.category.id,

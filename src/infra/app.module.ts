@@ -15,8 +15,8 @@ import { HttpModule } from './http/http.module'
     }),
     AuthModule,
     EnvModule,
-    HttpModule
+    HttpModule,
   ],
   providers: [EnvService],
 })
-export class AppModule { }
+export class AppModule {}

@@ -1,10 +1,11 @@
+import { Injectable } from '@nestjs/common'
+
 import { ProductsRepository } from '../repositories/products-repository'
 import { SellersRepository } from '../repositories/sellers-repository'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { ProductStatus } from '../../enterprise/entities/product'
 
 import { Either, left, right } from '@/core/either'
-import { Injectable } from '@nestjs/common'
 
 interface CountSellerAvailableUseCaseRequest {
   sellerId: string

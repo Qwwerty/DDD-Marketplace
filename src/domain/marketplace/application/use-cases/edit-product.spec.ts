@@ -64,7 +64,7 @@ describe('Edit Product Use Case', () => {
     inMemoryCategoriesRepository.items.push(category)
     inMemoryProductsRepository.items.push(product)
 
-    const result = await sut.execute({
+    await sut.execute({
       productId: 'product-1',
       ownerId: seller.id.toString(),
       categoryId: category.id.toString(),

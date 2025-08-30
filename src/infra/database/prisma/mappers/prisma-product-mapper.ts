@@ -4,7 +4,6 @@ import {
   Category as PrismaCategory,
   Product as PrismaProduct,
   User as PrismaUser,
-  Status,
 } from '@prisma/client'
 
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'

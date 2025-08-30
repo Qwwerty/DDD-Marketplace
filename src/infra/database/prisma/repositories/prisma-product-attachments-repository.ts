@@ -5,12 +5,12 @@ import { PrismaService } from '../prisma.service'
 
 import { ProductAttachmentsRepository } from '@/domain/marketplace/application/repositories/product-attachments-repository'
 import { ProductAttachment } from '@/domain/marketplace/enterprise/entities/product-attachment'
-import { PrismaAttachmentsMapper } from '../mappers/prisma-attachments-mapper'
 
 @Injectable()
 export class PrismaProductAttachmentsRepository
-  implements ProductAttachmentsRepository {
-  constructor(private prisma: PrismaService) { }
+  implements ProductAttachmentsRepository
+{
+  constructor(private prisma: PrismaService) {}
 
   async createMany(attachments: ProductAttachment[]): Promise<void> {
     if (attachments.length === 0) {
@@ -35,10 +35,12 @@ export class PrismaProductAttachmentsRepository
   async findByProductId(productId: string): Promise<ProductAttachment[]> {
     const attachments = await this.prisma.attachment.findMany({
       where: {
-        productId
-      }
+        productId,
+      },
     })
 
-    return attachments.map(attachment => PrismaProductAttachmentMapper.toDomain(attachment))
+    return attachments.map((attachment) =>
+      PrismaProductAttachmentMapper.toDomain(attachment),
+    )
   }
 }

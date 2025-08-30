@@ -1,13 +1,15 @@
-import { ListAllCategoriesUseCase } from "@/domain/marketplace/application/use-cases/list-all-categories";
-import { Public } from "@/infra/auth/public";
-import { BadRequestException, Controller, Get, HttpCode } from "@nestjs/common";
-import { CategoryPresenter } from "../presenters/category-presenter";
+import { BadRequestException, Controller, Get, HttpCode } from '@nestjs/common'
+
+import { CategoryPresenter } from '../presenters/category-presenter'
+
+import { ListAllCategoriesUseCase } from '@/domain/marketplace/application/use-cases/list-all-categories'
+import { Public } from '@/infra/auth/public'
 
 @Controller('/categories')
 @Public()
 export class ListAllCategoriesController {
   constructor(private listAllCategory: ListAllCategoriesUseCase) {}
-  
+
   @Get()
   @HttpCode(200)
   async handle() {
@@ -20,7 +22,9 @@ export class ListAllCategoriesController {
     const categories = result.value?.categories
 
     return {
-      categories: categories.map(category => CategoryPresenter.toHTTP(category))
+      categories: categories.map((category) =>
+        CategoryPresenter.toHTTP(category),
+      ),
     }
   }
 }

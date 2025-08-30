@@ -7,15 +7,15 @@ import { SellerFactory } from 'test/factories/make-seller'
 
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 import { Category } from '@/domain/marketplace/enterprise/entities/category'
-import { ProductStatus } from '@/domain/marketplace/enterprise/entities/product'
 import { AppModule } from '@/infra/app.module'
 import { DatabaseModule } from '@/infra/database/database.module'
 
-describe('Count seller sold products (E2E)', () => {
+describe('Register view (E2E)', () => {
   let app: INestApplication
-  let jwt: JwtService
+
   let sellerFactory: SellerFactory
   let productFactory: ProductFactory
+  let jwt: JwtService
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -25,19 +25,14 @@ describe('Count seller sold products (E2E)', () => {
 
     app = moduleRef.createNestApplication()
 
-    jwt = moduleRef.get(JwtService)
     sellerFactory = moduleRef.get(SellerFactory)
     productFactory = moduleRef.get(ProductFactory)
+    jwt = moduleRef.get(JwtService)
 
     await app.init()
   })
 
-  test('[GET] /sellers/metrics/products/sold', async () => {
-    const owner = await sellerFactory.makePrismaSeller({
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-    })
-
+  test('[PUT] /products/:id/views', async () => {
     const category = Category.create(
       {
         title: 'Electronics',
@@ -46,23 +41,27 @@ describe('Count seller sold products (E2E)', () => {
       new UniqueEntityId('electronics'),
     )
 
-    for (let i = 1; i <= 3; i++) {
-      await productFactory.makePrismaProduct({
-        description: 'Iphone 14',
-        owner,
-        category,
-        status: ProductStatus.sold,
-      })
-    }
+    const owner = await sellerFactory.makePrismaSeller()
+    const product = await productFactory.makePrismaProduct({ owner, category })
+    const viewer = await sellerFactory.makePrismaSeller()
 
-    const accessToken = jwt.sign({ sub: owner.id.toString() })
+    const productId = product.id.toString()
+
+    const accessToken = jwt.sign({ sub: viewer.id.toString() })
 
     const response = await request(app.getHttpServer())
-      .get('/sellers/metrics/products/sold')
+      .post(`/products/${productId}/views`)
       .set('Authorization', `Bearer ${accessToken}`)
+      .send()
+      .expect(201)
 
     expect(response.body).toStrictEqual({
-      amount: 3,
+      product: expect.objectContaining({
+        id: expect.any(String),
+      }),
+      viewer: expect.objectContaining({
+        id: expect.any(String),
+      }),
     })
   })
 })

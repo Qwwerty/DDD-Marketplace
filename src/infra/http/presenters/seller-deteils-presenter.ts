@@ -9,9 +9,9 @@ export class SellerDetailsPresenter {
       email: seller.email,
       avatar: seller.avatar
         ? {
-          id: seller.avatar.id.toString(),
-          url: seller.avatar.path,
-        }
+            id: seller.avatar.id.toString(),
+            url: seller.avatar.path,
+          }
         : null,
     }
   }

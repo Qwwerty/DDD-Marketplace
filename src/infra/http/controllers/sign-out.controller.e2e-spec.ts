@@ -1,14 +1,14 @@
 import { INestApplication } from '@nestjs/common'
+import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import { hash } from 'bcryptjs'
 import request from 'supertest'
 import { SellerFactory } from 'test/factories/make-seller'
 
 import { AppModule } from '@/infra/app.module'
-import { DatabaseModule } from '@/infra/database/database.module'
-import { JwtService } from '@nestjs/jwt'
-import { CacheModule } from '@/infra/cache/cache.module'
 import { CacheRepository } from '@/infra/cache/cache-repository'
+import { CacheModule } from '@/infra/cache/cache.module'
+import { DatabaseModule } from '@/infra/database/database.module'
 
 describe('Sign out (E2E)', () => {
   let app: INestApplication

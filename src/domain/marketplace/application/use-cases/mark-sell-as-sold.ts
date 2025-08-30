@@ -1,3 +1,5 @@
+import { Injectable } from '@nestjs/common'
+
 import { ProductsRepository } from '../repositories/products-repository'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { Product, ProductStatus } from '../../enterprise/entities/product'
@@ -5,7 +7,6 @@ import { SellersRepository } from '../repositories/sellers-repository'
 
 import { Either, left, right } from '@/core/either'
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
-import { Injectable } from '@nestjs/common'
 
 interface MarkSellAsSolddUseCaseRequest {
   productId: string

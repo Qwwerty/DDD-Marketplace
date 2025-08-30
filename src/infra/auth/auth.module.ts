@@ -4,13 +4,11 @@ import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
 
 import { JwtAuthGuard } from './jwt-auth.guard'
+import { JwtBlacklistGuard } from './jwt-blacklist-guard'
 import { JwtStrategy } from './jwt.strategy'
+import { CacheModule } from '../cache/cache.module'
 import { EnvModule } from '../env/env.module'
 import { EnvService } from '../env/env.service'
-import { JwtBlacklistGuard } from './jwt-blacklist-guard'
-import { CacheRepository } from '../cache/cache-repository'
-import { RedisCacheRepository } from '../cache/redis/redis-cache-repository'
-import { CacheModule } from '../cache/cache.module'
 
 @Module({
   imports: [
@@ -30,7 +28,7 @@ import { CacheModule } from '../cache/cache.module'
         }
       },
     }),
-    CacheModule
+    CacheModule,
   ],
   providers: [
     JwtStrategy,
@@ -41,8 +39,8 @@ import { CacheModule } from '../cache/cache.module'
     },
     {
       provide: APP_GUARD,
-      useClass: JwtBlacklistGuard
-    }
+      useClass: JwtBlacklistGuard,
+    },
   ],
 })
-export class AuthModule { }
+export class AuthModule {}

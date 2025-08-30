@@ -14,12 +14,10 @@ export interface ProductDetailsProps {
     name: string
     phone: string
     email: string
-    avatar:
-      | {
-          id: UniqueEntityId
-          path: string
-        }
-      | null
+    avatar: {
+      id: UniqueEntityId
+      path: string
+    } | null
   }
   category: {
     id: UniqueEntityId

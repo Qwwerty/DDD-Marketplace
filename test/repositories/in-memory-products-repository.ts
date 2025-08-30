@@ -4,7 +4,6 @@ import isBetween from 'dayjs/plugin/isBetween'
 import { InMemoryAttachmentsRepository } from './in-memory-attachments-repository'
 import { InMemoryProductAttachmentsRepository } from './in-memory-product-attachments-repository'
 
-import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 import {
   Count,
   FindMany,
@@ -51,7 +50,7 @@ export class InMemoryProductsRepository implements ProductsRepository {
     if (!product) {
       return null
     }
-    
+
     return product
   }
 
@@ -90,7 +89,7 @@ export class InMemoryProductsRepository implements ProductsRepository {
         email: product.owner.email,
         avatar: attachment
           ? { id: attachment.id, path: attachment.path }
-          : undefined,
+          : null,
       },
       category: {
         id: product.category.id,
@@ -154,7 +153,7 @@ export class InMemoryProductsRepository implements ProductsRepository {
             email: product.owner.email,
             avatar: attachment
               ? { id: attachment.id, path: attachment.path }
-              : undefined,
+              : null,
           },
           category: {
             id: product.category.id,
@@ -220,7 +219,7 @@ export class InMemoryProductsRepository implements ProductsRepository {
             email: product.owner.email,
             avatar: attachment
               ? { id: attachment.id, path: attachment.path }
-              : undefined,
+              : null,
           },
           category: {
             id: product.category.id,
@@ -268,7 +267,12 @@ export class InMemoryProductsRepository implements ProductsRepository {
         name: product.owner.name,
         phone: product.owner.phone,
         email: product.owner.email,
-        avatar: avatar ? { id: avatar.id, path: avatar.path } : undefined,
+        avatar: avatar
+          ? {
+              id: avatar.id,
+              path: avatar.path,
+            }
+          : null,
       },
       category: {
         id: product.category.id,
@@ -325,7 +329,7 @@ export class InMemoryProductsRepository implements ProductsRepository {
         name: product.owner.name,
         phone: product.owner.phone,
         email: product.owner.email,
-        avatar: avatar ? { id: avatar.id, path: avatar.path } : undefined,
+        avatar: avatar ? { id: avatar.id, path: avatar.path } : null,
       },
       category: {
         id: product.category.id,

@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common'
 
-import { Seller } from '../../enterprise/entities/seller'
 import { SellersRepository } from '../repositories/sellers-repository'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { SellerDetails } from '../../enterprise/entities/value-objects/seller-details'

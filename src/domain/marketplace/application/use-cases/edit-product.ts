@@ -1,6 +1,9 @@
-import { Product, ProductStatus } from '../../enterprise/entities/product'
+import { Injectable } from '@nestjs/common'
+
+import { ProductStatus } from '../../enterprise/entities/product'
 import { ProductAttachment } from '../../enterprise/entities/product-attachment'
 import { ProductAttachmentList } from '../../enterprise/entities/product-attachments-list'
+import { ProductDetails } from '../../enterprise/entities/value-objects/product-details'
 import { CategoriesRepository } from '../repositories/categories-repository'
 import { ProductsRepository } from '../repositories/products-repository'
 import { SellersRepository } from '../repositories/sellers-repository'
@@ -10,8 +13,6 @@ import { ProductAttachmentsRepository } from '../repositories/product-attachment
 import { Either, left, right } from '@/core/either'
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
-import { Injectable } from '@nestjs/common'
-import { ProductDetails } from '../../enterprise/entities/value-objects/product-details'
 
 interface EditProductUseCaseProps {
   productId: string
