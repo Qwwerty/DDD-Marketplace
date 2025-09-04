@@ -3,6 +3,7 @@ import { SellersRepository } from '../repositories/sellers-repository'
 import { ViewsRepository } from '../repositories/views-repository'
 
 import { Either, left, right } from '@/core/either'
+import { Injectable } from '@nestjs/common'
 
 interface CountSellerViewsUseCaseRequest {
   sellerId: string
@@ -15,6 +16,7 @@ type CountSellerViewsUseCaseResponse = Either<
   }
 >
 
+@Injectable()
 export class CountSellerViewsUseCase {
   constructor(
     private sellersRepository: SellersRepository,

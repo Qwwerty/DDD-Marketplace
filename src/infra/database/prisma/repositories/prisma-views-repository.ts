@@ -16,8 +16,16 @@ import { View } from '@/domain/marketplace/enterprise/entities/view'
 export class PrismaViewsRepository implements ViewsRepository {
   constructor(private prisma: PrismaService) {}
 
-  countBySeller(params: CountBySeller): Promise<number> {
-    throw new Error('Method not implemented.')
+  async countBySeller({ sellerId }: CountBySeller): Promise<number> {
+    const amount = await this.prisma.view.count({
+      where: {
+        product: {
+          userId: sellerId,
+        },
+      },
+    })
+
+    return amount
   }
 
   countByProduct(params: CountByProduct): Promise<number> {
