@@ -14,7 +14,7 @@ import { View } from '@/domain/marketplace/enterprise/entities/view'
 
 @Injectable()
 export class PrismaViewsRepository implements ViewsRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async countBySeller({ sellerId }: CountBySeller): Promise<number> {
     const amount = await this.prisma.view.count({
@@ -32,8 +32,21 @@ export class PrismaViewsRepository implements ViewsRepository {
     throw new Error('Method not implemented.')
   }
 
-  countPerDay(params: CountBySeller): Promise<ViewsPerDay[]> {
-    throw new Error('Method not implemented.')
+  async countPerDay({ sellerId }: CountBySeller): Promise<ViewsPerDay[]> {
+    const result = await this.prisma.view.groupBy({
+      by: 'createdAt',
+      _count: { _all: true },
+      where: {
+        product: {
+          userId: sellerId
+        }
+      },
+    })
+
+    return result.map(view => ({
+      date: view.createdAt,
+      amount: view._count._all
+    }))
   }
 
   async isViewed(view: View): Promise<boolean> {

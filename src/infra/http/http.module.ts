@@ -42,6 +42,8 @@ import { MarkAsAvailableController } from '@/infra/http/controllers/mark-as-avai
 import { MarkAsCancelledController } from '@/infra/http/controllers/mark-as-cancelled.controller'
 import { CountSellerViewsController } from './controllers/count-seller-views.controller'
 import { CountSellerViewsUseCase } from '@/domain/marketplace/application/use-cases/count-seller-views'
+import { CountSellerViewsPerDayController } from './controllers/count-seller-views-per-day.controller'
+import { CountSellerViewsPerDayUseCase } from '@/domain/marketplace/application/use-cases/count-seller-views-per-day'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, StorageModule, CacheModule],
@@ -64,7 +66,8 @@ import { CountSellerViewsUseCase } from '@/domain/marketplace/application/use-ca
     CountSellerSoldProductsController,
     CountSellerAvailableProductsController,
     RegisterViewController,
-    CountSellerViewsController
+    CountSellerViewsController,
+    CountSellerViewsPerDayController
   ],
   providers: [
     RegisterSellerUseCase,
@@ -84,7 +87,8 @@ import { CountSellerViewsUseCase } from '@/domain/marketplace/application/use-ca
     CountSellerSoldUseCase,
     CountSellerAvailableUseCase,
     RegisterViewUseCase,
-    CountSellerViewsUseCase
+    CountSellerViewsUseCase,
+    CountSellerViewsPerDayUseCase
   ],
 })
-export class HttpModule {}
+export class HttpModule { }

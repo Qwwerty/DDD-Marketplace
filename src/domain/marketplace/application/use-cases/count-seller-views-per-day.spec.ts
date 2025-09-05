@@ -9,7 +9,7 @@ import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-r
 import { InMemoryUserAttachmentsRepository } from 'test/repositories/in-memory-user-attachments-repository'
 import { InMemoryViewsRepository } from 'test/repositories/in-memory-views-repository'
 
-import { CountSellerViewsPerDay } from './count-seller-views-per-day'
+import { CountSellerViewsPerDayUseCase } from './count-seller-views-per-day'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 import { UniqueEntityId } from '@/core/entities/unique-entidy-id'
@@ -20,7 +20,7 @@ let inMemorySellersRepository: InMemorySellersRepository
 let inMemoryViewsRepository: InMemoryViewsRepository
 let inMemoryProductAttachments: InMemoryProductAttachmentsRepository
 let inMemoryProductsRepository: InMemoryProductsRepository
-let sut: CountSellerViewsPerDay
+let sut: CountSellerViewsPerDayUseCase
 
 describe('Count Seller Views Per Day Use Case', () => {
   beforeEach(() => {
@@ -38,9 +38,9 @@ describe('Count Seller Views Per Day Use Case', () => {
       inMemoryAttachmentsRepository,
     )
 
-    inMemoryViewsRepository = new InMemoryViewsRepository()
+    inMemoryViewsRepository = new InMemoryViewsRepository(inMemoryAttachmentsRepository)
 
-    sut = new CountSellerViewsPerDay(
+    sut = new CountSellerViewsPerDayUseCase(
       inMemorySellersRepository,
       inMemoryViewsRepository,
     )
