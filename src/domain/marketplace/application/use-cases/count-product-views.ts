@@ -1,3 +1,5 @@
+import { Injectable } from '@nestjs/common'
+
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { ProductsRepository } from '../repositories/products-repository'
 import { ViewsRepository } from '../repositories/views-repository'
@@ -15,6 +17,7 @@ type CountProductViewsUseCaseResponse = Either<
   }
 >
 
+@Injectable()
 export class CountProductViewsUseCase {
   constructor(
     private productsRepository: ProductsRepository,

@@ -6,7 +6,7 @@ export class ViewPerDayPresenter {
 
     return {
       date,
-      amount: view.amount
+      amount: view.amount,
     }
   }
 }

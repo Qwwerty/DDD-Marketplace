@@ -31,7 +31,7 @@ export class PrismaViewMapper {
       id: view.id.toString(),
       viewerId: view.viewer.id.toString(),
       productId: view.product.id.toString(),
-      createdAt: view.createdAt
+      createdAt: view.createdAt,
     }
   }
 

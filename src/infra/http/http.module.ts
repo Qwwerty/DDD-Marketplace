@@ -40,10 +40,12 @@ import { UploadAttachmentsUseCase } from '@/domain/marketplace/application/use-c
 import { GetProductController } from '@/infra/http/controllers/get-product.controller'
 import { MarkAsAvailableController } from '@/infra/http/controllers/mark-as-available.controller'
 import { MarkAsCancelledController } from '@/infra/http/controllers/mark-as-cancelled.controller'
-import { CountSellerViewsController } from './controllers/count-seller-views.controller'
 import { CountSellerViewsUseCase } from '@/domain/marketplace/application/use-cases/count-seller-views'
-import { CountSellerViewsPerDayController } from './controllers/count-seller-views-per-day.controller'
 import { CountSellerViewsPerDayUseCase } from '@/domain/marketplace/application/use-cases/count-seller-views-per-day'
+import { CountSellerViewsController } from './controllers/count-seller-views.controller'
+import { CountSellerViewsPerDayController } from './controllers/count-seller-views-per-day.controller'
+import { CountProductViewsController } from './controllers/count-product-views.controller'
+import { CountProductViewsUseCase } from '@/domain/marketplace/application/use-cases/count-product-views'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, StorageModule, CacheModule],
@@ -67,7 +69,8 @@ import { CountSellerViewsPerDayUseCase } from '@/domain/marketplace/application/
     CountSellerAvailableProductsController,
     RegisterViewController,
     CountSellerViewsController,
-    CountSellerViewsPerDayController
+    CountSellerViewsPerDayController,
+    CountProductViewsController,
   ],
   providers: [
     RegisterSellerUseCase,
@@ -88,7 +91,8 @@ import { CountSellerViewsPerDayUseCase } from '@/domain/marketplace/application/
     CountSellerAvailableUseCase,
     RegisterViewUseCase,
     CountSellerViewsUseCase,
-    CountSellerViewsPerDayUseCase
+    CountSellerViewsPerDayUseCase,
+    CountProductViewsUseCase,
   ],
 })
-export class HttpModule { }
+export class HttpModule {}

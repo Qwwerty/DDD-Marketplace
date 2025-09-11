@@ -38,7 +38,9 @@ describe('Count Seller Views Per Day Use Case', () => {
       inMemoryAttachmentsRepository,
     )
 
-    inMemoryViewsRepository = new InMemoryViewsRepository(inMemoryAttachmentsRepository)
+    inMemoryViewsRepository = new InMemoryViewsRepository(
+      inMemoryAttachmentsRepository,
+    )
 
     sut = new CountSellerViewsPerDayUseCase(
       inMemorySellersRepository,

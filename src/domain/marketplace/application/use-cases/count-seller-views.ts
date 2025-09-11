@@ -1,9 +1,10 @@
+import { Injectable } from '@nestjs/common'
+
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { SellersRepository } from '../repositories/sellers-repository'
 import { ViewsRepository } from '../repositories/views-repository'
 
 import { Either, left, right } from '@/core/either'
-import { Injectable } from '@nestjs/common'
 
 interface CountSellerViewsUseCaseRequest {
   sellerId: string
