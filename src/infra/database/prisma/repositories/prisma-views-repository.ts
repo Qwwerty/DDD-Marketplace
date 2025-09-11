@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common'
+import * as dayjs from 'dayjs'
 
 import { PrismaViewMapper } from '../mappers/prisma-view-mapper'
 import { PrismaService } from '../prisma.service'
@@ -14,7 +15,7 @@ import { View } from '@/domain/marketplace/enterprise/entities/view'
 
 @Injectable()
 export class PrismaViewsRepository implements ViewsRepository {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async countBySeller({ sellerId }: CountBySeller): Promise<number> {
     const amount = await this.prisma.view.count({
@@ -33,19 +34,26 @@ export class PrismaViewsRepository implements ViewsRepository {
   }
 
   async countPerDay({ sellerId }: CountBySeller): Promise<ViewsPerDay[]> {
+    const todayDate = dayjs()
+    const thirtyDaysAgo = todayDate.subtract(30, 'day')
+
     const result = await this.prisma.view.groupBy({
       by: 'createdAt',
       _count: { _all: true },
       where: {
         product: {
-          userId: sellerId
-        }
+          userId: sellerId,
+        },
+        createdAt: {
+          gte: thirtyDaysAgo.toDate(),
+          lte: todayDate.toDate(),
+        },
       },
     })
 
-    return result.map(view => ({
+    return result.map((view) => ({
       date: view.createdAt,
-      amount: view._count._all
+      amount: view._count._all,
     }))
   }
 
