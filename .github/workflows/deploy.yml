@@ -1,0 +1,152 @@
+name: Marketplace-api
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - "*"
+
+jobs:
+  deploy:
+    if: github.event.pull_request.merged == true
+    permissions: write-all
+    name: Deploy to EC2
+    runs-on: ubuntu-latest
+
+    steps:
+      # - name: Notify start on Discord
+      #   env:
+      #       WEBHOOK_URL: ${{secrets.DISCORD_WEBHOOK_URL}}
+      #   run: |
+      #       curl -H "Content-Type: application/json" -X POST -d '{"content": ":yellow_circle: ${{ github.head_ref }}\n'"$(basename $GITHUB_REPOSITORY)"'\nBranch: **${{ github.ref_name }}**\nWorkflow: '"${GITHUB_SERVER_URL}"'/'"${GITHUB_REPOSITORY}"'/actions/runs/'"${GITHUB_RUN_ID}"' "}' $WEBHOOK_URL
+
+      - name: Check base branch name
+        run: |
+          BRANCH_BASE_NAME=${{ github.base_ref }}
+          echo "Nome da branch de destino: $BRANCH_BASE_NAME"
+          if [[ $BRANCH_BASE_NAME =~ ^master$ ]]; then
+            echo "Branch name matches the pattern"
+          else
+            echo "Branch name does not match the pattern"
+            exit 1
+          fi
+
+      - name: Checkout files
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build application
+        run: npm run build
+
+      # - name: Run test and coverage
+      #   run: npm run coverage
+
+      - name: Update version
+        run: |
+          git config user.email "${{ github.event.pusher.email }}"
+          git config user.name "${{ github.actor }}"
+          BRANCH_HEAD_NAME=${{ github.head_ref }}
+          echo "Nome da branch de origem: $BRANCH_HEAD_NAME"
+          PREFIX=$(echo $BRANCH_HEAD_NAME | cut -d '/' -f 1)
+          echo "Prefixo da branch: $PREFIX"
+
+          if [ "$PREFIX" == "feat" ]; then
+            echo "Atualizando versão com minor"
+            git checkout -- .
+            npm version minor -m "Bump version to %s"
+            git push
+          elif [ "$PREFIX" == "fix" ]; then
+            echo "Atualizando versão com patch"
+            git checkout -- .
+            npm version patch -m "Bump version to %s"
+            git push
+          else
+            echo "Branch name does not match the pattern"
+            exit 1
+          fi
+
+      - name: Get new version
+        run: echo "PACKAGE_VERSION=$(node -pe 'require("./package.json").version')" >> $GITHUB_ENV
+
+      - name: Prepare Environment Files
+        run: |
+          echo "PORT=${{vars.PORT}}" >> .env
+          echo "DATABASE_URL=${{secrets.DATABASE_URL}}" >> .env
+
+          echo "REDIS_HOST=${{secrets.REDIS_HOST}}" >> .env
+          echo "REDIS_PORT=${{secrets.REDIS_PORT}}" >> .env
+          echo "REDIS_DB=${{secrets.REDIS_DB}}" >> .env
+          
+          echo "CLOUDFLARE_ACCOUNT_ID=${{secrets.CLOUDFLARE_ACCOUNT_ID}}" >> .env
+          echo "AWS_BUCKET_NAME=${{secrets.AWS_BUCKET_NAME}}" >> .env
+          echo "AWS_ACCESS_KEY_ID=${{secrets.AWS_ACCESS_KEY_ID}}" >> .env
+          echo "AWS_SECRET_ACCESS_KEY=${{secrets.AWS_SECRET_ACCESS_KEY}}" >> .env
+
+          echo "JWT_PRIVATE_KEY=${{secrets.JWT_PRIVATE_KEY}}" >> .env
+          echo "JWT_PUBLIC_KEY=${{secrets.JWT_PUBLIC_KEY}}" >> .env
+
+      - name: Prepare Pm2 Environment File
+        run: |
+          echo "module.exports = {apps : [{name: \"planlist-api\",script : \"dist/index.js\",max_restarts:10}]}" >> ./dist/.pm2.config.js
+
+      - name: Transfer files to VPS
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{secrets.EC2_HOST}}
+          username: ubuntu
+          key: ${{secrets.EC2_KEY}}
+          port: 22
+          source: "./prisma,./dist,package.json,.env"
+          target: /home/ubuntu/planlist-api
+
+      - name: Install dependencies
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.EC2_HOST}}
+          username: ubuntu
+          key: ${{secrets.EC2_KEY}}
+          port: 22
+          script: |
+            cd /home/ubuntu/planlist-api
+            npm install
+
+      - name: Prepare migrations and prisma
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.EC2_HOST}}
+          username: ubuntu
+          key: ${{secrets.EC2_KEY}}
+          port: 22
+          script: |
+            cd /home/ubuntu/marketplace-api
+            npx prisma migrate deploy
+            npx prisma generate
+
+      - name: Restarting application
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.EC2_HOST}}
+          username: ubuntu
+          key: ${{secrets.EC2_KEY}}
+          port: 22
+          script: |
+            cd /home/ubuntu/marketplace-api
+            sudo pm2 start ./dist/.pm2.config.js
+            sudo pm2 save
+
+      # - name: Notify error to Discord
+      #   if: failure()
+      #   env:
+      #     WEBHOOK_URL: ${{secrets.DISCORD_WEBHOOK_URL}}
+      #   run: |
+      #     curl -H "Content-Type: application/json" -X POST -d '{"content": ":red_circle: ${{ github.head_ref }}\n'"$(basename $GITHUB_REPOSITORY)"' **'"${PACKAGE_VERSION}"'**\nBranch: **${{ github.ref_name }}**\nWorkflow: '"${GITHUB_SERVER_URL}"'/'"${GITHUB_REPOSITORY}"'/actions/runs/'"${GITHUB_RUN_ID}"' "}' $WEBHOOK_URL
+
+      # - name: Notify success to Discord
+      #   if: success()
+      #   env:
+      #     WEBHOOK_URL: ${{secrets.DISCORD_WEBHOOK_URL}}
+      #   run: |
+      #     curl -H "Content-Type: application/json" -X POST -d '{"content": ":green_circle: ${{ github.head_ref }}\n'"$(basename $GITHUB_REPOSITORY)"' **'"${PACKAGE_VERSION}"'**\nBranch: **${{ github.ref_name }}**\nWorkflow: '"${GITHUB_SERVER_URL}"'/'"${GITHUB_REPOSITORY}"'/actions/runs/'"${GITHUB_RUN_ID}"' "}' $WEBHOOK_URL
