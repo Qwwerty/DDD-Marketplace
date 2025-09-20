@@ -76,9 +76,9 @@ jobs:
           echo "PORT=${{vars.PORT}}" >> .env
           echo "DATABASE_URL=${{secrets.DATABASE_URL}}" >> .env
 
-          echo "REDIS_HOST=${{secrets.REDIS_HOST}}" >> .env
-          echo "REDIS_PORT=${{secrets.REDIS_PORT}}" >> .env
-          echo "REDIS_DB=${{secrets.REDIS_DB}}" >> .env
+          echo "REDIS_HOST=${{vars.REDIS_HOST}}" >> .env
+          echo "REDIS_PORT=${{vars.REDIS_PORT}}" >> .env
+          echo "REDIS_DB=${{vars.REDIS_DB}}" >> .env
           
           echo "CLOUDFLARE_ACCOUNT_ID=${{secrets.CLOUDFLARE_ACCOUNT_ID}}" >> .env
           echo "AWS_BUCKET_NAME=${{secrets.AWS_BUCKET_NAME}}" >> .env
