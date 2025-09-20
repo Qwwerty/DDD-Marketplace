@@ -1,11 +1,11 @@
 name: Marketplace-api
 
-on:
-  pull_request:
-    types:
-      - closed
-    branches:
-      - "*"
+# on:
+#   pull_request:
+#     types:
+#       - closed
+#     branches:
+#       - "*"
 
 jobs:
   deploy:
@@ -90,7 +90,7 @@ jobs:
 
       - name: Prepare Pm2 Environment File
         run: |
-          echo "module.exports = {apps : [{name: \"planlist-api\",script : \"dist/index.js\",max_restarts:10}]}" >> ./dist/.pm2.config.js
+          echo "module.exports = {apps : [{name: \"marketplace-api\",script : \"dist/src/infra/main.js\",max_restarts:10}]}" >> ./dist/.pm2.config.js
 
       - name: Transfer files to VPS
         uses: appleboy/scp-action@master
@@ -100,7 +100,7 @@ jobs:
           key: ${{secrets.EC2_KEY}}
           port: 22
           source: "./prisma,./dist,package.json,.env"
-          target: /home/ubuntu/planlist-api
+          target: /home/ubuntu/marketplace-api
 
       - name: Install dependencies
         uses: appleboy/ssh-action@master
@@ -110,7 +110,7 @@ jobs:
           key: ${{secrets.EC2_KEY}}
           port: 22
           script: |
-            cd /home/ubuntu/planlist-api
+            cd /home/ubuntu/marketplace-api
             npm install
 
       - name: Prepare migrations and prisma
