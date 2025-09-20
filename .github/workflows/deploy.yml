@@ -1,11 +1,11 @@
 name: Marketplace-api
 
-# on:
-#   pull_request:
-#     types:
-#       - closed
-#     branches:
-#       - "*"
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - "*"
 
 jobs:
   deploy:
@@ -15,11 +15,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # - name: Notify start on Discord
-      #   env:
-      #       WEBHOOK_URL: ${{secrets.DISCORD_WEBHOOK_URL}}
-      #   run: |
-      #       curl -H "Content-Type: application/json" -X POST -d '{"content": ":yellow_circle: ${{ github.head_ref }}\n'"$(basename $GITHUB_REPOSITORY)"'\nBranch: **${{ github.ref_name }}**\nWorkflow: '"${GITHUB_SERVER_URL}"'/'"${GITHUB_REPOSITORY}"'/actions/runs/'"${GITHUB_RUN_ID}"' "}' $WEBHOOK_URL
+      - name: Notify start on Discord
+        env:
+            WEBHOOK_URL: ${{secrets.DISCORD_WEBHOOK_URL}}
+        run: |
+            curl -H "Content-Type: application/json" -X POST -d '{"content": ":yellow_circle: ${{ github.head_ref }}\n'"$(basename $GITHUB_REPOSITORY)"'\nBranch: **${{ github.ref_name }}**\nWorkflow: '"${GITHUB_SERVER_URL}"'/'"${GITHUB_REPOSITORY}"'/actions/runs/'"${GITHUB_RUN_ID}"' "}' $WEBHOOK_URL
 
       - name: Check base branch name
         run: |
@@ -137,16 +137,16 @@ jobs:
             sudo pm2 start ./dist/.pm2.config.js
             sudo pm2 save
 
-      # - name: Notify error to Discord
-      #   if: failure()
-      #   env:
-      #     WEBHOOK_URL: ${{secrets.DISCORD_WEBHOOK_URL}}
-      #   run: |
-      #     curl -H "Content-Type: application/json" -X POST -d '{"content": ":red_circle: ${{ github.head_ref }}\n'"$(basename $GITHUB_REPOSITORY)"' **'"${PACKAGE_VERSION}"'**\nBranch: **${{ github.ref_name }}**\nWorkflow: '"${GITHUB_SERVER_URL}"'/'"${GITHUB_REPOSITORY}"'/actions/runs/'"${GITHUB_RUN_ID}"' "}' $WEBHOOK_URL
+      - name: Notify error to Discord
+        if: failure()
+        env:
+          WEBHOOK_URL: ${{secrets.DISCORD_WEBHOOK_URL}}
+        run: |
+          curl -H "Content-Type: application/json" -X POST -d '{"content": ":red_circle: ${{ github.head_ref }}\n'"$(basename $GITHUB_REPOSITORY)"' **'"${PACKAGE_VERSION}"'**\nBranch: **${{ github.ref_name }}**\nWorkflow: '"${GITHUB_SERVER_URL}"'/'"${GITHUB_REPOSITORY}"'/actions/runs/'"${GITHUB_RUN_ID}"' "}' $WEBHOOK_URL
 
-      # - name: Notify success to Discord
-      #   if: success()
-      #   env:
-      #     WEBHOOK_URL: ${{secrets.DISCORD_WEBHOOK_URL}}
-      #   run: |
-      #     curl -H "Content-Type: application/json" -X POST -d '{"content": ":green_circle: ${{ github.head_ref }}\n'"$(basename $GITHUB_REPOSITORY)"' **'"${PACKAGE_VERSION}"'**\nBranch: **${{ github.ref_name }}**\nWorkflow: '"${GITHUB_SERVER_URL}"'/'"${GITHUB_REPOSITORY}"'/actions/runs/'"${GITHUB_RUN_ID}"' "}' $WEBHOOK_URL
+      - name: Notify success to Discord
+        if: success()
+        env:
+          WEBHOOK_URL: ${{secrets.DISCORD_WEBHOOK_URL}}
+        run: |
+          curl -H "Content-Type: application/json" -X POST -d '{"content": ":green_circle: ${{ github.head_ref }}\n'"$(basename $GITHUB_REPOSITORY)"' **'"${PACKAGE_VERSION}"'**\nBranch: **${{ github.ref_name }}**\nWorkflow: '"${GITHUB_SERVER_URL}"'/'"${GITHUB_REPOSITORY}"'/actions/runs/'"${GITHUB_RUN_ID}"' "}' $WEBHOOK_URL
