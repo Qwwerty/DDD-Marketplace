@@ -18,7 +18,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const publicKey = env.get('JWT_PUBLIC_KEY')
 
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: (req) => {
+        if (!req.cookies) {
+          return null
+        }
+
+        return req.cookies['access_token']
+      },
       secretOrKey: Buffer.from(publicKey, 'base64'),
       algorithms: ['RS256'],
     })

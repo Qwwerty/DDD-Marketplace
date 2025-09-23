@@ -5,8 +5,10 @@ import {
   ForbiddenException,
   HttpCode,
   Post,
+  Res,
 } from '@nestjs/common'
 import { z } from 'zod'
+import { FastifyReply } from 'fastify'
 
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
@@ -26,11 +28,11 @@ type AuthenticateBodySchema = z.infer<typeof authenticateBodySchema>
 @Controller('/sellers/sessions')
 @Public()
 export class AuthenticateController {
-  constructor(private authenticateSeller: AuthenticateSellerUseCase) {}
+  constructor(private authenticateSeller: AuthenticateSellerUseCase) { }
 
   @Post()
   @HttpCode(201)
-  async handle(@Body(bodyValidationPipe) body: AuthenticateBodySchema) {
+  async handle(@Body(bodyValidationPipe) body: AuthenticateBodySchema, @Res({ passthrough: true }) response: FastifyReply) {
     const { email, password } = body
 
     const result = await this.authenticateSeller.execute({
@@ -50,6 +52,8 @@ export class AuthenticateController {
     }
 
     const { accessToken } = result.value
+
+    response.cookie('access_token', accessToken)
 
     return {
       access_token: accessToken,

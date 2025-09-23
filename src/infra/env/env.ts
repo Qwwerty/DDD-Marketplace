@@ -12,6 +12,8 @@ export const envSchema = z.object({
   REDIS_HOST: z.string().optional().default('127.0.0.1'),
   REDIS_PORT: z.coerce.number().optional().default(6379),
   REDIS_DB: z.coerce.number().optional().default(0),
+  FRONT_HOST: z.string().optional().default('http://localhost:5173'),
+  FRONT_COOKIE_SECRET: z.string(),
 })
 
 export type Env = z.infer<typeof envSchema>

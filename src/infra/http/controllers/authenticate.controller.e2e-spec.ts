@@ -41,5 +41,9 @@ describe('Create session (E2E)', () => {
     expect(response.body).toEqual({
       access_token: expect.any(String),
     })
+
+    const cookies = response.headers['set-cookie'];
+    expect(cookies).toBeDefined();
+    expect(cookies[0]).toMatch(/access_token=/);
   })
 })
