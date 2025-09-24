@@ -8,7 +8,7 @@ import {
   Res,
 } from '@nestjs/common'
 import { z } from 'zod'
-import { FastifyReply } from 'fastify'
+import { Response } from 'express'
 
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
@@ -32,7 +32,7 @@ export class AuthenticateController {
 
   @Post()
   @HttpCode(201)
-  async handle(@Body(bodyValidationPipe) body: AuthenticateBodySchema, @Res({ passthrough: true }) response: FastifyReply) {
+  async handle(@Body(bodyValidationPipe) body: AuthenticateBodySchema, @Res({ passthrough: true }) response: Response) {
     const { email, password } = body
 
     const result = await this.authenticateSeller.execute({
@@ -53,7 +53,10 @@ export class AuthenticateController {
 
     const { accessToken } = result.value
 
-    response.cookie('access_token', accessToken)
+    response.cookie('access_token', accessToken, {
+      path: '/',
+      httpOnly: true
+    })
 
     return {
       access_token: accessToken,
