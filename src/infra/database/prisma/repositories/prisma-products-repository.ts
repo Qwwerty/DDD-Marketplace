@@ -96,7 +96,7 @@ export class PrismaProductsRepository implements ProductsRepository {
   }: FindManyByOwner): Promise<ProductDetails[]> {
     const where: Prisma.ProductWhereInput = {
       userId: ownerId,
-      description: {
+      title: {
         contains: search,
         mode: 'insensitive',
       },
@@ -130,7 +130,7 @@ export class PrismaProductsRepository implements ProductsRepository {
     status,
   }: FindMany): Promise<ProductDetails[]> {
     const where: Prisma.ProductWhereInput = {
-      description: {
+      title: {
         contains: search,
         mode: 'insensitive',
       },
