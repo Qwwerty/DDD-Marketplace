@@ -24,7 +24,7 @@ export class PrismaProductDetailsMapper {
       title: raw.title,
       description: raw.description,
       priceInCents: raw.priceInCents,
-      status: ProductStatus[raw.status],
+      status: raw.status as ProductStatus,
       owner: {
         id: new UniqueEntityId(raw.user.id),
         name: raw.user.name,
@@ -33,9 +33,9 @@ export class PrismaProductDetailsMapper {
         avatar:
           raw.user.attachments.length > 0
             ? {
-                id: new UniqueEntityId(raw.user.attachments[0].id),
-                path: raw.user.attachments[0].path,
-              }
+              id: new UniqueEntityId(raw.user.attachments[0].id),
+              path: raw.user.attachments[0].path,
+            }
             : null,
       },
       category: {
